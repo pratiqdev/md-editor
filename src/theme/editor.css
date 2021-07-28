@@ -1,0 +1,160 @@
+
+  .button-row h1{
+    font-size: 1.2rem;
+  }
+  
+  textarea{
+    background: inherit;
+    color: inherit;
+    border: 0px solid black;
+    border-bottom: 1px solid white;
+    resize: none;
+  }
+    textarea:focus{
+        outline:none;
+    }
+  
+  .scroll{
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  
+  .editor{
+    position:absolute;
+    display: block;
+    right:50vw;
+    left:0;
+    top: 3rem;
+    bottom:0;
+    border-right: 1px solid #555;
+  }
+  
+  .result{
+    position:absolute;
+    display: block;
+    left:50vw;
+    right:0;
+    top: 3rem;
+    bottom:0;
+  }
+  
+  .result .innerBox > *{
+    margin-bottom: 1rem;
+  }
+  
+  .innerBox{
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    background: transparent;
+  }
+  
+  
+  
+  .button-row{
+    display: flex;
+    padding: 0 1rem;
+    justify-content: space-between;
+    align-items: center;
+    height: 5vh;
+  }
+  
+  .button-group button{
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    border-radius: .25em;
+    padding: .25em .5em;
+    margin: 0;
+    margin-left: .5rem;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+
+/* small screens */
+@media only screen and (max-width: 900px){
+
+
+    .editor{
+    position:absolute;
+    display: block;
+    top: 3rem;
+    bottom: 50vh;
+    left:0;
+    right: 0;
+    }
+    .result{
+    position:absolute;
+    display: block;
+    top: 50.01vh;
+    bottom: 0;
+    left: 0;
+    right:0;
+    }
+}
+  
+  
+  
+  /* md styles ------------------------------------------------------------------------ */
+  
+  
+  
+    
+    code{
+      background: #ddd;
+      padding: .1em .2em;
+      border-radius: .2em;
+    }
+    
+    blockquote{
+      background: #eee;
+    }
+    
+  
+    
+    ul > ul, ol > ol, ul, ol{
+      /* margin-left: 0; */
+      padding-left: 15px;
+      list-style-position: inside;
+    }
+  
+  
+  
+  
+    ul li{
+      /* background: green; */
+    }
+  
+    ol li{
+      /* background: blue; */
+    }
+  
+    table{
+      background: none;
+      border-collapse: collapse;
+    }
+  
+    th{
+      border-bottom: 2px solid #222;
+    }
+  
+    td{
+      border-bottom: 1px solid #aaa;
+      padding:.2rem
+    }
