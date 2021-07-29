@@ -55,7 +55,7 @@ const Render = (props) => {
             const nodes = REF_RESULTBOX.current.querySelectorAll('pre');
             nodes.forEach((node) => {
                 hljs.highlightBlock(node);
-                console.log('found pre to highltight', node)
+                // console.log('found pre to highltight', node)
             });
         }
     }

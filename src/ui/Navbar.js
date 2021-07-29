@@ -171,7 +171,7 @@ const Navbar = forwardRef((props, ref) => {
         <Flex mr={0}>
           
           <ThemeToggle />
-          <NavMenu appInstallStatus={appInstallStatus} />
+          <NavMenu appInstallStatus={appInstallStatus} showSettingsModal={props.showSettingsModal}/>
         </Flex>
       </Box>
 

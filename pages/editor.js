@@ -18,6 +18,7 @@ import marked from 'marked'
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
 import SaveModal from '../src/ui/modals/SaveModal'
+import SettingsModal from '../src/ui/modals/SettingsModal'
 import toasty from '../src/lib/toasty';
 
 const Ace = dynamic(
@@ -41,6 +42,7 @@ const MDPage = props => {
 
   const [content, setContent] = useState(defaultText)
   const [showSave, setShowSave] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
 
   const handleChange = val => {
     setContent(val)
@@ -51,13 +53,24 @@ const MDPage = props => {
   const handleReset = () => {
       localStorage.setItem('content', defaultText)
       setContent(defaultText)
+      toasty({
+        type: 'info',
+        text: 'Reset editor to defaults'
+      })
   }
 
   
-  // SAVE ______________________________________________________________________________________________________________________________________
-  const showSaveDialogue = () => {
+  // MODAL TOGGLES ______________________________________________________________________________________________________________________________________
+  const showSaveModal = () => {
       setShowSave(true)
   }
+
+  const showSettingsModal = () => {
+    setShowSettings(true)
+  }
+
+
+
 
   const saveContent = () => {
       console.log('saving content!')
@@ -70,14 +83,12 @@ const MDPage = props => {
           let LSContent = localStorage.getItem('content')
           if(LSContent !== '' ){
               setContent(LSContent)
-              // REF_TEXTAREA.current.value = LSContent
               console.log('set content from local storage')
           }
       }, 500);
 
   }else{
       setContent(defaultText)
-      // REF_TEXTAREA.current.value = defaultText
       toasty({
           type: 'alert',
           text: 'No local storage is available to save data! Are you incognito?'
@@ -87,7 +98,7 @@ const MDPage = props => {
 
   return(
       <>
-      <Navbar fixed editor handleReset={handleReset} showSave={showSaveDialogue}/>
+      <Navbar fixed editor handleReset={handleReset} showSave={showSaveModal} showSettingsModal={showSettingsModal}/>
 
           <Ace 
             defaultContent={content} 
@@ -104,7 +115,17 @@ const MDPage = props => {
             right={''} 
             left={''} />
 
-          {showSave && <SaveModal handleDeny={()=>setShowSave(false)} handleAccept={()=>saveContent()}/>}
+          {showSave && 
+            <SaveModal 
+              handleDeny={()=>setShowSave(false)} 
+              handleAccept={()=>saveContent()}/>
+          }
+
+
+          {showSettings && 
+            <SettingsModal 
+            handleDeny={()=>setShowSettings(false)} 
+            handleAccept={()=>setShowSettings(false)}/>}
       </>
   )
 }

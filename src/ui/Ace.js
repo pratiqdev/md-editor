@@ -29,7 +29,7 @@ const Ace = props => {
     const REF_ACE = useRef(null)
 
     const onChange = (val) => {
-        console.log(val)
+        // console.log(val)
         props.handleChange(val)
     }
 
@@ -56,12 +56,18 @@ const Ace = props => {
         editor.setTheme(`ace/theme/${themeArray[currentThemeIndex]}`);
     }
 
+    const setAceToDefaultText = () => {
+        editor.setValue(props.defaultContent)
+        editor.clearSelection()
+        editor.selection.moveTo(0,0)
+    }
+
     useEffect(()=>{
         const reactAceComponent = REF_ACE.current;
         editor = reactAceComponent.editor;
         colorMode === 'dark' ? editor.setTheme('ace/theme/monokai') : editor.setTheme('ace/theme/dawn')
-        props.defaultContent ? (editor.setValue(props.defaultContent), editor.clearSelection(), editor.selection.moveTo(0,0)) : null
-    }, [colorMode])
+        props.defaultContent && editor.getValue() !== props.defaultContent ? setAceToDefaultText() : null
+    }, [colorMode, props])
 
 
 
@@ -86,6 +92,13 @@ const Ace = props => {
                 editorProps={{ $blockScrolling: true }}
                 width={'100%'}
                 height={'100%'}
+                setOptions={{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    enableSnippets: false,
+                    fontSize: '16px'
+                  }}
+                  style={{zIndex: '2'}}
                 />
             </Box>
         </>

@@ -22,7 +22,8 @@ const ModalType1 = props => {
     const handleClose = () => {
         closeDownAnim()
         setTimeout(() => {
-            props.hideFunc()
+            props.handleDeny ? props.handleDeny() : null
+            props.hideFunc ? props.hideFunc() : null
         }, 300);
     }
 
@@ -40,12 +41,13 @@ const ModalType1 = props => {
 
     //* accept / deny handlers _______________________________________________________________________
     const handleAccept = () => {
-        console.log(`accepted`)
+        // console.log(`accepted`)
         handleClose()
+        props.handleAccept ? props.handleAccept() : null
     }
 
     const handleDeny = () => {
-        console.log('denied')
+        // console.log('denied')
         handleClose()
     }
 
@@ -96,20 +98,35 @@ const ModalType1 = props => {
                     <Box
                     ref={REF_TITLE} 
                     sx={{color: 'grey_0', fontSize: 3, fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
-                        Install the App
+                        Save Your Work
                     </Box>
 
                     {/* SUBTITLE ------------------------------------------*/}
-                    <Box sx={{color: 'grey_6', my:7}}>
-                        Stay up to date! Sign up for notifications and emails when new content is published or a new version of the site becomes available
+                    <Box sx={{color: 'grey_6', my:6}}>
+                        Save this version of your work so you can use it later, or compare it with other versions to find the best one!
+                    </Box>
+
+                    <Box sx={{
+                        minHeight: '20vh',
+                        border: '1px solid',
+                        borderColor: 'grey_4',
+                        borderRadius: 2,
+                        bg: 'grey_1',
+                        width: '100%',
+                        mb: 6,
+                        color: 'grey_4',
+                        p:2,
+                        textAlign: 'center'
+                    }}>
+                        No saved data yet
                     </Box>
 
 
                     
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
-                        <Button variant='outline.secondary' sx={{p:4, minWidth: '14rem'}} onClick={handleDeny}>No, thanks</Button>
-                        <Button sx={{p:4, minWidth: '14rem'}} onClick={handleAccept}>Keep me up to date!</Button>
+                        <Button variant='outline.secondary' sx={{p:2, minWidth: '14rem'}} onClick={handleDeny}>No, go back</Button>
+                        <Button sx={{p:2, minWidth: '14rem'}} onClick={handleAccept}>Save this version</Button>
                     </Flex>
             </Flex>
             </Card>

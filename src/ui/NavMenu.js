@@ -50,20 +50,20 @@ const NavMenu = (props) => {
       
 
 
-  const menuItems = [
-    {
-      label: "Home",
-      active: true,
-      href: "/",
-      icon: <Home size="24" />,
-    },
-    {
-      label: "About",
-      active: true,
-      href: "/about",
-      icon: <QuestionSquare size="22" />,
-    },
-  ];
+  // const menuItems = [
+  //   {
+  //     label: "Home",
+  //     active: true,
+  //     href: "/",
+  //     icon: <Home size="24" />,
+  //   },
+  //   {
+  //     label: "About",
+  //     active: true,
+  //     href: "/about",
+  //     icon: <QuestionSquare size="22" />,
+  //   },
+  // ];
 
   return (
     <>
@@ -103,17 +103,17 @@ const NavMenu = (props) => {
           transform: !menuState ? "translateX(100vw)" : "translateX(0vw)",
           minHeight: "100%",
           height: "100%",
-          width: ["100%", "auto", "auto"],
-          maxWidth: ["100%", "20em", "20em"],
+          width: ["20em", "auto", "auto"],
+          maxWidth: ["90%", "20em", "20em"],
           overflowY: "none",
           display: "flex",
           flexDirection: "column",
           bg: "grey_0",
-          borderLeft: ["none", "1px solid", "1px solid"],
+          borderLeft: ["1px solid", "1px solid", "1px solid"],
           // borderBottom: ['none', '1px solid', "1px solid"],
-          borderColor: "primary_a",
+          borderColor: "grey_15",
           transition: 1,
-          zIndex: 2,
+          zIndex: '100',
         }}
       >
         <Flex
@@ -149,7 +149,7 @@ const NavMenu = (props) => {
         >
 
           
-
+{/* 
           {menuItems
             .filter((item) => item.active)
             .map((item) => (
@@ -169,13 +169,65 @@ const NavMenu = (props) => {
                   </Button>
                 </Text>
               </Link>
-            ))}
+            ))} */}
+
+              {/* //* MENU OPTIONS ====================================================================================================================== */}
+
+                  <Button
+                    variant="menuItem"
+                    tabIndex="-1"
+                    onClick={(e) => (props.showSettingsModal(), toggleMenu())}
+                  >
+                    <Flex sx={{ alignItems: "center"}}>
+                      <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                        I
+                      </Flex>
+                      Settings
+                    </Flex>
+                  </Button>
+
+
+                  <Link href='/'>
+                    <Text as="a">
+                      <Button
+                        variant="menuItem"
+                        tabIndex="-1"
+                        onClick={(e) => toggleMenu()}
+                      >
+                        <Flex sx={{ alignItems: "center"}}>
+                          <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                          <Home size="24" />
+                          </Flex>
+                          Home
+                        </Flex>
+                      </Button>
+                    </Text>
+                  </Link>
+
+
+
+                  <Link href='/about' >
+                    <Text as="a">
+                      <Button
+                        variant="menuItem"
+                        tabIndex="-1"
+                        onClick={(e) => toggleMenu()}
+                      >
+                        <Flex sx={{ alignItems: "center"}}>
+                          <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                            <QuestionSquare size="22" />
+                          </Flex>
+                            About
+                        </Flex>
+                      </Button>
+                    </Text>
+                  </Link>
 
           <InstallMenuItem />
 
           {/* menu footer ===========================================================================================================*/}
           <Flex
-            sx={{ mt: 4, width: "100%", p: 2, pr: 3, alignItems: "center" }}
+            sx={{ mt: 7, width: "100%", p: 2, pr: 3, alignItems: "center" }}
           >
             <Link href="http://www.github.com/pratiqdev" passHref>
               <Tipper tip="GitHub" delay={[1000, 0]}>
