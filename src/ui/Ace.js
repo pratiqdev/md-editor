@@ -67,7 +67,7 @@ const Ace = props => {
         editor = reactAceComponent.editor;
         colorMode === 'dark' ? editor.setTheme('ace/theme/monokai') : editor.setTheme('ace/theme/dawn')
         props.defaultContent && editor.getValue() !== props.defaultContent ? setAceToDefaultText() : null
-    }, [colorMode, props])
+    }, [colorMode, props, theme])
 
 
 
@@ -78,10 +78,10 @@ const Ace = props => {
         <>
         <Box sx={{
             position: 'absolute',
-            right: '50vw',
-            left: '0',
-            top: '3rem',
-            bottom: '0px'
+            right: props.layout.r,
+            left: props.layout.l,
+            top: props.layout.t,
+            bottom: props.layout.b,
         }}>
             <AceEditor
                 ref={REF_ACE}

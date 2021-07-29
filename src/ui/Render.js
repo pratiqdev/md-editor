@@ -3,9 +3,9 @@ import React, { useRef, useEffect, useState } from 'react'
 
 
 import hljs from 'highlight.js/lib/core';
-// import javascript from 'highlight.js/lib/languages/javascript';
+import javascript from 'highlight.js/lib/languages/javascript';
 import markdown from 'highlight.js/lib/languages/markdown';
-// hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('markdown', markdown);
 import 'highlight.js/styles/github.css';
 
@@ -55,7 +55,7 @@ const Render = (props) => {
             const nodes = REF_RESULTBOX.current.querySelectorAll('pre');
             nodes.forEach((node) => {
                 hljs.highlightBlock(node);
-                // console.log('found pre to highltight', node)
+                console.log('found pre to highltight', node)
             });
         }
     }
@@ -80,12 +80,12 @@ const Render = (props) => {
                 <Box
                 sx={{
                     position: 'absolute',
-                    top: '3rem',
-                    bottom: '0',
-                    left: '50vw',
-                    right: '0',
-                    p:3,
-                    pt:1,
+                    top: props.layout.t,
+                    bottom: props.layout.b,
+                    left: props.layout.l,
+                    right: props.layout.r,
+                    p:5,
+                    pt:3,
 
                     bg: 'grey_0',
                     color: 'grey_15',

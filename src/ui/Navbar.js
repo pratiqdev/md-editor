@@ -158,11 +158,12 @@ const Navbar = forwardRef((props, ref) => {
           </Link>
 
 
-
+          {props.editor &&
           <Flex>
             <Button variant='plain' sx={{mr:3}} onClick={()=>props.handleReset()}>Reset</Button>
             <Button variant='plain' sx={{mr:3}} onClick={()=>props.showSave()}>Save</Button>
           </Flex>
+          }
 
 
         </Flex>

@@ -98,12 +98,12 @@ const ModalType1 = props => {
                     <Box
                     ref={REF_TITLE} 
                     sx={{color: 'grey_0', fontSize: 3, fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
-                        Save Your Work
+                        Settings
                     </Box>
 
                     {/* SUBTITLE ------------------------------------------*/}
                     <Box sx={{color: 'grey_6', my:6}}>
-                        Save this version of your work so you can use it later, or compare it with other versions to find the best one!
+                        Change settings and themes of the editor and render
                     </Box>
 
                     <Box sx={{
@@ -118,15 +118,15 @@ const ModalType1 = props => {
                         p:2,
                         textAlign: 'center'
                     }}>
-                        No saved data yet
+                        No settings yet
                     </Box>
 
 
                     
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
-                        <Button variant='outline.secondary' sx={{p:2, minWidth: '14rem'}} onClick={handleDeny}>No, go back</Button>
-                        <Button sx={{p:2, minWidth: '14rem'}} onClick={handleAccept}>Save this version</Button>
+                        <Button variant='outline.secondary' sx={{p:2, minWidth: '14rem'}} onClick={handleDeny}>Reset defaults</Button>
+                        <Button sx={{p:2, minWidth: '14rem'}} onClick={handleAccept}>Apply settings</Button>
                     </Flex>
             </Flex>
             </Card>

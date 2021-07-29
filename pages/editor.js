@@ -9,6 +9,7 @@ import Link from 'next/link'
 //* THEME _________________________________________________________________________________________
 import { Button, Box, Flex, Text } from "theme-ui";
 import styled from "@emotion/styled";
+import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 
 //* EXTERNAL ______________________________________________________________________________________
 import Tippy from '@tippyjs/react'
@@ -36,6 +37,11 @@ const Render = dynamic(
 
 const MDPage = props => {
 
+  // const context = useThemeUI();
+  // const { theme, components, colorMode, setColorMode } = context;
+
+  const breakIndex = useBreakpointIndex();
+
   // DEFAULTS ___________________________________________________________________________________________________________________________________
   let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
 
@@ -43,6 +49,10 @@ const MDPage = props => {
   const [content, setContent] = useState(defaultText)
   const [showSave, setShowSave] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+  // const [currentTheme, setCurrentTheme] = useState('dark')
+  const [currentSettings, setCurrentSettings] = useState({
+
+  })
 
   const handleChange = val => {
     setContent(val)
@@ -76,14 +86,23 @@ const MDPage = props => {
       console.log('saving content!')
   }
 
+  // const toggleTheme = () => {
+  //   if(colorMode === 'dark'){
+  //     editor.setTheme('ace/theme/monokai')
+  //   }else{
+  //     editor.setTheme('ace/theme/dawn')
+  //   }
+  // }
+
   useEffect(()=>{
+    // toggleTheme()
     if(window.localStorage){
 
       setTimeout(() => {
           let LSContent = localStorage.getItem('content')
           if(LSContent !== '' ){
               setContent(LSContent)
-              console.log('set content from local storage')
+              // console.log('set content from local storage')
           }
       }, 500);
 
@@ -96,24 +115,64 @@ const MDPage = props => {
   }
   })
 
+  // EDITOR / RENDER LAYOUT ____________________________________________________________________________________________________________________________________
+
+  const [editorLayout, setEditorLayout] = useState({})
+
+  const [renderLayout, setRenderLayout] = useState({})
+    
+
+
+  
+  useEffect(()=>{
+    if(breakIndex <= 1){
+      setEditorLayout({
+        t: '3rem',
+        b: '55vh',
+        l: '0',
+        r: '0'
+      })
+      setRenderLayout({
+        t: '45vh',
+        b: '0',
+        l: '0',
+        r: '0'
+      })
+    }else{
+      setEditorLayout({
+        t: '3rem',
+        b: '0',
+        l: '0',
+        r: '50vw'
+      })
+      setRenderLayout({
+        t: '3rem',
+        b: '0',
+        l: '50vw',
+        r: '0'
+      })
+    }
+  }, [breakIndex])
+
   return(
       <>
-      <Navbar fixed editor handleReset={handleReset} showSave={showSaveModal} showSettingsModal={showSettingsModal}/>
+      <Navbar 
+        fixed 
+        editor 
+        handleReset={handleReset} 
+        showSave={showSaveModal} 
+        showSettingsModal={showSettingsModal}/>
 
           <Ace 
             defaultContent={content} 
             handleChange={handleChange} 
-            top={''} 
-            bottom={''} 
-            right={''} 
-            left={''}/>
+            layout={editorLayout}
+            />
 
           <Render 
             editorContent={content} 
-            top={''} 
-            bottom={''} 
-            right={''} 
-            left={''} />
+            layout={renderLayout}
+             />
 
           {showSave && 
             <SaveModal 

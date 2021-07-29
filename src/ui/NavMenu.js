@@ -103,13 +103,13 @@ const NavMenu = (props) => {
           transform: !menuState ? "translateX(100vw)" : "translateX(0vw)",
           minHeight: "100%",
           height: "100%",
-          width: ["20em", "auto", "auto"],
-          maxWidth: ["90%", "20em", "20em"],
+          width: ["100%", "auto", "auto"],
+          maxWidth: ["100%", "20em", "20em"],
           overflowY: "none",
           display: "flex",
           flexDirection: "column",
           bg: "grey_0",
-          borderLeft: ["1px solid", "1px solid", "1px solid"],
+          borderLeft: ["none", "1px solid", "1px solid"],
           // borderBottom: ['none', '1px solid', "1px solid"],
           borderColor: "grey_15",
           transition: 1,
@@ -176,7 +176,7 @@ const NavMenu = (props) => {
                   <Button
                     variant="menuItem"
                     tabIndex="-1"
-                    onClick={(e) => (props.showSettingsModal(), toggleMenu())}
+                    onClick={(e) => (props.showSettingsModal ? props.showSettingsModal() : null, toggleMenu())}
                   >
                     <Flex sx={{ alignItems: "center"}}>
                       <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
