@@ -46,7 +46,6 @@ const App = ({ Component, pageProps }) => {
   useEffect(() => {
     
     toast.remove()
-      setFirstTime(false)
     setTimeout(() => {
       toasty({
         text: `Using version ${version}`,
@@ -77,7 +76,7 @@ const App = ({ Component, pageProps }) => {
       <ThemeProvider theme={theme}>
         <Globals />
           <Head>
-            <title>MJ | Portfolio</title>
+            <title>MD Editor</title>
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1"

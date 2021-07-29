@@ -29,21 +29,21 @@ class MyDocument extends Document {
 
           <meta
             name="description"
-            content="Created with cna, pwa and styled-components"
+            content="Browser based markdown editor"
           />
           <meta
             name="keywords"
-            content="Mike Jannetta, Portfolio, PWA, examples, demo, blog"
+            content="md, markdown, editor"
           />
 
-          <meta name="application-name" content="next pwa" />
+          <meta name="application-name" content="MD Editor" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta
             name="apple-mobile-web-app-status-bar-style"
             content="default"
           />
-          <meta name="apple-mobile-web-app-title" content="next pwa" />
-          <meta name="description" content="my next pwa" />
+          <meta name="apple-mobile-web-app-title" content="MD Editor" />
+          <meta name="description" content="Browser based markdown editor" />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#FFFFFF" />
