@@ -55,7 +55,7 @@ const Render = (props) => {
             const nodes = REF_RESULTBOX.current.querySelectorAll('pre');
             nodes.forEach((node) => {
                 hljs.highlightBlock(node);
-                console.log('found pre to highltight', node)
+                // console.log('found pre to highltight', node)
             });
         }
     }
@@ -79,19 +79,40 @@ const Render = (props) => {
 
                 <Box
                 sx={{
-                    position: 'absolute',
+                    position: props.layout.p,
                     top: props.layout.t,
                     bottom: props.layout.b,
                     left: props.layout.l,
                     right: props.layout.r,
-                    p:5,
-                    pt:3,
+                    width: props.layout.w,
+                    height: props.layout.h,
+
+                    p:[2,3,4],
+                    pt:[2,3,4],
 
                     bg: 'grey_0',
                     color: 'grey_15',
                     '& > *':{
-                        mb:4
+                        mb:4,
                     },
+                    '& *':{
+                        fontSize: [0,1,2]
+                    },
+                    '& h1':{
+                        fontSize: [3,4,5],
+                        mt: 0,
+                    },
+                    '& h2':{
+                        fontSize: [2,3,4]
+                    },
+                    '& h3':{
+                        fontSize: [1,2,3]
+                    },
+                    '& h4, & h5, & h6':{
+                        fontSize: [0,1,2]
+                    },
+
+                    
                     '& blockquote':{
                         bg: 'grey_2',
                         borderLeft: '4px solid',

@@ -9,6 +9,43 @@ import gsap from 'gsap'
 
 
 
+
+
+
+const LoadItem = ({SD}) => {
+    return(
+        <Flex sx={{width: '100%', p:[1,2,2], border: '1px solid', borderColor: 'grey_4', mb:2 }}>
+            <Flex sx={{width: '100%'}}>
+            {SD.name}
+            </Flex>
+            <Flex sx={{width: '100%', fontSize: [0,1,1]}}>
+            {SD.date}
+            </Flex>
+        </Flex>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const SaveModal = props => {
 
 
@@ -87,7 +124,8 @@ const SaveModal = props => {
             onClick={e=>e.stopPropagation()}
             sx={{
                 opacity: '0',
-                transform: 'translateY(3rem)'
+                transform: 'translateY(3rem)',
+                width: ['98vw', 'auto', 'auto']
             }}>
             <Flex sx={{
                     p: [2,4,6],
@@ -99,13 +137,13 @@ const SaveModal = props => {
                     {/* TITLE ------------------------------------------*/}
                     <Box
                     ref={REF_TITLE} 
-                    sx={{color: 'grey_0', fontSize: 3, fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
-                        Save Your Work
+                    sx={{color: 'grey_0', fontSize: [1,2,3], fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
+                        Load a Document
                     </Box>
 
                     {/* SUBTITLE ------------------------------------------*/}
                     <Box sx={{color: 'grey_6', my:6}}>
-                        Save this version of your work so you can use it later, or compare it with other versions to find the best one!
+                        Select and load a document. This will abandon any unsaved changes.
                     </Box>
 
                     <Box sx={{
@@ -121,7 +159,7 @@ const SaveModal = props => {
                         textAlign: 'center'
                     }}>
                         {getArrayOfSaveData().map(SD => 
-                            <Box>{SD.name} | {SD.date}</Box>
+                            <LoadItem SD={SD} />
                         )}
                     </Box>
 
@@ -131,7 +169,7 @@ const SaveModal = props => {
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleDeny}>Cancel</Button>
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem',}} >New</Button>
-                        <Button sx={{p:2, minWidth: '6rem', flex:1}} onClick={handleAccept}>Save</Button>
+                        <Button sx={{p:2, minWidth: '6rem', flex:1}} onClick={handleAccept}>Load</Button>
                     </Flex>
             </Flex>
             </Card>

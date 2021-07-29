@@ -11,126 +11,23 @@ import {
     Radio,
     Checkbox,
     Slider,
-Link as LinkUI} from 'theme-ui'
+    Button,
+    Link as LinkUI
+} from 'theme-ui'
+import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
+
 
 
 // LOCAL ____________________________________________________________________________________
 import Navbar from '../src/ui/Navbar'
+import dataList from '../src/lib/documentation'
 
 // EXTERNAL ____________________________________________________________________________________
 import marked from 'marked'
+import { truncate } from 'lodash';
+import {CaretDown} from '@emotion-icons/boxicons-regular/CaretDown'
+import {CaretUp} from '@emotion-icons/boxicons-regular/CaretUp'
 
-
-
-const dataList = [
-{
-name: 'Option 1',
-group: 'editor',
-content: 
-`This is option 1 [link](https://google.com)`,
-},
-{
-name: 'Option 2',
-group: 'editor',
-content: 
-`This is option 2 
-
-[link](https://google.com)
-
-- list 1
-- list 2
-- list 3
-
-This is Some text right here boii
-
-`,
-},
-{
-name: 'Option 3 for Doing the Thing with editor',
-group: 'editor',
-content: 
-`This is option 2 
-
-[link](https://google.com)
-
-- list 1
-- list 2
-- list 3
-
-This is Some text right here boii
-
-`,
-},
-//_______________________
-{
-name: 'Option 4',
-group: 'render',
-content: `This is option 2 
-
-[link](https://google.com)
-
-- list 1
-- list 2
-- list 3
-
-This is Some text right here boii
-
-`,
-},
-{
-name: 'Option 5',
-group: 'render',
-content: `This is option 5 [link](https://google.com)`,
-},
-{
-name: 'Option 6',
-group: 'render',
-content: `This is option 2 
-
-[link](https://google.com)
-
-- list 1
-- list 2
-- list 3
-
-This is Some text right here boii
-
-`,
-
-},
-{
-name: 'Option 7',
-group: 'render',
-content: `This is option 2 
-
-[link](https://google.com)
-
-- list 1
-- list 2
-- list 3
-
-This is Some text right here boii
-
-`,
-
-},
-{
-name: 'Option 8',
-group: 'editor',
-content: `This is option 2 
-
-[link](https://google.com)
-
-- list 1
-- list 2
-- list 3
-
-This is Some text right here boii
-
-`,
-
-},
-]
 
 
 const uniqueGroups = [...new Set(dataList.map(item => item.group))]; 
@@ -139,32 +36,70 @@ let docString = ''
 
 
 
-//* DOCUMENTATION MENU ITEMS   /////////////////////////////////////////////////////////////////////////
-const DocMenuItem = props => {
+
+//* Collapsible MENU ITEM   /////////////////////////////////////////////////////////////////////////
+const DocMenuItemCollapse = props => {
+
+    const [isCollapsed, setIsCollapsed] = useState(props.allItemsCollapsed)
+
+    const toggleCollapse = () => {
+        props.collapseAll()
+        setTimeout(() => {
+            setIsCollapsed(!isCollapsed)
+        }, 1);
+    }
+
+    useEffect(()=>{
+        setIsCollapsed(props.allItemsCollapsed)
+    }, [props.trigger])
 
 
     return(
         <Flex 
             sx={{
-                // borderBottom: '1px solid',
-                bottom: '0',
                 flexDirection: 'column',
-                p:3
+                p:1,
+                px: 4,
 
             }}>
-                
-                       <LinkUI sx={{fontWeight: 'bold', mb:3}} href={`#${props.group}`}>
-                           {props.group.toUpperCase()}
-                        </LinkUI> 
+            
+            {isCollapsed &&
+            <Flex sx={{ fontWeight: 'bold',  color: 'primary_a', p:0, justifyContent:'space-between', alignItems: 'center'}}>
+                <LinkUI key={props} href={`#${props.group}`} >
+                            {props.group.toUpperCase()}
+                        </LinkUI>
+                <Button variant='icon.primary' sx={{color: 'primary_a'}} onClick={()=>toggleCollapse()}><CaretDown size='22'/></Button>
+            </Flex>
+            }
 
-                {dataList
-                    .filter(item => item.group === props.group)
-                    .map((item, index) => 
-                 
-                    <LinkUI sx={{fontSize: '.8rem !important', textDecoration: 'none', mb:3}} href={`#${item.name.toString().toLowerCase().replace(/ /g,'-') }`}>
-                        {item.name}
-                    </LinkUI> 
-                )}
+            {!isCollapsed &&
+                <Flex sx={{flexDirection: 'column'}}>
+
+
+                    <Flex sx={{fontWeight: 'bold', color: 'primary_a', justifyContent:'space-between'}}>
+                        <LinkUI key={props.group} href={`#${props.group}`}>
+                            {props.group.toUpperCase()}
+                        </LinkUI> 
+                        {props.canCollapse &&  <Button variant='icon.primary' sx={{color: 'primary_a'}} onClick={()=>toggleCollapse()}><CaretUp size='22'/></Button>}
+                    </Flex>
+                    
+
+                    {dataList
+                        .filter(item => item.group === props.group)
+                        .map((item, index) => 
+                    
+                        <LinkUI key={item.name} sx={{fontSize: '.8rem !important', textDecoration: 'none', mb:2}} href={`#${item.name.toString().toLowerCase().replace(/ /g,'-') }`}>
+                            {item.name}
+                        </LinkUI> 
+                    )}
+
+
+                </Flex>
+            }
+
+
+
+
 
         </Flex>
     )
@@ -172,9 +107,35 @@ const DocMenuItem = props => {
 
 
 
+
 //* DOCUMENTATION MENU GROUPS   /////////////////////////////////////////////////////////////////////////
 const DocMenu = props => {
 
+    const breakIndex = useBreakpointIndex();
+
+
+    const [allItemsCollapsed, setAllItemsCollapsed] = useState(true)
+    const [trigger, setTrigger] = useState(false)
+    const [canCollapse, setCanCollapse] = useState(true)
+
+    const collapseAll = () => {
+        console.log('collapseAll')
+        setTrigger(!trigger)
+    }
+
+    useEffect(()=>{
+        if(breakIndex <= 0){
+            setAllItemsCollapsed(true)
+            setCanCollapse(true)
+            setTrigger(!trigger)
+
+        }else{
+            setAllItemsCollapsed(false)
+            setCanCollapse(false)
+            setTrigger(!trigger)
+
+        }
+    }, [breakIndex])
 
     return(
         <Flex 
@@ -188,13 +149,13 @@ const DocMenu = props => {
                 overflow: 'hidden',
                 maxHeight: '93vh',
                 flexDirection: 'column',
-                p:4,
-                bg: 'grey_1',
+                p:2,
+                bg: 'grey_2',
                 mt: [4,0,0]
             }}>
             
                 {uniqueGroups.map((group, index) => 
-                    <DocMenuItem group={group} />
+                    group && <DocMenuItemCollapse group={group} collapseAll={collapseAll} allItemsCollapsed={allItemsCollapsed} trigger={trigger} canCollapse={canCollapse}/>
                 )}
 
         </Flex>
@@ -203,24 +164,38 @@ const DocMenu = props => {
 
 
 
-const createDocs = () => {
+const createDocs = (sv) => {
+    docString = ''
     uniqueGroups.map((group, index) => 
-        section(group)
+        section(group, sv)
     )
 }
 
 
 
-
-const section = val => {
-    h1(val),
+const section = (val, sv) => {
 
     dataList
-        .filter(item => val === item.group)
+        .filter(item => val === item.group )
+        .filter(item => {
+            if(!sv){
+                return true
+            }else{
+                console.log(sv)
+                return sv.map(s => 
+                    item.content.toLowerCase().includes(s.toLowerCase())
+                    || item.name.toLowerCase().includes(s.toLowerCase()) 
+                    || val.toLowerCase().includes(s.toLowerCase())).includes(true)
+                }
+            }
+        )
         .map((item, index) => {
+            if(index === 0){
+                h1(val)
+            }
 
-            h2(item.name)
-            append(item.content)
+            item.name && h2(item.name) 
+            item.content && append(item.content)
             
         })
 }
@@ -250,6 +225,8 @@ const h3 = val => {
 
 
 
+
+
 //* DOCUMENTATION PAGE   /////////////////////////////////////////////////////////////////////////
 const Docs = props => {
 
@@ -265,10 +242,10 @@ const Docs = props => {
     
 
             
-    createDocs()
+    createDocs(searchValue)
 
     return(
-        <>
+        <Box sx={{bg: 'grey_4', height: '100vh'}}>
             <Navbar />
             <Box sx={{overflowX: 'hidden'}}>
                 <Box 
@@ -286,9 +263,16 @@ const Docs = props => {
                         maxWidth: '30rem', 
                         mx: 'auto', 
                         mt:3, 
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        bg: 'grey_1'
                     }}
-                    onChange={(e)=>setSearchValue(e.target.value)}
+                    onChange={(e)=>setSearchValue(e.target.value.replace(/ /g, '%%').split('%%').filter(s => 
+                        s !== ''
+                        && s !== 'the'
+                        && s !== 'is'
+                        && s !== 'when'
+                        && s !== 'or'
+                        ))}
                 />
 
 
@@ -296,18 +280,20 @@ const Docs = props => {
 
                 <Box
                 sx={{
-                    top: '10rem',
                     bottom: '0',
                     right: '0',
-                position: ['relative','absolute', 'absolute'],
+                top: ['0','10rem', '10rem'],
+                    position: ['relative','absolute', 'absolute'],
                 left: ['0', '35vw','25vw'],
                 width: ['100vw', '65vw', '75vw'],
-                top: ['','10rem','10rem'],
+                maxHeight: ['auto','93vh', '93vh'],
                     p:5,
                     pt:1,
                     overflow: 'auto',
                     overflowY: 'auto',
-                    maxHeight: ['auto','93vh', '93vh'],
+                    // borderTop: '10px solid',
+                    borderColor: 'grey_1',
+                    bg: 'grey_0'
                 }}
                     >
                     <Box sx={{
@@ -320,23 +306,27 @@ const Docs = props => {
                     },
                     '& h1':{
                         fontSize: 9,
-                        color: '#88f',
+                        color: 'primary_a',
                         width: '100%',
-                        borderBottom: '2px solid #88f',
+                        borderBottom: '2px solid',
+                        borderColor: 'primary_a',
                         mt: 8,
                         mb:0,
                     },
-                    '& h1:first-child':{
+                    '& h1:first-of-type':{
                         mt:0
                     },
                     '& h2':{
                         fontSize: 5,
-                        // color: '#88f',
+                        // color: 'primary_a',
                         width: '100%',
                         borderTop: '1px solid',
                         borderColor: 'grey_3',
                         py: 4,
                         mt:0,
+                    },
+                    '':{
+
                     },
                     '& blockquote':{
                         bg: 'grey_2',
@@ -372,7 +362,7 @@ const Docs = props => {
             </Box>
             </Box>
             
-        </>
+        </Box>
     )
 }
 export default Docs

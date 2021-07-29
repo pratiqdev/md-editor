@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label} from 'theme-ui'
-import {TweenMax} from 'gsap'
+import gsap from 'gsap'
 
 
 
@@ -28,14 +28,14 @@ const ModalType1 = props => {
     }
 
     const openUpAnim = () => {
-        TweenMax.to([REF_BOX.current], .3, {opacity: 1})
-        TweenMax.to([REF_CARD.current], .3, {opacity: 1, y: '0', delay: .2})
-        TweenMax.to([REF_TITLE.current], .5, {scale: 2, delay: .2, opacity: 1})
+        gsap.to([REF_BOX.current],  {opacity: 1, duration: .3})
+        gsap.to([REF_CARD.current],  {opacity: 1, y: '0', delay: .2, duration: .3})
+        gsap.to([REF_TITLE.current],  {scale: 2, delay: .2, opacity: 1, duration: .5})
     }
     
     const closeDownAnim = () => {
-        TweenMax.to([REF_CARD.current], .3, {opacity: 1, y: '3rem'})
-        TweenMax.to([REF_BOX.current], .3, {opacity: 0})
+        gsap.to([REF_CARD.current], {opacity: 0, y: '3rem', duration: .3})
+        gsap.to([REF_BOX.current],  {opacity: 0, duration: .3 })
     }
 
 
@@ -43,7 +43,10 @@ const ModalType1 = props => {
     const handleAccept = () => {
         // console.log(`accepted`)
         handleClose()
-        props.handleAccept ? props.handleAccept() : null
+            setTimeout(() => {
+            props.handleAccept ? props.handleAccept() : null
+        }, 300);
+
     }
 
     const handleDeny = () => {
@@ -125,8 +128,9 @@ const ModalType1 = props => {
                     
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
-                        <Button variant='outline.secondary' sx={{p:2, minWidth: '14rem'}} onClick={handleDeny}>Reset defaults</Button>
-                        <Button sx={{p:2, minWidth: '14rem'}} onClick={handleAccept}>Apply settings</Button>
+                        <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleDeny}>Cancel</Button>
+                        <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem',}} onClick={()=>console.log('add confirmation dialogue')}>Reset</Button>
+                        <Button sx={{p:2, minWidth: '6rem', flex:1}} onClick={handleAccept}>Apply and Save</Button>
                     </Flex>
             </Flex>
             </Card>

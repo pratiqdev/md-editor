@@ -29,6 +29,8 @@ import { LinkedinSquare as Linkedin } from "@emotion-icons/boxicons-logos/Linked
 import { Home } from "@emotion-icons/boxicons-regular/Home";
 import { CloseOutline as Close } from "@emotion-icons/evaicons-outline/CloseOutline";
 import { QuestionSquare } from "@emotion-icons/bootstrap/QuestionSquare";
+import { File } from '@emotion-icons/boxicons-regular/File'
+import { Settings } from '@emotion-icons/fluentui-system-filled/Settings'
 
 const NavMenu = (props) => {
   const [menuState, setMenuOpen] = useState(false);
@@ -50,20 +52,7 @@ const NavMenu = (props) => {
       
 
 
-  // const menuItems = [
-  //   {
-  //     label: "Home",
-  //     active: true,
-  //     href: "/",
-  //     icon: <Home size="24" />,
-  //   },
-  //   {
-  //     label: "About",
-  //     active: true,
-  //     href: "/about",
-  //     icon: <QuestionSquare size="22" />,
-  //   },
-  // ];
+
 
   return (
     <>
@@ -149,29 +138,35 @@ const NavMenu = (props) => {
         >
 
           
-{/* 
-          {menuItems
-            .filter((item) => item.active)
-            .map((item) => (
-              <Link href={item.href} key={item.href}>
-                <Text as="a">
-                  <Button
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              {/* //* MENU OPTIONS ====================================================================================================================== */}
+
+              <Button
                     variant="menuItem"
                     tabIndex="-1"
-                    onClick={(e) => toggleMenu()}
+                    onClick={(e) => (props.showLoad ? props.showLoad() : null, toggleMenu())}
                   >
                     <Flex sx={{ alignItems: "center"}}>
                       <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
-                        {item.icon}
+                        <File size='22' />
                       </Flex>
-                      {item.label}
+                      Load Document
                     </Flex>
                   </Button>
-                </Text>
-              </Link>
-            ))} */}
 
-              {/* //* MENU OPTIONS ====================================================================================================================== */}
 
                   <Button
                     variant="menuItem"
@@ -180,11 +175,29 @@ const NavMenu = (props) => {
                   >
                     <Flex sx={{ alignItems: "center"}}>
                       <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
-                        I
+                        <Settings size='22' />
                       </Flex>
                       Settings
                     </Flex>
                   </Button>
+
+
+                  <Link href='/docs'>
+                    <Text as="a">
+                      <Button
+                        variant="menuItem"
+                        tabIndex="-1"
+                        onClick={(e) => toggleMenu()}
+                      >
+                        <Flex sx={{ alignItems: "center"}}>
+                          <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                          <Home size="24" />
+                          </Flex>
+                          Docs
+                        </Flex>
+                      </Button>
+                    </Text>
+                  </Link>
 
 
                   <Link href='/'>
@@ -224,6 +237,25 @@ const NavMenu = (props) => {
                   </Link>
 
           <InstallMenuItem />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           {/* menu footer ===========================================================================================================*/}
           <Flex

@@ -12,11 +12,15 @@ import { useRouter } from 'next/router'
 //* theme
 import { useThemeUI, Flex, Box, Button, Text, Grid, Select, Input } from "theme-ui";
 import styled from "@emotion/styled";
+import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
+
 
 //* local deps
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
 const Logo = dynamic(() => import("./Logo"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
+import { activeSaveData } from '../lib/save'
+import useLongPress from '../lib/longPress'
 
 
 import { showInstallPrompt, libInstallStatus, triggerInstallFlow, deferredPrompt } from '../lib/install'
@@ -29,6 +33,11 @@ import { MenuOutline } from "@emotion-icons/evaicons-outline/MenuOutline";
 import { Search } from "@emotion-icons/boxicons-regular/Search";
 import { CloseOutline as Close } from "@emotion-icons/evaicons-outline/CloseOutline";
 
+import {CaretLeft} from '@emotion-icons/boxicons-regular/CaretLeft'
+import {CaretRight} from '@emotion-icons/boxicons-regular/CaretRight'
+import {CaretUp} from '@emotion-icons/boxicons-regular/CaretUp'
+import {CaretDown} from '@emotion-icons/boxicons-regular/CaretDown'
+import {LayoutSplit} from '@emotion-icons/bootstrap/LayoutSplit'
 
 
 
@@ -39,6 +48,7 @@ import { CloseOutline as Close } from "@emotion-icons/evaicons-outline/CloseOutl
 
 const Navbar = forwardRef((props, ref) => {
 
+  const breakIndex = useBreakpointIndex();
 
 
   useImperativeHandle(
@@ -101,14 +111,30 @@ const Navbar = forwardRef((props, ref) => {
     
   }, [props, router.query.q, libInstallStatus]);
 
+const [toggle, setToggle] = useState(true)
+
+const toggleLayout = () => {
+  if(toggle){
+    setToggle(false)
+    props.setLayout('editor')
+  }else{
+    setToggle(true)
+    props.setLayout('render')
+
+  }
+}
+
+const splitWindow = () => {
+  props.setLayout('split')
+}
+
+const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
 
 
 
 
 
-
-
-
+// console.log(`props.layout: ${props.layoutType}`)
 
   return (
     <>
@@ -153,15 +179,32 @@ const Navbar = forwardRef((props, ref) => {
 
           <Link href='/'>
             <Box sx={{ ml: 3, mt: 1, cursor: "pointer", fontSize: [4,5,5] }}>
-              MD Editor
+              MD Editor - {activeSaveData.id}
             </Box>
           </Link>
 
 
           {props.editor &&
           <Flex>
-            <Button variant='plain' sx={{mr:3}} onClick={()=>props.handleReset()}>Reset</Button>
-            <Button variant='plain' sx={{mr:3}} onClick={()=>props.showSave()}>Save</Button>
+            {/* {
+            props.layoutType === 'editor' && 
+              <Button variant='icon.plain' sx={{mr:3}} 
+                onClick={()=>props.setLayout('render')} 
+                onDoubleClick={()=>props.setLayout('split')}>
+                  <CaretLeft size='22'/>
+              </Button>
+            } */}
+
+              <Button variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
+                  {(props.layoutType === 'editor' && breakIndex <=0) &&<CaretUp size='22'/>}
+                  {(props.layoutType === 'render' && breakIndex <=0) &&<CaretDown size='22'/>}
+                  {(props.layoutType === 'split' && breakIndex <=0) &&<LayoutSplit  style={{transform: 'rotate(90deg)'}} size='18'/>}
+
+                  {(props.layoutType === 'editor' && breakIndex > 0) &&<CaretLeft size='22'/>}
+                  {(props.layoutType === 'render' && breakIndex > 0) &&<CaretRight size='22'/>}
+                  {(props.layoutType === 'split' && breakIndex > 0) &&<LayoutSplit size='18'/>}
+              </Button>
+            
           </Flex>
           }
 
@@ -172,7 +215,13 @@ const Navbar = forwardRef((props, ref) => {
         <Flex mr={0}>
           
           <ThemeToggle />
-          <NavMenu appInstallStatus={appInstallStatus} showSettingsModal={props.showSettingsModal}/>
+          <NavMenu 
+            appInstallStatus={appInstallStatus} 
+            showSettingsModal={props.showSettingsModal} 
+            showLoad={props.showLoad}
+            
+            />
+
         </Flex>
       </Box>
 

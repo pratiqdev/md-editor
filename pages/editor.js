@@ -18,7 +18,7 @@ import marked from 'marked'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-import SaveModal from '../src/ui/modals/SaveModal'
+import LoadModal from '../src/ui/modals/LoadModal'
 import SettingsModal from '../src/ui/modals/SettingsModal'
 import toasty from '../src/lib/toasty';
 
@@ -42,12 +42,12 @@ const MDPage = props => {
 
   const breakIndex = useBreakpointIndex();
 
-  // DEFAULTS ___________________________________________________________________________________________________________________________________
+  //~ DEFAULTS ___________________________________________________________________________________________________________________________________
   let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
 
 
   const [content, setContent] = useState(defaultText)
-  const [showSave, setShowSave] = useState(false)
+  const [showLoad, setShowLoad] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   // const [currentTheme, setCurrentTheme] = useState('dark')
   const [currentSettings, setCurrentSettings] = useState({
@@ -59,7 +59,7 @@ const MDPage = props => {
     localStorage.setItem('content', val)
   }
 
-  // RESET ______________________________________________________________________________________________________________________________________
+  //~ RESET ______________________________________________________________________________________________________________________________________
   const handleReset = () => {
       localStorage.setItem('content', defaultText)
       setContent(defaultText)
@@ -70,9 +70,9 @@ const MDPage = props => {
   }
 
   
-  // MODAL TOGGLES ______________________________________________________________________________________________________________________________________
-  const showSaveModal = () => {
-      setShowSave(true)
+  //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
+  const showLoadModal = () => {
+      setShowLoad(true)
   }
 
   const showSettingsModal = () => {
@@ -82,9 +82,6 @@ const MDPage = props => {
 
 
 
-  const saveContent = () => {
-      console.log('saving content!')
-  }
 
   // const toggleTheme = () => {
   //   if(colorMode === 'dark'){
@@ -110,74 +107,209 @@ const MDPage = props => {
       setContent(defaultText)
       toasty({
           type: 'alert',
-          text: 'No local storage is available to save data! Are you incognito?'
+          text: 'No local storage is available to Load data! Are you incognito?'
       })
   }
   })
 
-  // EDITOR / RENDER LAYOUT ____________________________________________________________________________________________________________________________________
+  //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
 
   const [editorLayout, setEditorLayout] = useState({})
-
   const [renderLayout, setRenderLayout] = useState({})
-    
+  const [layoutType, setLayoutType] = useState('split')
 
 
+
+  const [fontSize, setFontSize] = useState('.7rem')
   
+
   useEffect(()=>{
-    if(breakIndex <= 1){
+
+    // console.log(`layout: ${layoutType}`)
+    if(layoutType === 'editor'){
       setEditorLayout({
-        t: '3rem',
-        b: '55vh',
-        l: '0',
-        r: '0'
-      })
-      setRenderLayout({
-        t: '45vh',
-        b: '0',
-        l: '0',
-        r: '0'
-      })
-    }else{
-      setEditorLayout({
+        p: 'absolute',
         t: '3rem',
         b: '0',
         l: '0',
-        r: '50vw'
+        r: '0',
+        w: '',
+        h: '',
       })
       setRenderLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '0',
+        r: '0',
+        w: '',
+        h: '',
+      })
+    }
+
+
+
+    if(layoutType === 'render' ){
+      setEditorLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '100vw',
+        r: '0',
+        w: '',
+        h: '',
+      })
+      setRenderLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '0',
+        r: '0',
+        w: '',
+        h: '',
+      })
+    }
+
+
+
+    if(layoutType === 'split' && breakIndex <= 1){
+      setEditorLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '50vh',
+        l: '0',
+        r: '0',
+        w: '',
+        h: '',
+      })
+      setRenderLayout({
+        p: 'absolute',
+        t: '50vh',
+        b: '0',
+        l: '0',
+        r: '0',
+        w: '',
+        h: '',
+      })
+    }
+    if(layoutType === 'split' && breakIndex > 0){
+      setEditorLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '0',
+        r: '50vw',
+        w: '',
+        h: '',
+      })
+      setRenderLayout({
+        p: 'absolute',
         t: '3rem',
         b: '0',
         l: '50vw',
-        r: '0'
+        r: '0',
+        w: '',
+        h: '',
       })
     }
-  }, [breakIndex])
 
+
+  }, [layoutType, breakIndex])
+
+  
+  // useEffect(()=>{
+  //   if(breakIndex <= 1){
+  //     setFontSize('.7rem')
+  //     setEditorLayout({
+  //       t: '3rem',
+  //       b: '55vh',
+  //       l: '0',
+  //       r: '0'
+  //     })
+  //     setRenderLayout({
+  //       t: '45vh',
+  //       b: '0',
+  //       l: '0',
+  //       r: '0'
+  //     })
+  //   }else{
+  //     setFontSize('1rem')
+  //     setEditorLayout({
+  //       t: '3rem',
+  //       b: '0',
+  //       l: '0',
+  //       r: '50vw'
+  //     })
+  //     setRenderLayout({
+  //       t: '3rem',
+  //       b: '0',
+  //       l: '50vw',
+  //       r: '0'
+  //     })
+  //   }
+  // }, [breakIndex])
+
+
+
+
+
+  //~ RETURN ELEMENTS __________________________________________________________________________________________________________________
   return(
       <>
       <Navbar 
         fixed 
-        editor 
-        handleReset={handleReset} 
-        showSave={showSaveModal} 
+        editor
+        setLayout={setLayoutType}
+        layoutType={layoutType}
+        showLoad={showLoadModal} 
         showSettingsModal={showSettingsModal}/>
 
+
+
+
+
+
+
+
+
+
+        <Flex sx={{flexDirection: ['column', 'row', 'row']}}>
+          
+          <Box sx={{
+            height: editorLayout.h,
+            width: editorLayout.w
+            }} >
           <Ace 
-            defaultContent={content} 
+            setLayout={setLayoutType}
+            defaultContent={defaultText} 
             handleChange={handleChange} 
             layout={editorLayout}
+            fontSize={fontSize}
             />
+          </Box>
 
+
+          <Box sx={{height: '3vh', overflow: 'hidden', overflowY: 'auto'}} >
           <Render 
             editorContent={content} 
             layout={renderLayout}
-             />
+            />
+          </Box>
 
-          {showSave && 
-            <SaveModal 
-              handleDeny={()=>setShowSave(false)} 
-              handleAccept={()=>saveContent()}/>
+        </Flex>
+
+
+
+
+
+
+
+
+
+          {showLoad && 
+            <LoadModal 
+              handleDeny={()=>setShowLoad(false)} 
+              handleAccept={()=>LoadContent()}/>
           }
 
 

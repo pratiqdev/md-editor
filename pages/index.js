@@ -48,13 +48,13 @@ const Index = (props) => {
 
 
         <Link href='/editor'>
-          <Button variant='outline.accent' sx={{minWidth: '25rem', maxWidth: '80vw',mb:6, py: 4, fontSize: [7,8,9]}}>MD Editor</Button>
+          <Button variant='outline.accent' sx={{width: '25rem', maxWidth: '80vw',mb:6, py: 4, fontSize: [4,6,9]}}>MD Editor</Button>
         </Link>
         <Link href='/docs'>
-          <Button variant='outline.secondary' sx={{minWidth: '18rem', mb:4, fontSize: [5,6,7]}}>View Documentation</Button>
+          <Button variant='outline.secondary' sx={{width: '12rem', mb:4, fontSize: [3,5,6]}}>Documentation</Button>
         </Link>
         <Link href='/about'>
-          <Button variant='outline.secondary' sx={{minWidth: '18rem', mb:4, fontSize: [5,6,7]}}>About this App</Button>
+          <Button variant='outline.secondary' sx={{width: '12rem', mb:4, fontSize: [3,5,6]}}>About this App</Button>
         </Link>
 
       </Flex>

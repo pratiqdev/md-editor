@@ -4,6 +4,7 @@ export default {
     fontWeight: "body",
   },
   input: {
+    borderRadius: 2,
     borderColor: "grey_7",
     "&:focus": {
       borderColor: "primary",

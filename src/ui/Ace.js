@@ -5,6 +5,7 @@ import {useEffect, useState, useRef } from 'react'
 
 //* THEME ______________________________________________________________________
 import {useThemeUI, Box, Flex} from 'theme-ui'
+import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 
 
 
@@ -25,6 +26,9 @@ const Ace = props => {
 
     const context = useThemeUI();
     const { theme, components, colorMode, setColorMode } = context;
+
+    const breakIndex = useBreakpointIndex();
+
     
     const REF_ACE = useRef(null)
 
@@ -66,7 +70,7 @@ const Ace = props => {
         const reactAceComponent = REF_ACE.current;
         editor = reactAceComponent.editor;
         colorMode === 'dark' ? editor.setTheme('ace/theme/monokai') : editor.setTheme('ace/theme/dawn')
-        props.defaultContent && editor.getValue() !== props.defaultContent ? setAceToDefaultText() : null
+        // props.defaultContent && editor.getValue() !== props.defaultContent ? setAceToDefaultText() : null
     }, [colorMode, props, theme])
 
 
@@ -77,12 +81,18 @@ const Ace = props => {
     return(
         <>
         <Box sx={{
-            position: 'absolute',
+            // position: 'relative',
+            // height: '10vh',
+            position: props.layout.p,
             right: props.layout.r,
             left: props.layout.l,
             top: props.layout.t,
             bottom: props.layout.b,
-        }}>
+            width: props.layout.w,
+            height: props.layout.h,
+        }}
+        onFocus={()=>breakIndex <= 0 && props.setLayout('editor')}
+        >
             <AceEditor
                 ref={REF_ACE}
                 mode="java"
@@ -96,7 +106,7 @@ const Ace = props => {
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
                     enableSnippets: false,
-                    fontSize: '16px'
+                    fontSize: props.fontSize
                   }}
                   style={{zIndex: '2'}}
                 />
