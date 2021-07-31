@@ -28,15 +28,26 @@ export default {
       variant: "text.heading",
       fontSize: [9,10,10],
       fontFamily: "heading",
-      color: "primary_d",
-      my: 0,
+      color: "primary_a",
+      borderBottom: '2px solid',
+      borderColor: 'primary_a',
+      mt: 4,
+    '&:first-of-type':{
+      mt: 1,
+    },
     },
     h2: {
       variant: "text.heading",
-      fontSize: [8,9,9],
-      mt: 8,
+      fontSize: [5,6,7],
+      mt: 6,
       mb: 4,
       fontFamily: "body",
+      borderTop: '1px solid',
+      borderColor: 'grey_4',
+      mt: 4,
+    '&:first-of-type':{
+      mt: 1,
+    },
     },
     h3: {
       variant: "text.heading",
@@ -210,6 +221,26 @@ export default {
       borderColor: 'grey_2',
       mb: 2,
     },
+    // this is the 'marked' text created from search matches
+
+    'em':{
+      color: 'blue'
+    },
+    'strong':{
+      color: 'green'
+    },
+    
+      'strong':{
+        'em':{
+          bg: 'rgba(150,150,150,.9) !important',
+          // bg: 'red',
+          // color: 'white',
+          fontStyle: 'normal',
+          textDecoration: 'underline',
+          p: '.1rem',
+          m: '-.1rem',
+        }
+    }
     
 
 

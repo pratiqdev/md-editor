@@ -5,7 +5,7 @@ import { useThemeUI, Box } from 'theme-ui'
 const Logo = (props) => {
     const context = useThemeUI()
     const { theme, colorMode } = context
-    const logoThemeColor = colorMode === 'default' ? '#ffffff' : '#000000'
+    const logoThemeColor = colorMode !== 'dark' ? '#000' : '#fff'
 
     return(
 

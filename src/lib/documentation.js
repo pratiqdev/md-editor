@@ -6,7 +6,7 @@ const documentation = [
     group: "editor",
     content: `
     
-This text-editor uses the ${'`Ace`'} editor with awesome built-in features.  
+This text-editor uses the Ace editor with awesome built-in features.  
 
 - Live syntax highlighing
 - Multiple cursors
@@ -16,7 +16,10 @@ This text-editor uses the ${'`Ace`'} editor with awesome built-in features.
 - Search and replace
 
 
-Visit [the Ace website](https://ace.c9.io/) to use it in your project!`,
+Visit [the Ace website](https://ace.c9.io/) to use it in your project!
+
+![alt](https://placekitten.com/800/200)
+`,
   },
   {
     name: "Option 1",

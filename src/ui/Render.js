@@ -31,16 +31,17 @@ const Render = (props) => {
     const REF_RESULTBOX = useRef(null)
 
     const renderText = text => {
-        if (typeof hljs != 'undefined')
-            marked.setOptions({
-                highlight: function (code, lang) {
-                if (lang && hljs.getLanguage(lang))
-                    return hljs.highlight(lang, code).value;
-                else
-                    return code;
-                }
-            });
-        const __html = marked(text)
+        let t = text || ''
+        // if (typeof hljs != 'undefined')
+        //     marked.setOptions({
+        //         highlight: function (code, lang) {
+        //         if (lang && hljs.getLanguage(lang))
+        //             return hljs.highlight(lang, code).value;
+        //         else
+        //             return code;
+        //         }
+        //     });
+        const __html = marked(t)
         return { __html }
     }
 
@@ -91,7 +92,7 @@ const Render = (props) => {
                     pt:[2,3,4],
 
                     bg: 'grey_0',
-                    color: 'grey_15',
+                    // color: 'grey_15',
                     '& > *':{
                         mb:4,
                     },

@@ -200,7 +200,7 @@ const NavMenu = (props) => {
                   </Link>
 
 
-                  <Link href='/'>
+                  <Link href='/editor'>
                     <Text as="a">
                       <Button
                         variant="menuItem"
@@ -211,7 +211,7 @@ const NavMenu = (props) => {
                           <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
                           <Home size="24" />
                           </Flex>
-                          Home
+                          Editor
                         </Flex>
                       </Button>
                     </Text>

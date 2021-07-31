@@ -217,37 +217,7 @@ const MDPage = props => {
   }, [layoutType, breakIndex])
 
   
-  // useEffect(()=>{
-  //   if(breakIndex <= 1){
-  //     setFontSize('.7rem')
-  //     setEditorLayout({
-  //       t: '3rem',
-  //       b: '55vh',
-  //       l: '0',
-  //       r: '0'
-  //     })
-  //     setRenderLayout({
-  //       t: '45vh',
-  //       b: '0',
-  //       l: '0',
-  //       r: '0'
-  //     })
-  //   }else{
-  //     setFontSize('1rem')
-  //     setEditorLayout({
-  //       t: '3rem',
-  //       b: '0',
-  //       l: '0',
-  //       r: '50vw'
-  //     })
-  //     setRenderLayout({
-  //       t: '3rem',
-  //       b: '0',
-  //       l: '50vw',
-  //       r: '0'
-  //     })
-  //   }
-  // }, [breakIndex])
+
 
 
 
