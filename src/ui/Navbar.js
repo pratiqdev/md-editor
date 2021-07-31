@@ -19,7 +19,7 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
 const Logo = dynamic(() => import("./Logo"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
-import { activeSaveData } from '../lib/save'
+import * as SD from '../lib/save'
 import useLongPress from '../lib/longPress'
 
 
@@ -51,14 +51,6 @@ const Navbar = forwardRef((props, ref) => {
   const breakIndex = useBreakpointIndex();
 
 
-  useImperativeHandle(
-      ref,
-      () => ({
-          resetSearch() {
-            clearInput()
-          }
-       }),
-   )
 
 
 
@@ -178,9 +170,20 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
         <Flex sx={{ alignItems: "center", zIndex: 1, justifyContent: 'space-between', flex:1 }}>
 
           <Link href='/'>
-            <Box sx={{ ml: 3, mt: 1, cursor: "pointer", fontSize: [4,5,5] }}>
-              MD Editor - {activeSaveData.id}
-            </Box>
+            <Flex sx={{ ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
+              MD
+              {props.editor ?
+              <Flex sx={{fontSize: 1, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
+                <Box>
+                  {SD.getActive() && SD.getActive().name  }
+                </Box>
+                <Box>
+                  {SD.getActive() && SD.getActive().date  }
+                </Box>
+              </Flex>
+              :
+              ' Editor'}
+            </Flex>
           </Link>
 
 

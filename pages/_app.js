@@ -15,7 +15,6 @@ import { useRouter } from 'next/router'
 //* theme-ui
 import '../src/theme/editor.css'
 import { useThemeUI, ThemeProvider, Flex, Box } from 'theme-ui' 
-import { keyframes } from '@emotion/react'
 
 //* local deps
 import theme from '../src/theme/Theme'

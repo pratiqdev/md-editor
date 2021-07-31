@@ -6,7 +6,9 @@ import {useEffect, useState, useRef } from 'react'
 //* THEME ______________________________________________________________________
 import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
+import gsap from'gsap'
 
+import * as SD from '../lib/save'
 
 
 import AceEditor from "react-ace";
@@ -33,7 +35,6 @@ const Ace = props => {
     const REF_ACE = useRef(null)
 
     const onChange = (val) => {
-        // console.log(val)
         props.handleChange(val)
     }
 
@@ -41,40 +42,53 @@ const Ace = props => {
 
     let editor
 
-    let currentThemeIndex = 0
-    let themeArray = [
-        'tomorrow_night',
-        'chrome',
-        'chaos',
-        'dawn',
-        'dracula',
-        'monokai'
-    ]
+    // let currentThemeIndex = 0
+    // let themeArray = [
+    //     'tomorrow_night',
+    //     'chrome',
+    //     'chaos',
+    //     'dawn',
+    //     'dracula',
+    //     'monokai'
+    // ]
 
-    const cycleThemes = () => {
-        if(currentThemeIndex <= themeArray.length - 1){
-            currentThemeIndex++
-        }else{
-            currentThemeIndex = 0
-        }
-        editor.setTheme(`ace/theme/${themeArray[currentThemeIndex]}`);
-    }
+    // const cycleThemes = () => {
+    //     if(currentThemeIndex <= themeArray.length - 1){
+    //         currentThemeIndex++
+    //     }else{
+    //         currentThemeIndex = 0
+    //     }
+    //     editor.setTheme(`ace/theme/${themeArray[currentThemeIndex]}`);
+    // }
 
     // const setAceToDefaultText = () => {
     //     editor.setValue(props.defaultContent)
     //     editor.clearSelection()
     //     editor.selection.moveTo(0,0)
     // }
+    let bgcolor = '#aaa'
+
 
     useEffect(()=>{
         const reactAceComponent = REF_ACE.current;
         editor = reactAceComponent.editor;
         colorMode === 'dark' ? editor.setTheme('ace/theme/monokai') : editor.setTheme('ace/theme/dawn')
+
+        if(colorMode === 'dark'){
+            gsap.to([editor.container], {background: '#191919', duration: .3})
+        }else{
+            gsap.to([editor.container], {background: '#ccc', duration: .3})
+        }
+
         // props.defaultContent && editor.getValue() !== props.defaultContent ? setAceToDefaultText() : null
     }, [colorMode, props, theme])
+    
+    useEffect(()=>{
+        editor.setValue(SD.getActive().content)
 
-
-
+    }, [props.refreshContent])
+    
+    
 
 
 
@@ -109,7 +123,7 @@ const Ace = props => {
                     enableSnippets: false,
                     fontSize: props.fontSize
                   }}
-                  style={{zIndex: '2'}}
+                  style={{zIndex: '2', background: bgcolor}}
                 />
             </Box>
         </>

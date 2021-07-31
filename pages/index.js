@@ -7,7 +7,6 @@ import Link from 'next/link'
 
 //* THEME _________________________________________________________________________________________
 import { Button, Box, Flex, Text } from "theme-ui";
-import styled from "@emotion/styled";
 
 //* EXTERNAL ______________________________________________________________________________________
 import Tippy from '@tippyjs/react'

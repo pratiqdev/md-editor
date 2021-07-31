@@ -87,9 +87,10 @@ const Render = (props) => {
                     right: props.layout.r,
                     width: props.layout.w,
                     height: props.layout.h,
+                    transition: 'background .3s',
 
-                    p:[2,3,4],
-                    pt:[2,3,4],
+                    p:[4,5,6],
+                    pt:4,
 
                     bg: 'grey_0',
                     // color: 'grey_15',
@@ -97,20 +98,20 @@ const Render = (props) => {
                         mb:4,
                     },
                     '& *':{
-                        fontSize: [0,1,2]
+                        fontSize: [1,2,3]
                     },
                     '& h1':{
-                        fontSize: [3,4,5],
+                        fontSize: [8,9,10],
                         mt: 0,
                     },
                     '& h2':{
-                        fontSize: [2,3,4]
+                        fontSize: [6,7,8]
                     },
                     '& h3':{
-                        fontSize: [1,2,3]
+                        fontSize: [4,5,6]
                     },
                     '& h4, & h5, & h6':{
-                        fontSize: [0,1,2]
+                        fontSize: [2,3,4]
                     },
 
                     

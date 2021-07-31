@@ -163,7 +163,7 @@ const NavMenu = (props) => {
                       <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
                         <File size='22' />
                       </Flex>
-                      Load Document
+                      Documents
                     </Flex>
                   </Button>
 
@@ -193,7 +193,7 @@ const NavMenu = (props) => {
                           <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
                           <Home size="24" />
                           </Flex>
-                          Docs
+                          Guide
                         </Flex>
                       </Button>
                     </Text>

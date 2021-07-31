@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label} from 'theme-ui'
 
-import { activeSaveData, getArrayOfSaveData, setActiveSaveData } from '../../lib/save'
+import { activeSaveData, getAll, setActiveSaveData } from '../../lib/save'
 import gsap from 'gsap'
 
 
@@ -120,7 +120,7 @@ const SaveModal = props => {
                         p:2,
                         textAlign: 'center'
                     }}>
-                        {getArrayOfSaveData().map(SD => 
+                        {getAll().map(SD => 
                             <Box>{SD.name} | {SD.date}</Box>
                         )}
                     </Box>
