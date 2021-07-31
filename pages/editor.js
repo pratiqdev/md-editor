@@ -105,6 +105,7 @@ const MDPage = props => {
 
   }else{
       setContent(defaultText)
+      console.log('editor.js @108 | setting default text')
       toasty({
           type: 'alert',
           text: 'No local storage is available to Load data! Are you incognito?'
@@ -251,7 +252,7 @@ const MDPage = props => {
             }} >
           <Ace 
             setLayout={setLayoutType}
-            defaultContent={defaultText} 
+            defaultContent={content} 
             handleChange={handleChange} 
             layout={editorLayout}
             fontSize={fontSize}

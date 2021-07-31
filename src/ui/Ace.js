@@ -60,11 +60,11 @@ const Ace = props => {
         editor.setTheme(`ace/theme/${themeArray[currentThemeIndex]}`);
     }
 
-    const setAceToDefaultText = () => {
-        editor.setValue(props.defaultContent)
-        editor.clearSelection()
-        editor.selection.moveTo(0,0)
-    }
+    // const setAceToDefaultText = () => {
+    //     editor.setValue(props.defaultContent)
+    //     editor.clearSelection()
+    //     editor.selection.moveTo(0,0)
+    // }
 
     useEffect(()=>{
         const reactAceComponent = REF_ACE.current;
@@ -91,7 +91,8 @@ const Ace = props => {
             width: props.layout.w,
             height: props.layout.h,
         }}
-        onFocus={()=>breakIndex <= 0 && props.setLayout('editor')}
+        // onFocus={()=>breakIndex <= 0 && props.setLayout('editor')} // used to hide render window on mobile devices because virtual keyboard takes up so much space.
+        // onFocusOut={()=>breakIndex <= 0 && props.setLayout('split')}
         >
             <AceEditor
                 ref={REF_ACE}
