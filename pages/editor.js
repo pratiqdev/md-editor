@@ -20,7 +20,7 @@ import Navbar from "../src/ui/Navbar";
 // import LoadModal from '../src/ui/modals/LoadModal'
 // import SettingsModal from '../src/ui/modals/SettingsModal'
 import toasty from '../src/lib/toasty';
-import * as SD from '../src/lib/save-version-3.js'
+import * as SD from '../src/lib/save-version-4.js'
 
 
 
@@ -35,7 +35,7 @@ const Render = dynamic(
   )
 
 
-
+let parentFinishedLoading = false 
 
 const MDPage = props => {
 
@@ -48,35 +48,55 @@ const MDPage = props => {
   // let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
 
 
-  const [content, setContent] = useState('')
-  const [currentSettings, setCurrentSettings] = useState({
-
-  })
-
-  const handleChange = val => {
-    setContent(val)
-    SD.updateContent(val)
-  }
-
-
-
-
-  useEffect(()=>{
-    SD.init()
-    SD.getActive()
-  })
-
-  //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
+  const [parentContent, setParentContent] = useState('LOADING')
+  const [currentSettings, setCurrentSettings] = useState()
 
   const [editorLayout, setEditorLayout] = useState({})
   const [renderLayout, setRenderLayout] = useState({})
   const [layoutType, setLayoutType] = useState('split')
-  const [trigger, setTrigger] = useState(false)
+  const [parentTrigger, setParentTrigger] = useState(false)
 
 
-  const [fontSize, setFontSize] = useState('.7rem')
+
+  const handleChange = val => {
+      console.log('EDITOR | handleChange - 034958')
+      setParentContent(val) 
+      SD.updateContent(val) ? SD.updateContent(val) : console.log('EDITOR | failed to call SD.updateContent')
+  }
+
+
+  //* useEffect for load only - loading should only happen in the parent
+  useEffect(()=>{
+    if(!parentFinishedLoading){
+      parentFinishedLoading = true
+    
+      console.log(`running load useEffect - should only happen once!`)
+      
+      if(typeof SD !== 'undefined'){
+        SD.init() && SD.init() // check if SD.init exists before calling
+        // check if getActivve exists before calling
+        setTimeout(() => {
+          let contentReturnedFromSD = SD.getActive() ? SD.getActive().content : false
+          
+          setParentContent(contentReturnedFromSD || 'no content to pass from parent 65434635642') //! causing errors in BUST ??????
+
+          setParentTrigger(!parentTrigger)
+      
+        }, 100);
+      }
+
+    }
+
+  })
+
+  //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
+
+
+
+
+  const [fontSize, setFontSize] = useState('1rem')
   
-
+  //* useEffect for layout changes
   useEffect(()=>{
 
     if(layoutType === 'editor'){
@@ -169,19 +189,6 @@ const MDPage = props => {
 
   }, [layoutType, breakIndex])
 
-  
-  useEffect(()=>{
-    if(typeof SD !== 'undefined'){
-      SD.getActive()
-      setTimeout(() => {
-        
-        setContent(SD.getActive().content) //! causing errors in BUST ??????
-      }, 100);
-    }
-    console.log('trigger!')
-  }, [trigger])
-
-
 
 
 
@@ -193,44 +200,33 @@ const MDPage = props => {
         editor
         setLayout={setLayoutType}
         layoutType={layoutType}
-        trigger={()=>setTrigger(!trigger)}
-        // showLoad={showLoadModal} 
-        // showSettingsModal={showSettingsModal}
+        causeParentTrigger={()=>setParentTrigger(!parentTrigger)}
         />
 
 
-
-
-
-
-
-
-
-
         <Flex sx={{flexDirection: ['column', 'row', 'row']}}>
-          
           <Box sx={{
             height: editorLayout.h,
             width: editorLayout.w
             }} >
-          <Ace 
-            setLayout={setLayoutType}
-            content={content} 
-            handleChange={handleChange} 
-            layout={editorLayout}
-            fontSize={fontSize}
-            trigger={trigger}
+            <Ace 
+              setLayout={setLayoutType}
+              parentContent={parentContent} 
+              handleChange={handleChange} 
+              layout={editorLayout}
+              fontSize={fontSize}
+              useTrigger={parentTrigger}
             />
           </Box>
 
 
           <Box sx={{height: '3vh', overflow: 'hidden', overflowY: 'auto'}} >
-          <Render 
-            editorContent={content} 
-            layout={renderLayout}
+            <Render 
+              useTrigger={parentTrigger}
+              parentContent={parentContent} 
+              layout={renderLayout}
             />
           </Box>
-
         </Flex>
 
 
@@ -241,17 +237,6 @@ const MDPage = props => {
 
 
 
-          {/* {showLoad && 
-            <LoadModal 
-              handleDeny={()=>setShowLoad(false)} 
-              handleAccept={()=>LoadContent()}/>
-          }
-
-
-          {showSettings && 
-            <SettingsModal 
-            handleDeny={()=>setShowSettings(false)} 
-            handleAccept={()=>setShowSettings(false)}/>} */}
       </>
   )
 }

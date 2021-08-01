@@ -26,6 +26,8 @@ import marked from 'marked'
 
 const Render = (props) => {
 
+    const [passedContent, setPassedContent] = useState('')
+
    
     
     const REF_RESULTBOX = useRef(null)
@@ -65,7 +67,8 @@ const Render = (props) => {
     
     useEffect(()=>{
         highlightResult()
-    }, [])
+        setPassedContent(props.parentContent || 'props.editorContent returned empty')
+    }, [props.parentContent, props.useTrigger])
 
     
 
@@ -146,7 +149,7 @@ const Render = (props) => {
                     //~ use a custom id for titles in the append / generate section of docs!! - mdx doesnt append id's
                 }} 
                 ref={REF_RESULTBOX}
-                dangerouslySetInnerHTML={renderText(props.editorContent)} />
+                dangerouslySetInnerHTML={renderText(passedContent)} />
 
 
 

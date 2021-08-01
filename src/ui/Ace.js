@@ -8,7 +8,7 @@ import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
 
-import * as SD from '../lib/save-version-3'
+import * as SD from '../lib/save-version-4'
 
 
 import AceEditor from "react-ace";
@@ -22,6 +22,7 @@ import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-textmate";
 
+let aceFinishedLoading = false
 
 
 const Ace = props => {
@@ -30,6 +31,7 @@ const Ace = props => {
     const { theme, components, colorMode, setColorMode } = context;
 
     const breakIndex = useBreakpointIndex();
+
 
     
     const REF_ACE = useRef(null)
@@ -42,31 +44,7 @@ const Ace = props => {
 
     let editor
 
-    // let currentThemeIndex = 0
-    // let themeArray = [
-    //     'tomorrow_night',
-    //     'chrome',
-    //     'chaos',
-    //     'dawn',
-    //     'dracula',
-    //     'monokai'
-    // ]
 
-    // const cycleThemes = () => {
-    //     if(currentThemeIndex <= themeArray.length - 1){
-    //         currentThemeIndex++
-    //     }else{
-    //         currentThemeIndex = 0
-    //     }
-    //     editor.setTheme(`ace/theme/${themeArray[currentThemeIndex]}`);
-    // }
-
-    // const setAceToDefaultText = () => {
-    //     editor.setValue(props.defaultContent)
-    //     editor.clearSelection()
-    //     editor.selection.moveTo(0,0)
-    // }
-    let bgcolor = '#aaa'
 
 
     useEffect(()=>{
@@ -80,22 +58,30 @@ const Ace = props => {
             gsap.to([editor.container], {background: '#ccc', duration: .3})
         }
 
-        // props.defaultContent && editor.getValue() !== props.defaultContent ? setAceToDefaultText() : null
     }, [colorMode, props, theme])
     
-    useEffect(()=>{
-        
-        if(typeof SD !== 'undefined'){
-            SD.getActive()
-            setTimeout(() => {
-                editor.setValue(SD.getActive() ? SD.getActive().content : '')
-            //   setContent(SD.getActive().content) //! causing errors in BUST ??????
-            }, 100);
-          }
 
-    }, [props.trigger])
+
+
+    //! load sd content here ONCE - because it triggers handleUpdate and causes rerender on parent and renderer
+
+    // useEffect(()=>{
+        
+    //     if(!aceFinishedLoading){
+    //         aceFinishedLoading = true
+    //         editor.setValue(props.parentContent || 'ACE | loading content once')
+    //       }
+        
+
+    // })
     
-    
+
+    //! load content from parent only when useTrigger fires
+    useEffect(()=>{
+        console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
+            
+            editor.setValue(props.parentContent || 'ACE | no content passed from parent 563724')
+    }, [props.useTrigger])
 
 
 
@@ -130,7 +116,7 @@ const Ace = props => {
                     enableSnippets: false,
                     fontSize: props.fontSize
                   }}
-                  style={{zIndex: '2', background: bgcolor}}
+                  style={{zIndex: '2', }}
                 />
             </Box>
         </>

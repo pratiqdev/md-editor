@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input} from 'theme-ui'
 
-import * as SD from '../../lib/save-version-3'
+import * as SD from '../../lib/save-version-4'
 import gsap from 'gsap'
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
@@ -93,7 +93,7 @@ const LoadModal = props => {
     const REF_BOX = useRef(null)
     const REF_TITLE = useRef(null)
 
-    const [trigger, setTrigger] = useState(false)
+    const [localTrigger, setLocalTrigger] = useState(false)
     const [isEditMode, setIsEditMode] = useState(false)
     const [indexToEdit, setIndexToEdit] = useState(0)
     const [newSummary, setNewSummary] = useState('')
@@ -141,8 +141,8 @@ const LoadModal = props => {
     const handleActiveSwap = givenId => {
         console.log(`handleActiveSwap: ${givenId}`)
             SD.setActiveById(givenId)
-            setTrigger(!trigger)
-            props.triggerContent()
+            setLocalTrigger(!localTrigger)
+            props.causeParentTrigger()
             setTimeout(() => {
                 handleClose()
             }, 500);
@@ -162,14 +162,14 @@ const LoadModal = props => {
     const handleDelete = givenId => {
         console.log('LOADMODAL | handleDelete')
         SD.deleteById(givenId)
-        setTrigger(!trigger)
+        setLocalTrigger(!localTrigger)
     }
 
     const handleNew = () => {
         console.log('LOADMODAL | handleNew ')
 
         SD.createNew()
-        setTrigger(!trigger)
+        setLocalTrigger(!localTrigger)
     }
 
     const handleUpdateInfo = () => {

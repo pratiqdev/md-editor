@@ -19,7 +19,7 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
 const Logo = dynamic(() => import("./Logo"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
-import * as SD from '../lib/save-version-3'
+import * as SD from '../lib/save-version-4'
 import useLongPress from '../lib/longPress'
 
 import LoadModal from './modals/LoadModal'
@@ -74,12 +74,12 @@ const Navbar = forwardRef((props, ref) => {
   //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
   const showLoadModal = () => {
       setShowLoad(true)
-      props.trigger()
+      props.causeParentTrigger()
   }
 
   const hideLoadModal = () => {
     setShowLoad(false)
-    props.trigger()
+    props.causeParentTrigger()
   }
 
   const showSettingsModal = () => {
@@ -267,7 +267,7 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
         
         {showLoad && 
             <LoadModal 
-              triggerContent={props.trigger}
+              causeParentTrigger={props.causeParentTrigger}
               handleDeny={hideLoadModal} 
               handleAccept={()=>LoadContent()}/>
           }

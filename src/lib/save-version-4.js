@@ -27,11 +27,8 @@ let MOMENT_FORMAT = "dddd, MMMM Do, h:mm:ss a"
    
 const CHECK_AVAIL = () => { 
     return new Promise((resolve, reject) => {
-        
-        
-        
         if(typeof window === 'undefined' || !window.indexedDB || typeof window.indexedDB === 'undefined'){ 
-            IS_AVAIL = false 
+            reject()
         }else{
             set('IDBKV_TEST', 'test_value')
                 .then(()=>{
@@ -39,6 +36,7 @@ const CHECK_AVAIL = () => {
                 })
                 .catch((err)=>{
                     console.log(`TEST FAILED: ${err}`)
+                    return reject()
                 })
         }
     })
@@ -50,11 +48,11 @@ const CHECK_AVAIL = () => {
 
 /** Every few seconds - save the new data to localStorage */
 const SAVE_TO_DISK = () => {
-    // if(!IS_AVAIL){console.log('SAVE_TO_DISK not available'); return false}
-
-    // set('MD_EDITOR_SD', SD_ARRAY)
-    //     .then(()=>console.log('saved to disk!'))
-    //     .catch(err=>console.log(`no local storage: ${err}`))
+    if(typeof window === 'undefined' || !window.indexedDB || typeof window.indexedDB === 'undefined'){         
+        set('MD_EDITOR_SD', SD_ARRAY)
+            .then(()=>console.log('saved to disk!'))
+            .catch(err=>console.log(`no local storage: ${err}`))
+    }
  
 }
 
@@ -66,7 +64,6 @@ const SAVE_TO_DISK = () => {
 
 /** If array is empty, create an intro file from the template */
 const START_FRESH = () => {
-    if(!IS_AVAIL){console.log('START_FRESH not available');return false}
 
     let date = moment().format(MOMENT_FORMAT)
 
@@ -94,7 +91,6 @@ const START_FRESH = () => {
     
 /** Initialize the SD object and load data from memory, or create new object and save to memory if it does not exist */
 const INITIALIZE = () => {
-    if(!IS_AVAIL){console.log('INITIALIZE not available');return false}
 
     get('MD_EDITOR_SD')
         .then(x=>{
@@ -120,7 +116,9 @@ const INITIALIZE = () => {
 
 
 
+const ALERT_STATUS = () => {
 
+}
 
 
 
@@ -149,10 +147,13 @@ const INITIALIZE = () => {
 
     /** Initialize the SD object and load data from memory, or create new object and save to memory if it does not exist */
     export const init = () => {
+        // call the initialize function
+        INITIALIZE()
+
+        // alert the user if 
         CHECK_AVAIL()
             .then(()=>{
                 IS_AVAIL = true
-                INITIALIZE()
             })
             .catch(()=>{
                 
@@ -182,14 +183,11 @@ const INITIALIZE = () => {
     //! CHECK DATA /////////////////////////////////////////////////////////////////////////////////
 
     export const getNumberOfDocuments = () => {
-        if(!IS_AVAIL){console.log('getNumberOfDocuments not available');return false}
             return SD_ARRAY.length || 0  
     }
 
     /** Create a new document with the default object */
     export const createNew = () => {
-        if(!IS_AVAIL){console.log('createNew not available');return false}
-
     
         let date = moment().format("dddd, MMMM Do, h:mm:ss a")
         let num = getNumberOfDocuments() + 1
@@ -219,13 +217,11 @@ Created ${date}
 
     /** Get the entire SD_ARRAY  */
     export const getAll = () => {
-        if(!IS_AVAIL){console.log('getAll not available');return false}
         return SD_ARRAY
     }
 
     /** Get a single element of the SD_ARARY by id  */
     export const getById = (id) => {
-        if(!IS_AVAIL){console.log('getById not available');return false}
 
         if(SD_ARRAY && SD_ARRAY.length !== 0){
             return getAll()[id]
@@ -238,7 +234,6 @@ Created ${date}
 
     /** Return the SD object that is currently active  */
     export const getActive = () => {
-        if(!IS_AVAIL){console.log('getActive not available');return false}
 
         if(SD_ARRAY && SD_ARRAY.length !== 0){
             return SD_ARRAY.find(x => x.active)
@@ -260,7 +255,6 @@ Created ${date}
     
     /** Set the selected SD object to active by index */
     export const setActiveById = (givenId) => {
-        if(!IS_AVAIL){console.log('setActiveById not available');return false}
 
 
         SD_ARRAY.forEach((x, i) => {
@@ -275,7 +269,6 @@ Created ${date}
 
     /** Save the content to the current active SD object  */
     export const updateContent = debounce((val) => {
-        if(!IS_AVAIL){console.log('updateContent not available');return false}
 
         getActive() ? getActive().content = val : console.log('SAVE | `updateContent` failed to call `getACcive`')
         SAVE_TO_DISK()
@@ -286,14 +279,12 @@ Created ${date}
 
     /** Save the summary to the current active SD object  */
     export const updateSummary = (val) => {
-        if(!IS_AVAIL){console.log('updateSummary not available');return false}        
         getActive().sum = val
         SAVE_TO_DISK()
     }
 
     /** Save the name to the current active SD object  */
     export const updateName = (val) => {
-        if(!IS_AVAIL){console.log('updateName not available');return false}
         getActive().name = val
         SAVE_TO_DISK()
     }
@@ -307,7 +298,6 @@ Created ${date}
 
     /** Delete the setlected SD object by id   */
     export const deleteById = (givenId) => {
-        if(!IS_AVAIL){console.log('deleteById not available');return false}
         SD_ARRAY.splice(givenId, 1);
         if(!SD_ARRAY || SD_ARRAY.length === 0){
             createNew()
