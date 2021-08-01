@@ -8,7 +8,7 @@ import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
 
-import * as SD from '../lib/save'
+import * as SD from '../lib/save-version-3'
 
 
 import AceEditor from "react-ace";
@@ -84,9 +84,16 @@ const Ace = props => {
     }, [colorMode, props, theme])
     
     useEffect(()=>{
-        editor.setValue(SD.getActive().content)
+        
+        if(typeof SD !== 'undefined'){
+            SD.getActive()
+            setTimeout(() => {
+                editor.setValue(SD.getActive() ? SD.getActive().content : '')
+            //   setContent(SD.getActive().content) //! causing errors in BUST ??????
+            }, 100);
+          }
 
-    }, [props.refreshContent])
+    }, [props.trigger])
     
     
 

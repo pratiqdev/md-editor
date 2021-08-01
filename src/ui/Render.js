@@ -88,6 +88,7 @@ const Render = (props) => {
                     width: props.layout.w,
                     height: props.layout.h,
                     transition: 'background .3s',
+                    overflowY: 'auto',
 
                     p:[4,5,6],
                     pt:4,
@@ -136,7 +137,12 @@ const Render = (props) => {
                     },
                     '& ::marker':{
                         color: 'grey_8'
-                    }
+                    },
+                    '& img':{
+                        maxWidth: '100%'
+                    },
+                    //~ set a max width on images!
+                    //~ use a custom id for titles in the append / generate section of docs!! - mdx doesnt append id's
                 }} 
                 ref={REF_RESULTBOX}
                 dangerouslySetInnerHTML={renderText(props.editorContent)} />

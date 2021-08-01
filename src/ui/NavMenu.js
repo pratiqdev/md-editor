@@ -160,10 +160,10 @@ const NavMenu = (props) => {
                     onClick={(e) => (props.showLoad ? props.showLoad() : null, toggleMenu())}
                   >
                     <Flex sx={{ alignItems: "center"}}>
-                      <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                      <Flex sx={{ width: "3.5em", p:2, justifyContent: "center" }}>
                         <File size='22' />
                       </Flex>
-                      Documents
+                      Files
                     </Flex>
                   </Button>
 
@@ -174,7 +174,7 @@ const NavMenu = (props) => {
                     onClick={(e) => (props.showSettingsModal ? props.showSettingsModal() : null, toggleMenu())}
                   >
                     <Flex sx={{ alignItems: "center"}}>
-                      <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                      <Flex sx={{ width: "3.5em", p:2, justifyContent: "center" }}>
                         <Settings size='22' />
                       </Flex>
                       Settings
@@ -190,25 +190,25 @@ const NavMenu = (props) => {
                         onClick={(e) => toggleMenu()}
                       >
                         <Flex sx={{ alignItems: "center"}}>
-                          <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                          <Flex sx={{width: "3.5em", p:2, justifyContent: "center" }}>
                           <Home size="24" />
                           </Flex>
-                          Guide
+                          Docs
                         </Flex>
                       </Button>
                     </Text>
                   </Link>
 
-
+            {!props.editor &&
                   <Link href='/editor'>
                     <Text as="a">
                       <Button
                         variant="menuItem"
                         tabIndex="-1"
                         onClick={(e) => toggleMenu()}
-                      >
+                        >
                         <Flex sx={{ alignItems: "center"}}>
-                          <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                          <Flex sx={{width: "3.5em", p:2,  justifyContent: "center" }}>
                           <Home size="24" />
                           </Flex>
                           Editor
@@ -217,6 +217,7 @@ const NavMenu = (props) => {
                     </Text>
                   </Link>
 
+                      }
 
 
                   <Link href='/about' >
@@ -227,7 +228,7 @@ const NavMenu = (props) => {
                         onClick={(e) => toggleMenu()}
                       >
                         <Flex sx={{ alignItems: "center"}}>
-                          <Flex sx={{ width: "2.5em", justifyContent: "center" }}>
+                          <Flex sx={{ width: "3.5em", p:2,  justifyContent: "center" }}>
                             <QuestionSquare size="22" />
                           </Flex>
                             About

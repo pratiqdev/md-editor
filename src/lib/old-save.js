@@ -4,32 +4,6 @@ import moment from 'moment'
 
 
 
-// let SD_ARRAY = [
-//     {
-//         active: true,
-//         name: 'My Save Data',
-//         sum: 'A test of some save data i guess',
-//         date: 'July 29, 2020 : 2:00pm',
-//         edit: 'July 31, 2020 : 12:57am',
-//         content: 'My saved data from save 001 (My Save Data)',
-//     },
-//     {
-//         active: false,
-//         name: 'My Other file',
-//         sum: 'Another SD file for testing',
-//         date: 'July 29, 2020 : 2:45pm',
-//         edit: 'July 31, 2020 : 12:57am',
-//         content: 'Data from save 002 (My Other File)',
-//     },
-//     {
-//         active: false,
-//         name: 'Even Another file',
-//         sum: 'One more file for testing',
-//         date: 'July 30, 2020 : 11:15pm',
-//         edit: 'July 31, 2020 : 12:57am',
-//         content: 'Data from save 003 (Even Another File)',
-//     },
-// ]
 
 let SD_ARRAY = []
 

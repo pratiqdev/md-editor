@@ -17,10 +17,12 @@ import marked from 'marked'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-import LoadModal from '../src/ui/modals/LoadModal'
-import SettingsModal from '../src/ui/modals/SettingsModal'
+// import LoadModal from '../src/ui/modals/LoadModal'
+// import SettingsModal from '../src/ui/modals/SettingsModal'
 import toasty from '../src/lib/toasty';
-import * as SD from '../src/lib/save'
+import * as SD from '../src/lib/save-version-3.js'
+
+
 
 const Ace = dynamic(
   () => import('../src/ui/Ace.js'),
@@ -44,15 +46,9 @@ const MDPage = props => {
 
   //~ DEFAULTS ___________________________________________________________________________________________________________________________________
   // let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
-  let defaultText = `# Default text 
-  
-  to show if nothing is available in SD`
 
 
-  const [content, setContent] = useState(SD.getActive() ? SD.getActive().content : '')
-  const [showLoad, setShowLoad] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
-  // const [currentTheme, setCurrentTheme] = useState('dark')
+  const [content, setContent] = useState('')
   const [currentSettings, setCurrentSettings] = useState({
 
   })
@@ -62,59 +58,12 @@ const MDPage = props => {
     SD.updateContent(val)
   }
 
-  // // RESET ______________________________________________________________________________________________________________________________________
-  // const handleReset = () => {
-  //     localStorage.setItem('content', defaultText)
-  //     setContent(defaultText)
-  //     toasty({
-  //       type: 'info',
-  //       text: 'Reset editor to defaults'
-  //     })
-  // }
-
-  
-  //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
-  const showLoadModal = () => {
-      setShowLoad(true)
-  }
-
-  const showSettingsModal = () => {
-    setShowSettings(true)
-  }
 
 
-
-
-
-  // const toggleTheme = () => {
-  //   if(colorMode === 'dark'){
-  //     editor.setTheme('ace/theme/monokai')
-  //   }else{
-  //     editor.setTheme('ace/theme/dawn')
-  //   }
-  // }
 
   useEffect(()=>{
-    // toggleTheme()
-  //   if(window.localStorage){
-
-  //     setTimeout(() => {
-  //         let LSContent = localStorage.getItem('content')
-  //         if(LSContent !== '' ){
-  //             setContent(LSContent)
-  //             // console.log('set content from local storage')
-  //         }
-  //     }, 500);
-
-  // }else{
-  //     setContent(defaultText)
-  //     console.log('editor.js @108 | setting default text')
-  //     toasty({
-  //         type: 'alert',
-  //         text: 'No local storage is available to Load data! Are you incognito?'
-  //     })
-  // }
-  SD.init()
+    SD.init()
+    SD.getActive()
   })
 
   //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
@@ -122,7 +71,7 @@ const MDPage = props => {
   const [editorLayout, setEditorLayout] = useState({})
   const [renderLayout, setRenderLayout] = useState({})
   const [layoutType, setLayoutType] = useState('split')
-
+  const [trigger, setTrigger] = useState(false)
 
 
   const [fontSize, setFontSize] = useState('.7rem')
@@ -130,7 +79,6 @@ const MDPage = props => {
 
   useEffect(()=>{
 
-    // console.log(`layout: ${layoutType}`)
     if(layoutType === 'editor'){
       setEditorLayout({
         p: 'absolute',
@@ -223,8 +171,15 @@ const MDPage = props => {
 
   
   useEffect(()=>{
-    setContent(SD.getActive() ? SD.getActive().content : '')
-  }, [showLoad])
+    if(typeof SD !== 'undefined'){
+      SD.getActive()
+      setTimeout(() => {
+        
+        setContent(SD.getActive().content) //! causing errors in BUST ??????
+      }, 100);
+    }
+    console.log('trigger!')
+  }, [trigger])
 
 
 
@@ -238,8 +193,10 @@ const MDPage = props => {
         editor
         setLayout={setLayoutType}
         layoutType={layoutType}
-        showLoad={showLoadModal} 
-        showSettingsModal={showSettingsModal}/>
+        trigger={()=>setTrigger(!trigger)}
+        // showLoad={showLoadModal} 
+        // showSettingsModal={showSettingsModal}
+        />
 
 
 
@@ -262,7 +219,7 @@ const MDPage = props => {
             handleChange={handleChange} 
             layout={editorLayout}
             fontSize={fontSize}
-            refreshContent={showLoad}
+            trigger={trigger}
             />
           </Box>
 
@@ -284,7 +241,7 @@ const MDPage = props => {
 
 
 
-          {showLoad && 
+          {/* {showLoad && 
             <LoadModal 
               handleDeny={()=>setShowLoad(false)} 
               handleAccept={()=>LoadContent()}/>
@@ -294,7 +251,7 @@ const MDPage = props => {
           {showSettings && 
             <SettingsModal 
             handleDeny={()=>setShowSettings(false)} 
-            handleAccept={()=>setShowSettings(false)}/>}
+            handleAccept={()=>setShowSettings(false)}/>} */}
       </>
   )
 }

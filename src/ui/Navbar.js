@@ -19,8 +19,11 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
 const Logo = dynamic(() => import("./Logo"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
-import * as SD from '../lib/save'
+import * as SD from '../lib/save-version-3'
 import useLongPress from '../lib/longPress'
+
+import LoadModal from './modals/LoadModal'
+import SettingsModal from './modals/SettingsModal'
 
 
 import { showInstallPrompt, libInstallStatus, triggerInstallFlow, deferredPrompt } from '../lib/install'
@@ -63,7 +66,25 @@ const Navbar = forwardRef((props, ref) => {
   const [appInstallStatus, setAppInstallStatus] = useState(libInstallStatus)
   const [deferred, setDeferred] = useState()
 
+  const [showLoad, setShowLoad] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
 
+
+
+  //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
+  const showLoadModal = () => {
+    setShowLoad(true)
+    props.trigger()
+  }
+
+  const hideLoadModal = () => {
+    setShowLoad(false)
+    props.trigger()
+  }
+
+  const showSettingsModal = () => {
+    setShowSettings(true)
+  }
 
 
 
@@ -220,8 +241,9 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
           <ThemeToggle />
           <NavMenu 
             appInstallStatus={appInstallStatus} 
-            showSettingsModal={props.showSettingsModal} 
-            showLoad={props.showLoad}
+            showSettingsModal={showSettingsModal} 
+            showLoad={showLoadModal}
+            editor={props.editor}
             
             />
 
@@ -241,6 +263,19 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
           mt: props.fixed ? 8 : 0,
         }}
       ></Box>
+
+        
+        {showLoad && 
+            <LoadModal 
+              handleDeny={hideLoadModal} 
+              handleAccept={()=>LoadContent()}/>
+          }
+
+
+          {showSettings && 
+            <SettingsModal 
+            handleDeny={()=>setShowSettings(false)} 
+            handleAccept={()=>setShowSettings(false)}/>}
       
     </>
   );

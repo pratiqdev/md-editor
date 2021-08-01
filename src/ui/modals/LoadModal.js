@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input} from 'theme-ui'
 
-import * as SD from '../../lib/save'
+import * as SD from '../../lib/save-version-3'
 import gsap from 'gsap'
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
@@ -16,11 +16,23 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete}) => {
     const [isSelected, setIsSelected] = useState(false)
 
+    const handleSelection = () => {
+        setTimeout(() => {
+            setIsSelected(!isSelected)
+        }, 200);
+    }
+    const handleSwap = e => {
+        e.stopPropagation()
+        handleActiveSwap(currentIndex)
+    }
+
 
 
     return(
         <Box sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3}}>
         <Flex 
+            onClick={handleSelection}
+
             sx={{width: '100%',alignItems: 'center', justifyContent: 'space-between', color: 'grey_15' }}>
             <Flex sx={{flexDirection: 'column', alignItems: 'flex-start'}}>
                 <Box sx={{fontSize: 2}}>{currentSD.name}</Box>
@@ -28,8 +40,8 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
             </Flex>
 
 
-            {isSelected && <Button variant='icon.plain' onClick={()=>setIsSelected(!isSelected)}><CaretUp size='22' /></Button>}
-            {!isSelected && <Button variant='icon.plain' onClick={()=>setIsSelected(!isSelected)}><CaretDown size='22' /></Button>}
+            <Button  onClick={handleSwap}>Load</Button>
+            
 
         </Flex>
 
@@ -42,8 +54,8 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
 
                         <Flex sx={{mt: 4}}>
                             <Button variant='outline.secondary' sx={{flex: 1, mr: 2}} onClick={()=>handleDelete(currentIndex)}>Delete</Button>
-                            <Button variant='outline.secondary' sx={{flex: 1, mr: 2}} onClick={()=>handleEdit(currentIndex)}>Edit</Button>
-                            <Button sx={{flex: 3}} onClick={()=>handleActiveSwap(currentIndex)}>Load</Button>
+                            <Button variant='outline.secondary' sx={{flex: 1, mr: 2}} onClick={()=>handleEdit(currentIndex)}>Rename</Button>
+                            <Button variant='outline.secondary' sx={{flex: 1}} onClick={()=>console.log('create template from this file')}>Save as Template</Button>
                         </Flex>
 
                     </Flex>
@@ -132,6 +144,8 @@ const SaveModal = props => {
             setTimeout(() => {
                 handleClose()
             }, 500);
+        console.log('LOADMODAL | handleActiveSwap')
+
     }
 
     const handleEdit = givenId => {
@@ -139,19 +153,26 @@ const SaveModal = props => {
         setIndexToEdit(givenId)
         setNewTitle(SD.getById(givenId).name)
         setNewSummary(SD.getById(givenId).sum)
+        console.log('LOADMODAL | handleEdit')
+
     }
 
     const handleDelete = givenId => {
+        console.log('LOADMODAL | handleDelete')
         SD.deleteById(givenId)
         setTrigger(!trigger)
     }
 
     const handleNew = () => {
+        console.log('LOADMODAL | handleNew ')
+
         SD.createNew()
         setTrigger(!trigger)
     }
 
     const handleUpdateInfo = () => {
+        console.log('LOADMODAL | handleUpdateInfo ')
+
         SD.updateName(newTitle)
         SD.updateSummary(newSummary)
         setTimeout(() => {

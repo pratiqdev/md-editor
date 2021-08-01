@@ -30,6 +30,7 @@ import toast, { Toaster, useToasterStore } from 'react-hot-toast';
 
 
 
+toast.remove()
 
 
 const App = ({ Component, pageProps }) => {
@@ -49,7 +50,7 @@ const App = ({ Component, pageProps }) => {
       toasty({
         text: `Using version ${version}`,
         type: 'special',
-        time: 6000,
+        time: 3000,
         agree: {
           text: 'Got it',
         },
@@ -60,6 +61,47 @@ const App = ({ Component, pageProps }) => {
       
       
     }, 1000);
+
+    
+      setTimeout(() => {
+        toasty({
+          text: `View the documentation for more info or guides on how to use this application`,
+          type: 'info',
+          time: 10000,
+          dismiss: {
+            text: 'Nah',
+          },
+          agree: {
+            text: 'View docs',
+            func: () => {router.push('/docs')},
+          },
+          closeAnyway: true
+        })
+  
+  
+        
+        
+      }, 4000);
+
+      setTimeout(() => {
+        toasty({
+          text: `If you discover any problems please submit a new issue on the github repository!`,
+          type: 'alert',
+          time: 15000,
+          dismiss: {
+            text: 'Maybe Later',
+          },
+          agree: {
+            text: 'GitHub',
+            func: () => {location.replace('https://github.com/pratiqdev/md-editor/issues')},
+          },
+          closeAnyway: true
+        })
+  
+  
+        
+        
+      }, 14000);
 
     
     
