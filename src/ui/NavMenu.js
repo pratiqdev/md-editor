@@ -30,7 +30,8 @@ import { Home } from "@emotion-icons/boxicons-regular/Home";
 import { CloseOutline as Close } from "@emotion-icons/evaicons-outline/CloseOutline";
 import { QuestionSquare } from "@emotion-icons/bootstrap/QuestionSquare";
 import { File } from '@emotion-icons/boxicons-regular/File'
-import { Settings } from '@emotion-icons/fluentui-system-filled/Settings'
+import { Settings } from '@emotion-icons/fluentui-system-regular/Settings'
+import { Paperclip } from '@emotion-icons/boxicons-regular/Paperclip'
 
 const NavMenu = (props) => {
   const [menuState, setMenuOpen] = useState(false);
@@ -153,11 +154,11 @@ const NavMenu = (props) => {
 
 
               {/* //* MENU OPTIONS ====================================================================================================================== */}
-
-              <Button
-                    variant="menuItem"
-                    tabIndex="-1"
-                    onClick={(e) => (props.showLoad ? props.showLoad() : null, toggleMenu())}
+                {props.editor &&
+                  <Button
+                  variant="menuItem"
+                  tabIndex="-1"
+                  onClick={(e) => (props.showLoad ? props.showLoad() : null, toggleMenu())}
                   >
                     <Flex sx={{ alignItems: "center"}}>
                       <Flex sx={{ width: "3.5em", p:2, justifyContent: "center" }}>
@@ -166,7 +167,27 @@ const NavMenu = (props) => {
                       Files
                     </Flex>
                   </Button>
+                }
 
+
+                {!props.editor &&
+                  <Link href='/editor'>
+                    <Text as="a">
+                      <Button
+                        variant="menuItem"
+                        tabIndex="-1"
+                        onClick={(e) => toggleMenu()}
+                        >
+                        <Flex sx={{ alignItems: "center"}}>
+                          <Flex sx={{width: "3.5em", p:2,  justifyContent: "center" }}>
+                          <Home size="24" />
+                          </Flex>
+                          Editor
+                        </Flex>
+                      </Button>
+                    </Text>
+                  </Link>
+                }
 
                   <Button
                     variant="menuItem"
@@ -191,7 +212,7 @@ const NavMenu = (props) => {
                       >
                         <Flex sx={{ alignItems: "center"}}>
                           <Flex sx={{width: "3.5em", p:2, justifyContent: "center" }}>
-                          <Home size="24" />
+                          <Paperclip size="24" />
                           </Flex>
                           Docs
                         </Flex>
@@ -199,25 +220,7 @@ const NavMenu = (props) => {
                     </Text>
                   </Link>
 
-            {!props.editor &&
-                  <Link href='/editor'>
-                    <Text as="a">
-                      <Button
-                        variant="menuItem"
-                        tabIndex="-1"
-                        onClick={(e) => toggleMenu()}
-                        >
-                        <Flex sx={{ alignItems: "center"}}>
-                          <Flex sx={{width: "3.5em", p:2,  justifyContent: "center" }}>
-                          <Home size="24" />
-                          </Flex>
-                          Editor
-                        </Flex>
-                      </Button>
-                    </Text>
-                  </Link>
-
-                      }
+       
 
 
                   <Link href='/about' >
@@ -260,7 +263,7 @@ const NavMenu = (props) => {
 
           {/* menu footer ===========================================================================================================*/}
           <Flex
-            sx={{ mt: 7, width: "100%", p: 2, pr: 3, alignItems: "center" }}
+            sx={{ mt: 9, width: "100%", p: 2, pr: 3, alignItems: "center" }}
           >
             <Link href="http://www.github.com/pratiqdev" passHref>
               <Tipper tip="GitHub" delay={[1000, 0]}>
@@ -285,7 +288,7 @@ const NavMenu = (props) => {
               </Tipper>
             </Link>
 
-            <Text>@pratiqdev</Text>
+            <Box sx={{fontSize: 2}}>@pratiqdev</Box>
           </Flex>
 
           

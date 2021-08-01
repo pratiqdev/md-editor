@@ -48,9 +48,9 @@ class MyDocument extends Document {
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#FFFFFF" />
 
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          {/* <link rel="preconnect" href="https://fonts.googleapis.com" /> */}
           {/* <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> */}
-          <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet"></link>
+          {/* <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet"></link> */}
           {/* TIP: set viewport head meta tag in _app.js, otherwise it will show a warning */}
           {/* <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover' /> */}
 

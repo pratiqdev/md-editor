@@ -89,6 +89,7 @@ const Render = (props) => {
                     height: props.layout.h,
                     transition: 'background .3s',
                     overflowY: 'auto',
+                    
 
                     p:[4,5,6],
                     pt:4,
@@ -147,7 +148,6 @@ const Render = (props) => {
                 ref={REF_RESULTBOX}
                 dangerouslySetInnerHTML={renderText(props.editorContent)} />
 
-            {/* {showSave && <SaveModal handleDeny={()=>setShowSave(false)} handleAccept={()=>saveContent()}/>} */}
 
 
 

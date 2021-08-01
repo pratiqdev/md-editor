@@ -85,7 +85,7 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
 
 
 
-const SaveModal = props => {
+const LoadModal = props => {
 
 
     //~ open and close handlers ______________________________________________________________________
@@ -104,6 +104,7 @@ const SaveModal = props => {
     }
 
     const handleClose = () => {
+        // props.triggerContent()
         closeDownAnim()
         setTimeout(() => {
             props.handleDeny ? props.handleDeny() : null
@@ -141,6 +142,7 @@ const SaveModal = props => {
         console.log(`handleActiveSwap: ${givenId}`)
             SD.setActiveById(givenId)
             setTrigger(!trigger)
+            props.triggerContent()
             setTimeout(() => {
                 handleClose()
             }, 500);
@@ -223,11 +225,12 @@ const SaveModal = props => {
             {/* LOAD CONTENT SECTION /////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
             {!isEditMode &&
                 <Flex sx={{
-                    p: [2,4,6],
+                    p: [3,4,6],
+                    py: [4,4,6],
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'column',
-                    minWidth: '40rem'
+                    minWidth: ['90vw', 'auto', 'auto']
                 }}>
 
                     {/* TITLE ------------------------------------------*/}
@@ -273,7 +276,7 @@ const SaveModal = props => {
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleDeny}>Cancel</Button>
-                        <Button  sx={{p:2, minWidth: '6rem',}} onClick={handleNew}>New</Button>
+                        <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleNew}>New</Button>
                     </Flex>
             </Flex>
             }
@@ -348,4 +351,4 @@ const SaveModal = props => {
         </Flex>
     )
 }
-export default SaveModal
+export default LoadModal

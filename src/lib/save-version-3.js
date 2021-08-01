@@ -3,6 +3,7 @@ import {get, set} from 'idb-keyval'
 import moment from 'moment'
 import toasty from './toasty'
 import intro from './intro'
+import {debounce} from 'lodash'
 
 
 
@@ -43,8 +44,6 @@ const CHECK_AVAIL = () => {
     })
   
 }
-
-
 
 
 
@@ -205,6 +204,7 @@ const INITIALIZE = () => {
 Created ${date}
             `, // the content of the document
         })
+        SAVE_TO_DISK()
         
     }
 
@@ -242,12 +242,13 @@ Created ${date}
 
         if(SD_ARRAY && SD_ARRAY.length !== 0){
             return SD_ARRAY.find(x => x.active)
-        }else{
-            START_FRESH()
-            // console.log('WAS CALLING CREATE NEW HERE')
-            setActiveById(0)
-            return SD_ARRAY[0]
         }
+        // else{
+        //     START_FRESH()
+        //     // console.log('WAS CALLING CREATE NEW HERE')
+        //     setActiveById(0)
+        //     return SD_ARRAY[0]
+        // }
     }
 
 
@@ -271,11 +272,14 @@ Created ${date}
     }
 
     /** Save the content to the current active SD object  */
-    export const updateContent = (val) => {
+    export const updateContent = debounce((val) => {
         if(!IS_AVAIL){console.log('updateContent not available');return false}
         getActive().content = val
         SAVE_TO_DISK()
-    }
+    },
+    1000,
+    { leading: true, trailing: true, maxWait: 5000 }
+    );
 
     /** Save the summary to the current active SD object  */
     export const updateSummary = (val) => {

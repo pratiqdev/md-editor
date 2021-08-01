@@ -73,8 +73,8 @@ const Navbar = forwardRef((props, ref) => {
 
   //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
   const showLoadModal = () => {
-    setShowLoad(true)
-    props.trigger()
+      setShowLoad(true)
+      props.trigger()
   }
 
   const hideLoadModal = () => {
@@ -129,10 +129,10 @@ const [toggle, setToggle] = useState(true)
 const toggleLayout = () => {
   if(toggle){
     setToggle(false)
-    props.setLayout('editor')
+    props.setLayout() && props.setLayout('editor')
   }else{
     setToggle(true)
-    props.setLayout('render')
+    props.setLayout() && props.setLayout('render')
 
   }
 }
@@ -267,6 +267,7 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
         
         {showLoad && 
             <LoadModal 
+              triggerContent={props.trigger}
               handleDeny={hideLoadModal} 
               handleAccept={()=>LoadContent()}/>
           }
