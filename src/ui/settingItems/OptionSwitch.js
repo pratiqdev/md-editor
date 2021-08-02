@@ -7,9 +7,11 @@ import { CaretRight } from "@emotion-icons/boxicons-regular/CaretRight";
 const OptionSwitch = ({s, si, handle}) => {
     const [showDetails, setShowDetails] = useState(false)
     const [showOptions, setShowOptions] = useState(false)
+    const [newOption, SetNewOption] = useState(s.options[s.state])
 
     const closeAndHandle = (si, newState) => {
         setShowOptions(!showOptions)
+        SetNewOption(s.options[newState])
         handle(si, newState)
     }
 
@@ -38,7 +40,7 @@ const OptionSwitch = ({s, si, handle}) => {
                     variant='outline.primary' 
                     sx={{whiteSpace: 'nowrap', fontWeight: 'body', overflow: 'hidden', width: '100%'}} 
                     onClick={()=>setShowOptions(!showOptions)}>
-                        {s.options[s.state]}
+                        {newOption}
                 </Button>
             </Flex>
 

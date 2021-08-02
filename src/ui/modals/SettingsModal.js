@@ -232,7 +232,7 @@ const LoadModal = props => {
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={()=>console.log('reset settings')}>Reset</Button>
-                        <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={()=>console.log('done with settings')}>Done</Button>
+                        <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleClose}>Done</Button>
                     </Flex>
             </>
             

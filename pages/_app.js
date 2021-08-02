@@ -33,7 +33,11 @@ import * as SD from '../src/lib/save-version-4'
 
 toast.remove()
 
+let WELCOME_LIMIT = 0
+
 const welcomeAlerts = () => {
+  WELCOME_LIMIT++
+  if(WELCOME_LIMIT === 0){
   setTimeout(() => {
       toasty({
         text: `Using version ${version}`,
@@ -91,7 +95,7 @@ const welcomeAlerts = () => {
         
       }, 10000);
 
-    
+  }
     
     
   
