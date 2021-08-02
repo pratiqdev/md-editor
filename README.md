@@ -1,5 +1,3 @@
-# next-pwa-application
+# MD Editor
 
-[Visit deployment](https://www.mikejannetta.tk)
-
-Still adding features, components and pages - basic layout and testing
+A simple project - never stays simple

@@ -28,8 +28,74 @@ import { Info } from '@emotion-icons/evaicons-solid/Info'
 import { version } from '../package.json';
 import toast, { Toaster, useToasterStore } from 'react-hot-toast';
 
+import * as SD from '../src/lib/save-version-4'
 
 
+toast.remove()
+
+const welcomeAlerts = () => {
+  setTimeout(() => {
+      toasty({
+        text: `Using version ${version}`,
+        type: 'special',
+        time: 3000,
+        agree: {
+          text: 'Got it',
+        },
+        closeAnyway: true
+      })
+
+
+      
+      
+    }, 1000);
+
+    
+      setTimeout(() => {
+        toasty({
+          text: `View the documentation for more info or guides on how to use this application`,
+          type: 'info',
+          time: 6000,
+          dismiss: {
+            text: 'Nah',
+          },
+          agree: {
+            text: 'View docs',
+            func: () => {router.push('/docs')},
+          },
+          closeAnyway: true
+        })
+  
+  
+        
+        
+      }, 4000);
+
+      setTimeout(() => {
+        toasty({
+          text: `If you discover any problems please submit a new issue on the github repository!`,
+          type: 'alert',
+          time: 6000,
+          dismiss: {
+            text: 'Maybe Later',
+          },
+          agree: {
+            text: 'GitHub',
+            func: () => {location.replace('https://github.com/pratiqdev/md-editor/issues')},
+          },
+          closeAnyway: true
+        })
+  
+  
+        
+        
+      }, 10000);
+
+    
+    
+    
+  
+}
 
 
 const App = ({ Component, pageProps }) => {
@@ -43,23 +109,16 @@ const App = ({ Component, pageProps }) => {
   
   
   useEffect(() => {
-    
+    SD.init()
     toast.remove()
-    setTimeout(() => {
-      toasty({
-        text: `Using version ${version}`,
-        type: 'special',
-        time: 6000,
-        agree: {
-          text: 'Got it',
-        },
-        closeAnyway: true
-      })
-
-
-      
-      
-    }, 1000);
+   welcomeAlerts()
+   
+  
+  
+  
+        
+        
+      // }, 14000);
 
     
     

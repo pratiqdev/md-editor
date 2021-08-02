@@ -147,6 +147,10 @@ export default {
         borderColor: 'currentColor'
       }
     },
+    li:{
+      ml: 0,
+      pl: 0
+    },
     ul:{
       fontWeight: 'body',
       ml: 5,

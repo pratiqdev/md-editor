@@ -8,7 +8,7 @@ import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
 
-import * as SD from '../lib/save'
+import * as SD from '../lib/save-version-4'
 
 
 import AceEditor from "react-ace";
@@ -31,65 +31,85 @@ const Ace = props => {
 
     const breakIndex = useBreakpointIndex();
 
+
     
     const REF_ACE = useRef(null)
 
-    const onChange = (val) => {
-        props.handleChange(val)
-    }
+    
 
 
 
     let editor
 
-    // let currentThemeIndex = 0
-    // let themeArray = [
-    //     'tomorrow_night',
-    //     'chrome',
-    //     'chaos',
-    //     'dawn',
-    //     'dracula',
-    //     'monokai'
-    // ]
-
-    // const cycleThemes = () => {
-    //     if(currentThemeIndex <= themeArray.length - 1){
-    //         currentThemeIndex++
-    //     }else{
-    //         currentThemeIndex = 0
-    //     }
-    //     editor.setTheme(`ace/theme/${themeArray[currentThemeIndex]}`);
-    // }
-
-    // const setAceToDefaultText = () => {
-    //     editor.setValue(props.defaultContent)
-    //     editor.clearSelection()
-    //     editor.selection.moveTo(0,0)
-    // }
-    let bgcolor = '#aaa'
-
-
+    //* define the editor at start
     useEffect(()=>{
         const reactAceComponent = REF_ACE.current;
         editor = reactAceComponent.editor;
-        colorMode === 'dark' ? editor.setTheme('ace/theme/monokai') : editor.setTheme('ace/theme/dawn')
+    })
 
+
+    //* change themes and bg on colorMode or theme change
+    useEffect(()=>{
         if(colorMode === 'dark'){
+            editor.setTheme('ace/theme/monokai')
             gsap.to([editor.container], {background: '#191919', duration: .3})
         }else{
+            editor.setTheme('ace/theme/dawn')
             gsap.to([editor.container], {background: '#ccc', duration: .3})
         }
-
-        // props.defaultContent && editor.getValue() !== props.defaultContent ? setAceToDefaultText() : null
-    }, [colorMode, props, theme])
+    }, [colorMode, theme])
     
+
+    const loadContent = () => {
+        console.log('EDITOR | loadContent fired')
+        if(editor){
+            SD.getActive()
+            .then(x=>{
+                if(x){
+                        console.log('ACE |  triggered useEffect')    
+                        editor.setValue(x.content)
+                        if(x.position.line && x.position.column){
+                        console.log(`ACE | loaded with cursor: ${x.position.line} @ ${x.position.column}`)
+                        editor.gotoLine(x.position.line, x.position.column)
+                    }else{
+                        editor.gotoLine(0,0)
+                    }
+                }else{
+                    setTimeout(() => {
+                        loadContent()
+                    }, 200);
+                }
+                // editor.focus()
+            })
+        }else{
+            setTimeout(() => {
+                loadContent()
+            }, 200);
+        }
+    }
+
+    
+
+    //! load content from parent only when useTrigger fires 
     useEffect(()=>{
-        editor.setValue(SD.getActive().content)
+        // console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
+        
+        loadContent()
+            
+            // editor.setValue(props.parentContent || '97asdf876')
+    }, [props.useTrigger])
 
-    }, [props.refreshContent])
-    
-    
 
+
+    const onChange = (val) => {
+        let line
+        let column
+        if(editor){
+            line = editor.getCursorPosition().row
+            column = editor.getCursorPosition().column
+        }
+        props.handleChange(val, line, column)
+    }
 
 
     return(
@@ -123,7 +143,7 @@ const Ace = props => {
                     enableSnippets: false,
                     fontSize: props.fontSize
                   }}
-                  style={{zIndex: '2', background: bgcolor}}
+                  style={{zIndex: '2', }}
                 />
             </Box>
         </>

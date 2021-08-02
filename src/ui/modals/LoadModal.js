@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react'
-import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input} from 'theme-ui'
+import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input, Textarea} from 'theme-ui'
 
-import * as SD from '../../lib/save'
+import * as SD from '../../lib/save-version-4'
 import gsap from 'gsap'
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
@@ -13,37 +13,66 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 
 
 
-const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete}) => {
+const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete, loadModalTrigger}) => {
     const [isSelected, setIsSelected] = useState(false)
+    const [newName, setNewName] = useState()
+    const [newSum, setNewSum] = useState()
+
+    const handleSelection = () => {
+        setIsSelected(!isSelected)
+    }
+    const handleSwap = e => {
+        e.stopPropagation()
+        handleActiveSwap(currentIndex)
+    }
+
+    const handleUpdateName = e => {
+        setNewName(e.target.value)
+        SD.updateNameByIndex(e.target.value, currentIndex)
+    }
+
+    const handleUpdateSum = e => {
+        setNewSum(e.target.value)
+        SD.updateSummaryByIndex(e.target.value, currentIndex)
+    }
+
+    useEffect(()=>{
+        setNewName(currentSD.name)
+        setNewSum(currentSD.newSum)
+    })
 
 
 
     return(
-        <Box sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3}}>
+        <Box sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3, cursor: 'pointer'}}>
         <Flex 
+            onClick={handleSelection}
+
             sx={{width: '100%',alignItems: 'center', justifyContent: 'space-between', color: 'grey_15' }}>
             <Flex sx={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                <Box sx={{fontSize: 2}}>{currentSD.name}</Box>
-                <Box sx={{fontSize: 0}}>{currentSD.date}</Box>
+                {/* <Box sx={{fontSize: 3}}>{currentSD.name}</Box> */}
+                <Input value={newName} onChange={handleUpdateName} onClick={e=>e.stopPropagation()} sx={{p:0,fontSize: 3, border: '0px solid', cursor: 'auto', width: 'auto', minWidth: '2rem'}}/>
+                <Box sx={{fontSize: 1, color: 'grey_10', cursor: 'pointer'}}>{currentSD.date}</Box>
             </Flex>
 
 
-            {isSelected && <Button variant='icon.plain' onClick={()=>setIsSelected(!isSelected)}><CaretUp size='22' /></Button>}
-            {!isSelected && <Button variant='icon.plain' onClick={()=>setIsSelected(!isSelected)}><CaretDown size='22' /></Button>}
+            <Button  onClick={handleSwap}>Load</Button>
+            
 
         </Flex>
 
                 {isSelected && 
-                    <Flex sx={{flexDirection: 'column', borderTop: '1px solid', borderColor: 'grey_4', mt:3}}>
-                        <Flex sx={{pt:1, fontSize: 2, color: 'grey_8'}}>
-                            {currentSD.sum}
-                        </Flex>
+                    <Flex sx={{flexDirection: 'column'}}>
 
+                    <Flex sx={{borderBottom: '1px solid', fontSize: 1, borderColor: 'grey_4', color: 'grey_10', my:1, pb: 1}}>
+                        {currentSD.content.length} Characters
+                    </Flex>
 
-                        <Flex sx={{mt: 4}}>
-                            <Button variant='outline.secondary' sx={{flex: 1, mr: 2}} onClick={()=>handleDelete(currentIndex)}>Delete</Button>
-                            <Button variant='outline.secondary' sx={{flex: 1, mr: 2}} onClick={()=>handleEdit(currentIndex)}>Edit</Button>
-                            <Button sx={{flex: 3}} onClick={()=>handleActiveSwap(currentIndex)}>Load</Button>
+                        <Textarea value={newSum} onChange={handleUpdateSum} onClick={e=>e.stopPropagation()} rows={8} sx={{p:0, color: 'grey_12', fontFamily: 'body', fontSize: 2, cursor: 'auto',  maxHeight:'6rem',  border: '0px solid'}}/>
+
+                        <Flex sx={{mt: 4, justifyContent: 'space-between'}}>
+                            <Button variant='outline.secondary' sx={{minWidth: '6rem', mr: 2}} onClick={()=>handleDelete(currentIndex)}>Delete</Button>
+                            <Button variant='outline.secondary' sx={{minWidth: '6rem'}} onClick={()=>console.log('create template from this file')}>Save as Template</Button>
                         </Flex>
 
                     </Flex>
@@ -73,7 +102,7 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
 
 
 
-const SaveModal = props => {
+const LoadModal = props => {
 
 
     //~ open and close handlers ______________________________________________________________________
@@ -81,17 +110,15 @@ const SaveModal = props => {
     const REF_BOX = useRef(null)
     const REF_TITLE = useRef(null)
 
-    const [trigger, setTrigger] = useState(false)
-    const [isEditMode, setIsEditMode] = useState(false)
-    const [indexToEdit, setIndexToEdit] = useState(0)
-    const [newSummary, setNewSummary] = useState('')
-    const [newTitle, setNewTitle] = useState('')
+    const [localTrigger, setLocalTrigger] = useState(false)
 
     const handleOpen = () => {
         openUpAnim()
     }
 
+
     const handleClose = () => {
+        // props.triggerContent()
         closeDownAnim()
         setTimeout(() => {
             props.handleDeny ? props.handleDeny() : null
@@ -128,42 +155,42 @@ const SaveModal = props => {
     const handleActiveSwap = givenId => {
         console.log(`handleActiveSwap: ${givenId}`)
             SD.setActiveById(givenId)
-            setTrigger(!trigger)
+            setLocalTrigger(!localTrigger)
+            props.causeParentTrigger()
             setTimeout(() => {
                 handleClose()
             }, 500);
+        console.log('LOADMODAL | handleActiveSwap')
+
     }
 
-    const handleEdit = givenId => {
-        setIsEditMode(true)
-        setIndexToEdit(givenId)
-        setNewTitle(SD.getById(givenId).name)
-        setNewSummary(SD.getById(givenId).sum)
-    }
+
 
     const handleDelete = givenId => {
+        console.log(`LOADMODAL | handleDelete - index: ${givenId}`)
         SD.deleteById(givenId)
-        setTrigger(!trigger)
+        props.causeParentTrigger()
+        setLocalTrigger(!localTrigger)
     }
 
     const handleNew = () => {
+        console.log('LOADMODAL | handleNew ')
+
         SD.createNew()
-        setTrigger(!trigger)
+        setLocalTrigger(!localTrigger)
     }
 
-    const handleUpdateInfo = () => {
-        SD.updateName(newTitle)
-        SD.updateSummary(newSummary)
-        setTimeout(() => {
-            setIsEditMode(false)
-        }, 200);
-    }
+
 
 
     //~ useEffect ____________________________________________________________________________________
     useEffect(()=>{
         handleOpen()
-    },[])
+    })
+
+    useEffect(()=>{
+        console.log('LOADMODAL | localTrigger')
+    },[localTrigger, SD])
 
 
     //~ define the element ===========================================================================
@@ -193,21 +220,24 @@ const SaveModal = props => {
             onClick={e=>e.stopPropagation()}
             sx={{
                 opacity: '0',
+                p: [3,4,6],
+                py: [4,4,6],
                 transform: 'translateY(3rem)',
                 width: ['98vw', 'auto', 'auto'],
-                minWidth: ['98vw', '30rem', '30rem'],
+                minWidth: ['98vw', '40rem', '40rem'],
+                maxWidth: '98vw',
+                height: '40rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'stretch',
+                alignItems: 'center'
+                
             }}>
 
 
             {/* LOAD CONTENT SECTION /////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {!isEditMode &&
-                <Flex sx={{
-                    p: [2,4,6],
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    minWidth: '40rem'
-                }}>
+   
+                <>
 
                     {/* TITLE ------------------------------------------*/}
                     <Box
@@ -222,11 +252,12 @@ const SaveModal = props => {
                     </Box>
 
                     <Box sx={{
-                        minHeight: '30vh',
-                        maxHeight: '30vh',
+                        // height: '40rem',
+                        flex: 1,
+                        // maxHeight: '70vh',
                         overflowY: 'auto',
                         border: '1px solid',
-                        borderColor: 'grey_3',
+                        borderColor: 'grey_4',
                         borderRadius: 2,
                         bg: 'grey_2',
                         width: '100%',
@@ -240,8 +271,8 @@ const SaveModal = props => {
                                 currentSD={x} 
                                 currentIndex={i} 
                                 handleActiveSwap={handleActiveSwap}
-                                handleEdit={handleEdit}
                                 handleDelete={handleDelete}
+                                loadModalTrigger={localTrigger}
                                 
                                 />
                         )}
@@ -252,72 +283,13 @@ const SaveModal = props => {
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleDeny}>Cancel</Button>
-                        <Button  sx={{p:2, minWidth: '6rem',}} onClick={handleNew}>New</Button>
+                        <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleNew}>New</Button>
                     </Flex>
-            </Flex>
-            }
+            </>
 
 
 
-            {/* EDIT CONTENT SECTION /////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {isEditMode &&
-                <Flex sx={{
-                    p: [2,4,6],
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                }}>
-
-                    {/* TITLE ------------------------------------------*/}
-                    <Box
-                    ref={REF_TITLE} 
-                    sx={{color: 'grey_0', fontSize: [1,2,3], fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
-                        Edit Document Info
-                    </Box>
-
-                    {/* SUBTITLE ------------------------------------------*/}
-                    <Input sx={{color: 'grey_6', my:6,
-                    border: '1px solid',
-                    borderColor: 'grey_3',
-                    borderRadius: 2,
-                    bg: 'grey_2',
-                    width: '100%',
-                    mb: 4,
-                    color: 'grey_12',
-                    p:2,
-                    textAlign: 'center'
-                    }} 
-                    value={newTitle}
-                    onChange={e=>setNewTitle(e.target.value)}
-                    />
-
-                    <Input sx={{
-                        minHeight: '30vh',
-                        maxHeight: '30vh',
-                        overflowY: 'auto',
-                        border: '1px solid',
-                        borderColor: 'grey_3',
-                        borderRadius: 2,
-                        bg: 'grey_2',
-                        width: '100%',
-                        mb: 6,
-                        color: 'grey_12',
-                        p:2,
-                        textAlign: 'center'
-                    }}
-                    value={newSummary}
-                    onChange={e=>setNewSummary(e.target.value)}
-                    />
-
-
-                    
-                    {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
-                    <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
-                        <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={()=>setIsEditMode(false)}>Cancel</Button>
-                        <Button  sx={{p:2, minWidth: '6rem',}} onClick={handleUpdateInfo}>Update</Button>
-                    </Flex>
-            </Flex>
-            }
+            
 
 
 
@@ -327,4 +299,4 @@ const SaveModal = props => {
         </Flex>
     )
 }
-export default SaveModal
+export default LoadModal

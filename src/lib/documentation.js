@@ -15,6 +15,7 @@ This text-editor uses the Ace editor with awesome built-in features.
 - Copy and paste
 - Search and replace
 
+[Test heading 'option 3'](#option-3-for-doing-the-thing-with-editor)
 
 Visit [the Ace website](https://ace.c9.io/) to use it in your project!
 

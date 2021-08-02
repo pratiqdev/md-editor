@@ -17,10 +17,12 @@ import marked from 'marked'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-import LoadModal from '../src/ui/modals/LoadModal'
-import SettingsModal from '../src/ui/modals/SettingsModal'
+// import LoadModal from '../src/ui/modals/LoadModal'
+// import SettingsModal from '../src/ui/modals/SettingsModal'
 import toasty from '../src/lib/toasty';
-import * as SD from '../src/lib/save'
+import * as SD from '../src/lib/save-version-4.js'
+
+
 
 const Ace = dynamic(
   () => import('../src/ui/Ace.js'),
@@ -33,7 +35,7 @@ const Render = dynamic(
   )
 
 
-
+let DONE_LOADING = false 
 
 const MDPage = props => {
 
@@ -44,93 +46,59 @@ const MDPage = props => {
 
   //~ DEFAULTS ___________________________________________________________________________________________________________________________________
   // let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
-  let defaultText = `# Default text 
-  
-  to show if nothing is available in SD`
 
 
-  const [content, setContent] = useState(SD.getActive() ? SD.getActive().content : '')
-  const [showLoad, setShowLoad] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
-  // const [currentTheme, setCurrentTheme] = useState('dark')
-  const [currentSettings, setCurrentSettings] = useState({
-
-  })
-
-  const handleChange = val => {
-    setContent(val)
-    SD.updateContent(val)
-  }
-
-  // // RESET ______________________________________________________________________________________________________________________________________
-  // const handleReset = () => {
-  //     localStorage.setItem('content', defaultText)
-  //     setContent(defaultText)
-  //     toasty({
-  //       type: 'info',
-  //       text: 'Reset editor to defaults'
-  //     })
-  // }
-
-  
-  //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
-  const showLoadModal = () => {
-      setShowLoad(true)
-  }
-
-  const showSettingsModal = () => {
-    setShowSettings(true)
-  }
-
-
-
-
-
-  // const toggleTheme = () => {
-  //   if(colorMode === 'dark'){
-  //     editor.setTheme('ace/theme/monokai')
-  //   }else{
-  //     editor.setTheme('ace/theme/dawn')
-  //   }
-  // }
-
-  useEffect(()=>{
-    // toggleTheme()
-  //   if(window.localStorage){
-
-  //     setTimeout(() => {
-  //         let LSContent = localStorage.getItem('content')
-  //         if(LSContent !== '' ){
-  //             setContent(LSContent)
-  //             // console.log('set content from local storage')
-  //         }
-  //     }, 500);
-
-  // }else{
-  //     setContent(defaultText)
-  //     console.log('editor.js @108 | setting default text')
-  //     toasty({
-  //         type: 'alert',
-  //         text: 'No local storage is available to Load data! Are you incognito?'
-  //     })
-  // }
-  SD.init()
-  })
-
-  //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
+  const [parentContent, setParentContent] = useState('LOADING') //!!!!!!!!!! STEP 3
+  const [currentSettings, setCurrentSettings] = useState()
 
   const [editorLayout, setEditorLayout] = useState({})
   const [renderLayout, setRenderLayout] = useState({})
   const [layoutType, setLayoutType] = useState('split')
+  const [parentTrigger, setParentTrigger] = useState(false)
 
 
 
-  const [fontSize, setFontSize] = useState('.7rem')
-  
+  const handleChange = (val, line, column) => {
+      console.log('EDITOR | handleChange - 034958')
+      setParentContent(val) 
+      if(line && column && line !== 0 && column !== 0){
+        SD.updateContent(val, line + 1, column + 1)
+      }else{
+        SD.updateContent(val)
+      }
+  }
+
+  const loadContent = () => {
+    SD.getActive()
+      .then(x=>setParentContent(x.content)) //!!!!!!!!!!!!!! STEP 2
+      .catch(err=>console.log(`couldnt get result from getActive: ${err}`))
+  }
 
   useEffect(()=>{
+    console.log('EDITOR | useEffect | parentTrigger triggered')
+ 
+    loadContent() //!!!!!!!!!!!! STEP 1 
 
-    // console.log(`layout: ${layoutType}`)
+  }, [parentTrigger]) //!!!!!! ORIGIN
+
+  useEffect(()=>{
+    if(!DONE_LOADING){
+      setParentTrigger(!parentTrigger)
+      DONE_LOADING = true
+    }
+  })
+
+  //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
+
+
+
+
+  const [fontSize, setFontSize] = useState('1rem')
+  
+  //* useEffect for layout changes
+  useEffect(()=>{
+    console.log(`new layout type: ${layoutType}`)
+
     if(layoutType === 'editor'){
       setEditorLayout({
         p: 'absolute',
@@ -221,16 +189,10 @@ const MDPage = props => {
 
   }, [layoutType, breakIndex])
 
-  
-  useEffect(()=>{
-    setContent(SD.getActive() ? SD.getActive().content : '')
-  }, [showLoad])
 
 
 
-
-
-  //~ RETURN ELEMENTS __________________________________________________________________________________________________________________
+  //! RETURN ELEMENTS __________________________________________________________________________________________________________________
   return(
       <>
       <Navbar 
@@ -238,42 +200,33 @@ const MDPage = props => {
         editor
         setLayout={setLayoutType}
         layoutType={layoutType}
-        showLoad={showLoadModal} 
-        showSettingsModal={showSettingsModal}/>
-
-
-
-
-
-
-
-
+        causeParentTrigger={()=>setParentTrigger(!parentTrigger)}
+        />
 
 
         <Flex sx={{flexDirection: ['column', 'row', 'row']}}>
-          
           <Box sx={{
             height: editorLayout.h,
             width: editorLayout.w
             }} >
-          <Ace 
-            setLayout={setLayoutType}
-            content={content} 
-            handleChange={handleChange} 
-            layout={editorLayout}
-            fontSize={fontSize}
-            refreshContent={showLoad}
+            <Ace 
+              setLayout={setLayoutType}
+              parentContent={parentContent} //!!!!!!!! STEP 4
+              handleChange={handleChange} 
+              layout={editorLayout}
+              fontSize={fontSize}
+              useTrigger={parentTrigger}
             />
           </Box>
 
 
           <Box sx={{height: '3vh', overflow: 'hidden', overflowY: 'auto'}} >
-          <Render 
-            editorContent={content} 
-            layout={renderLayout}
+            <Render 
+              useTrigger={parentTrigger}
+              parentContent={parentContent} 
+              layout={renderLayout}
             />
           </Box>
-
         </Flex>
 
 
@@ -284,17 +237,6 @@ const MDPage = props => {
 
 
 
-          {showLoad && 
-            <LoadModal 
-              handleDeny={()=>setShowLoad(false)} 
-              handleAccept={()=>LoadContent()}/>
-          }
-
-
-          {showSettings && 
-            <SettingsModal 
-            handleDeny={()=>setShowSettings(false)} 
-            handleAccept={()=>setShowSettings(false)}/>}
       </>
   )
 }

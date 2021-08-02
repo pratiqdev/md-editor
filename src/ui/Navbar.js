@@ -19,8 +19,11 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
 const Logo = dynamic(() => import("./Logo"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
-import * as SD from '../lib/save'
+import * as SD from '../lib/save-version-4'
 import useLongPress from '../lib/longPress'
+
+import LoadModal from './modals/LoadModal'
+import SettingsModal from './modals/SettingsModal'
 
 
 import { showInstallPrompt, libInstallStatus, triggerInstallFlow, deferredPrompt } from '../lib/install'
@@ -63,7 +66,27 @@ const Navbar = forwardRef((props, ref) => {
   const [appInstallStatus, setAppInstallStatus] = useState(libInstallStatus)
   const [deferred, setDeferred] = useState()
 
+  const [showLoad, setShowLoad] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
 
+  const [activeFileData, setActiveFileData] = useState({name: '-Title-', date: '-date-'})
+
+
+
+  //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
+  const showLoadModal = () => {
+      setShowLoad(true)
+      // props.causeParentTrigger()
+  }
+
+  const hideLoadModal = () => {
+    setShowLoad(false)
+    props.causeParentTrigger()
+  }
+
+  const showSettingsModal = () => {
+    setShowSettings(true)
+  }
 
 
 
@@ -106,6 +129,7 @@ const Navbar = forwardRef((props, ref) => {
 const [toggle, setToggle] = useState(true)
 
 const toggleLayout = () => {
+  console.log('toggle layout????')
   if(toggle){
     setToggle(false)
     props.setLayout('editor')
@@ -120,9 +144,12 @@ const splitWindow = () => {
   props.setLayout('split')
 }
 
-const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
+const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
 
-
+useEffect(()=>{
+  SD.getActive()
+    .then(x=>setActiveFileData(x))
+})
 
 
 
@@ -175,10 +202,10 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
               {props.editor ?
               <Flex sx={{fontSize: 1, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
                 <Box>
-                  {SD.getActive() && SD.getActive().name  }
+                  {activeFileData && activeFileData.name}
                 </Box>
                 <Box>
-                  {SD.getActive() && SD.getActive().date  }
+                  {activeFileData && activeFileData.date }
                 </Box>
               </Flex>
               :
@@ -220,8 +247,9 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
           <ThemeToggle />
           <NavMenu 
             appInstallStatus={appInstallStatus} 
-            showSettingsModal={props.showSettingsModal} 
-            showLoad={props.showLoad}
+            showSettingsModal={showSettingsModal} 
+            showLoad={showLoadModal}
+            editor={props.editor}
             
             />
 
@@ -241,6 +269,20 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
           mt: props.fixed ? 8 : 0,
         }}
       ></Box>
+
+        
+        {showLoad && 
+            <LoadModal 
+              causeParentTrigger={props.causeParentTrigger}
+              handleDeny={hideLoadModal} 
+              handleAccept={()=>LoadContent()}/>
+          }
+
+
+          {showSettings && 
+            <SettingsModal 
+            handleDeny={()=>setShowSettings(false)} 
+            handleAccept={()=>setShowSettings(false)}/>}
       
     </>
   );
