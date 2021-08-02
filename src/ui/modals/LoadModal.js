@@ -13,10 +13,10 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 
 
 
-const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete}) => {
+const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete, loadModalTrigger}) => {
     const [isSelected, setIsSelected] = useState(false)
-    const [newName, setNewName] = useState(currentSD.name)
-    const [newSum, setNewSum] = useState(currentSD.sum)
+    const [newName, setNewName] = useState()
+    const [newSum, setNewSum] = useState()
 
     const handleSelection = () => {
         setIsSelected(!isSelected)
@@ -35,6 +35,11 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
         setNewSum(e.target.value)
         SD.updateSummaryByIndex(e.target.value, currentIndex)
     }
+
+    useEffect(()=>{
+        setNewName(currentSD.name)
+        setNewSum(currentSD.newSum)
+    })
 
 
 
@@ -111,6 +116,7 @@ const LoadModal = props => {
         openUpAnim()
     }
 
+
     const handleClose = () => {
         // props.triggerContent()
         closeDownAnim()
@@ -161,8 +167,9 @@ const LoadModal = props => {
 
 
     const handleDelete = givenId => {
-        console.log('LOADMODAL | handleDelete')
+        console.log(`LOADMODAL | handleDelete - index: ${givenId}`)
         SD.deleteById(givenId)
+        props.causeParentTrigger()
         setLocalTrigger(!localTrigger)
     }
 
@@ -179,7 +186,11 @@ const LoadModal = props => {
     //~ useEffect ____________________________________________________________________________________
     useEffect(()=>{
         handleOpen()
-    },[])
+    })
+
+    useEffect(()=>{
+        console.log('LOADMODAL | localTrigger')
+    },[localTrigger, SD])
 
 
     //~ define the element ===========================================================================
@@ -261,6 +272,7 @@ const LoadModal = props => {
                                 currentIndex={i} 
                                 handleActiveSwap={handleActiveSwap}
                                 handleDelete={handleDelete}
+                                loadModalTrigger={localTrigger}
                                 
                                 />
                         )}

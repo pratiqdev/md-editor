@@ -26,16 +26,65 @@ let SD_ARRAY = [
         date: `${date}`, // the date of creation
         edit: `${date}`, // the date of the last edit
         content: intro, // the content of the document
+        position: {
+            line: 0, // the vertical line position of the cursor
+            column: 0 // the horizontal position of the cursor
+        }
     }
 ]
 
+let NUM_FILES = SD_ARRAY.length
+
+//! boolean type___________________________________________
+// name: '',        // name on menu
+// type: '',        // type for display and toggle
+// state: false,    // state for display and functionality
+// group: '',       // group for grouping or filtering or details
+// desc: '',        // description to explain setting
+// default: true,   // default to revert to defaults
+
+//! array type ___________________________________________
+// name: '',
+// type: 'array',
+// state: 2,
+// options: [{          // an array of objects containing the options and details
+//    name: ''          // a full name to show in the description or dropdown
+//    shortName: '',    // a short name to display in the active option slot
+//    desc: ''          // an extended description with details
+// }, {}, {}...]
+// group: '',
+// desc: '',
+// default: 1
+
+//! number type ___________________________________________
+// name: '',
+// type: 'number',
+// state: 27,
+// group: '',
+// desc: '',
+// default: 12,
+// min: 0,              // a min value
+// max: 100             // a max value
+
+//! string type ___________________________________________
+// name: '',
+// type: 'string',
+// state: 'watermelon',
+// group: '',
+// desc: '',
+// default: 'peach',
+// min: 0,              // a min string length
+// max: 42              // a max string length
+
+
 let SETTINGS_ARRAY = [
     {
-        name: 'A boolean setting',
-        type: 'boolean',
-        state: true,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
+        name: 'A boolean setting',// name on menu
+        type: 'boolean', // type for display and toggle
+        state: true, // state for display and functionality
+        group: 'editorSettings', // group for grouping or filtering or details
+        desc: 'This setting controls things about stuff', // description to explain setting
+        default: true, // default to revert to defaults
     },
     {
         name: 'Another boolean setting',
@@ -48,7 +97,7 @@ let SETTINGS_ARRAY = [
         name: 'An array setting',
         type: 'array',
         state: 2,
-        options: ['option 1', 'option 2', 'option 3'],
+        options: ['option One here', 'option 2 here', 'option three here', 'Option number is over 9000! what will we do?'],
         group: 'editorSettings',
         desc: 'This setting controls things about stuff',
     },
@@ -88,7 +137,7 @@ const CHECK_AVAIL = () => {
                     resolve()
                 })
                 .catch((err)=>{
-                    console.log(`TEST FAILED: ${err}`)
+                    ALERT_STATUS()
                     return reject()
                 })
         }
@@ -101,12 +150,12 @@ const CHECK_AVAIL = () => {
 const SAVE_TO_DISK = debounce(() => {
     if(typeof window !== 'undefined' && typeof window.indexedDB !== 'undefined'){         
         set('MD_EDITOR_SD', SD_ARRAY)
-            .then(()=>console.log('SAVE | SAVE_TO_DISK | saved'))
-            .catch(err=>console.log(`SAVE | SAVE_TO_DISK | no local storage: ${err}`))
+            .then()
+            .catch(err=> ALERT_STATUS())
 
         set('MD_EDITOR_SETTINGS', SETTINGS_ARRAY)
-            .then(()=>console.log('SAVE | SAVE_TO_DISK | saved settings'))
-            .catch(err=>console.log(`SAVE | SAVE_TO_DISK | no local storage: ${err}`))
+            .then()
+            .catch(err=> ALERT_STATUS())
     }
  
 },
@@ -127,31 +176,35 @@ const INITIALIZE = () => {
     get('MD_EDITOR_SD')
         .then(x=>{
             if(x && x.length !== 0){
-                console.log('SAVE | INIT| got data from LSD')
+                // console.log('SAVE | INIT| got data from LSD')
                 SD_ARRAY = x
             }else{
-                console.log('SAVE | INIT | no data in LSD ')
+                // console.log('SAVE | INIT | no data in LSD ')
             }
             SD_INITIALIZED = true
         })
         .catch(err=>{
-            console.log(`SAVE | INIT | data not available...${err}`)
+            // console.log(`SAVE | INIT | data not available...${err}`)
             SD_INITIALIZED = true
+            ALERT_STATUS()
+
         })
 
     get('MD_EDITOR_SETTINGS')
         .then(x=>{
             if(x && x.length !== 0){
-                console.log('SAVE | INIT| got settings from LSD')
+                // console.log('SAVE | INIT| got settings from LSD')
                 SETTINGS_ARRAY = x
             }else{
-                console.log('SAVE | INIT | no settings in LSD ')
+                // console.log('SAVE | INIT | no settings in LSD ')
             }
             SD_INITIALIZED = true
         })
         .catch(err=>{
-            console.log(`SAVE | INIT | settings not available...${err}`)
+            // console.log(`SAVE | INIT | settings not available...${err}`)
             SD_INITIALIZED = true
+            ALERT_STATUS()
+
         })
                     
 }
@@ -174,7 +227,25 @@ const WAIT_FOR_INIT = () => {
 
 //~ ___________________________________________________________________________________________________________________________________
 const ALERT_STATUS = () => {
+    INIT_ALERT_NUM++
 
+    if(INIT_ALERT_NUM === 1 || INIT_ALERT_NUM > 100){
+        INIT_ALERT_NUM = 2
+        toasty({
+            type: 'error',
+            text: 'Save data not available! Are you incognito!? View the docs for more info',
+            time: 10000,
+            agree: {
+                text: 'View Docs',
+                func: () => location.replace('/docs')
+            },
+            dismiss: {
+                text: 'Report Issue',
+                func: () => location.replace('https://github.com/pratiqdev/md-editor/issues')
+            },
+            closeAnyway: true,
+        })
+    }
 }
 
 
@@ -210,24 +281,8 @@ export const init = () => {
             
             IS_AVAIL = false 
             
-            // only alert the user once about failed storage
-            if(INIT_ALERT_NUM === 0){
-                INIT_ALERT_NUM++
-                toasty({
-                    type: 'error',
-                    text: 'Save data not available! Are you incognito!? View the docs for more info',
-                    closeAnyway: true,
-                    time: '10000',
-                    agree: {
-                        text: 'View Docs',
-                        func: () => location.replace('/docs')
-                    },
-                    dismiss: {
-                        text: 'Report Issue',
-                        func: () => location.replace('https://github.com/pratiqdev/md-editor/issues')
-                    }
-                })
-            }
+            // only alert the user occasionaly about failed storage
+            ALERT_STATUS()
         })
 }
 
@@ -241,7 +296,8 @@ export const getNumberOfDocuments = () => {
 export const createNew = () => {
 
     let date = moment().format("dddd, MMMM Do, h:mm:ss a")
-    let num = getNumberOfDocuments() + 1
+    NUM_FILES++
+    let num = NUM_FILES
 
     SD_ARRAY.push({
         active: false, // is the current file active
@@ -250,8 +306,11 @@ export const createNew = () => {
         date: `${date}`, // the date of creation
         edit: `${date}`, // the date of the last edit
         content: `New File ${num}
-Created ${date}
-        `, // the content of the document
+Created ${date}`, // the content of the document
+        position: {
+            line: 99999,
+            column: 999999
+        }
     })
     SAVE_TO_DISK()
     
@@ -288,6 +347,10 @@ export const getById = (id) => {
 /** Return the SD object that is currently active  */
 export const getActive = () => {
     return new Promise((resolve, reject) => {
+        if(!SD_ARRAY || SD_ARRAY.length === 0){
+            createNew()
+            setActiveById(0)
+        }
         let x = SD_ARRAY.find(x => x.active)
         resolve(x)
     })
@@ -314,9 +377,18 @@ export const setActiveById = (givenId) => {
 
 //~ ___________________________________________________________________________________________________________________________________
 /** Save the content to the current active SD object  */
-export const updateContent = (val) => {
-    console.log('WHO IS CALLING UPDATE CONTENT???')
-    getActive().then(x=>x.content = val)
+export const updateContent = (val, line, column) => {
+    // console.log('WHO IS CALLING UPDATE CONTENT???')
+    getActive().then(x=>{
+        x.content = val
+        if(line){
+            x.position.line = line 
+        }
+        if(column){
+            x.position.column = column 
+        }
+        // console.log(`SAVE | saving position ${line || 'no line'} @ ${column || 'no column'}`)
+    })
     SAVE_TO_DISK()
 }
 
@@ -355,11 +427,24 @@ export const updateSummaryByIndex = (val, i) => {
 
 /** Delete the setlected SD object by id   */
 export const deleteById = (givenId) => {
-    SD_ARRAY.splice(givenId, 1);
-    if(!SD_ARRAY || SD_ARRAY.length === 0){
+    if(SD_ARRAY.length === 0){
         createNew()
         setActiveById(0)
+    }else{
+
+        // if this sd is active, set another one to active
+        if(SD_ARRAY[givenId].active){
+            if(givenId === 0){
+                setActiveById(1)
+            }else{
+                setActiveById(0)
+            }
+        }
+
+
+        SD_ARRAY.splice(givenId, 1);
     }
+    SAVE_TO_DISK()
 }
 
 
@@ -464,7 +549,7 @@ export const toggleSetting= (index, newState) => {
                     }
                     
                 }else{
-                    console.log(`SETTING | '${s.name}' : newState must be of type number`)
+                    console.log(`SETTING | '${s.name}' : newState must be number. got ${newState}`)
                 }
             }; break;
 

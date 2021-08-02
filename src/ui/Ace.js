@@ -35,9 +35,7 @@ const Ace = props => {
     
     const REF_ACE = useRef(null)
 
-    const onChange = (val) => {
-        props.handleChange(val)
-    }
+    
 
 
 
@@ -62,19 +60,56 @@ const Ace = props => {
     }, [colorMode, theme])
     
 
-
+    const loadContent = () => {
+        console.log('EDITOR | loadContent fired')
+        if(editor){
+            SD.getActive()
+            .then(x=>{
+                if(x){
+                        console.log('ACE |  triggered useEffect')    
+                        editor.setValue(x.content)
+                        if(x.position.line && x.position.column){
+                        console.log(`ACE | loaded with cursor: ${x.position.line} @ ${x.position.column}`)
+                        editor.gotoLine(x.position.line, x.position.column)
+                    }else{
+                        editor.gotoLine(0,0)
+                    }
+                }else{
+                    setTimeout(() => {
+                        loadContent()
+                    }, 200);
+                }
+                // editor.focus()
+            })
+        }else{
+            setTimeout(() => {
+                loadContent()
+            }, 200);
+        }
+    }
 
     
 
     //! load content from parent only when useTrigger fires 
     useEffect(()=>{
         // console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
-        SD.getActive()
-            .then(x=>editor.setValue(x.content))
+        
+        loadContent()
             
             // editor.setValue(props.parentContent || '97asdf876')
     }, [props.useTrigger])
 
+
+
+    const onChange = (val) => {
+        let line
+        let column
+        if(editor){
+            line = editor.getCursorPosition().row
+            column = editor.getCursorPosition().column
+        }
+        props.handleChange(val, line, column)
+    }
 
 
     return(

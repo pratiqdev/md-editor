@@ -1,68 +1,22 @@
 import {useState, useEffect, useRef} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input} from 'theme-ui'
 
-import * as SETTINGS from '../../lib/settings'
+import * as SD from '../../lib/save-version-4'
 import gsap from 'gsap'
+
+import BooleanSwitch from '../settingItems/BooleanSwitch'
+import OptionSwitch  from '../settingItems/OptionSwitch'
+import NumberSwitch from '../settingItems/NumberSwitch'
+import StringSwitch from '../settingItems/StringSwitch'
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
 import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
+import { setSyntheticTrailingComments } from 'typescript';
 
 
 
 
-
-
-
-const LoadItem = ({currentSETTING, currentIndex, handleActiveSwap, handleEdit, handleDelete}) => {
-    const [isSelected, setIsSelected] = useState(false)
-
-    const handleSelection = () => {
-        setIsSelected(!isSelected)
-    }
-    const handleSwap = e => {
-        e.stopPropagation()
-        handleActiveSwap(currentIndex)
-    }
-
-
-
-    return(
-        <Box sx={{border: '1px solid', borderColor:  'grey_3', borderRadius: 2, bg: 'grey_0', p: [1,2,2], m:1, mb:3}}>
-        <Flex 
-            onClick={handleSelection}
-
-            sx={{width: '100%',alignItems: 'center', justifyContent: 'space-between', color: 'grey_15', p:2 }}>
-           
-                <Box sx={{width: '100%', textAlign: 'left', fontSize: 2, flex: 1 }}>{currentSETTING.name}</Box>
-            <Box>
-                <Switch id="enable-email-alerts" checked={currentSETTING.active}/>
-            </Box>
-
-        </Flex>
-
-      
-            
-            
-
-
-
-                {isSelected && 
-                    <Flex sx={{flexDirection: 'column', borderTop: '1px solid', borderColor: 'grey_4', mt:3}}>
-                        <Flex sx={{pt:1, fontSize: 1, color: 'grey_6'}}>
-                           {currentSETTING.group}
-                        </Flex>
-                        <Flex sx={{pt:1, fontSize: 2, color: 'grey_10'}}>
-                           {currentSETTING.desc}
-                        </Flex>
-
-
-                        
-
-                    </Flex>
-                }
-        </Box>
-    )
-}
+    
 
 
 
@@ -93,6 +47,13 @@ const LoadModal = props => {
     const REF_BOX = useRef(null)
     const REF_TITLE = useRef(null)
 
+    const [settingsList, setSettingsList] = useState([])
+    const [localTrigger, setLocalTrigger] = useState(false)
+
+    const test = (i, val) => {
+        SD.toggleSetting(i, val)
+        setLocalTrigger(!localTrigger)
+    }
 
     const handleOpen = () => {
         openUpAnim()
@@ -157,9 +118,11 @@ const LoadModal = props => {
 
     //~ useEffect ____________________________________________________________________________________
     useEffect(()=>{
-        SETTINGS.init()
+        SD.init()
         handleOpen()
-    },[])
+        SD.getAllSettings()
+            .then(x=>setSettingsList(x))
+    })
 
 
     //~ define the element ===========================================================================
@@ -180,6 +143,8 @@ const LoadModal = props => {
             opacity: '0',
             zIndex: '1000',
 
+  
+
         }}
         onClick={()=>handleClose()}>
 
@@ -189,22 +154,30 @@ const LoadModal = props => {
             onClick={e=>e.stopPropagation()}
             sx={{
                 opacity: '0',
+                p: [3,4,6],
+                py: [4,4,6],
                 transform: 'translateY(3rem)',
                 width: ['98vw', 'auto', 'auto'],
-                minWidth: ['98vw', '30rem', '30rem'],
+                minWidth: ['98vw', '40rem', '40rem'],
+                maxWidth: '98vw',
+                height: '40rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'stretch',
+                alignItems: 'center'
             }}>
 
 
             {/* LOAD CONTENT SECTION /////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-         
-                <Flex sx={{
+         <>
+                {/* <Flex sx={{
                     p: [3,4,6],
                     py: [4,4,6],
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'column',
                     minWidth: ['90vw', 'auto', 'auto']
-                }}>
+                }}> */}
 
                     {/* TITLE ------------------------------------------*/}
                     <Box
@@ -218,11 +191,12 @@ const LoadModal = props => {
                     </Box>
 
                     <Box sx={{
-                        minHeight: '30vh',
-                        maxHeight: '30vh',
+                        // height: '40rem',
+                        flex: 1,
+                        // maxHeight: '70vh',
                         overflowY: 'auto',
                         border: '1px solid',
-                        borderColor: 'grey_3',
+                        borderColor: 'grey_4',
                         borderRadius: 2,
                         bg: 'grey_2',
                         width: '100%',
@@ -231,14 +205,24 @@ const LoadModal = props => {
                         p:2,
                         textAlign: 'center'
                     }}>
-                        {SETTINGS.getAll() && SETTINGS.getAll().map((x, i) => 
-                            <LoadItem 
-                                currentSETTING={x} 
-                                currentIndex={i} 
-                                handleActiveSwap={handleActiveSwap}
+
+
+                        {settingsList.map((s, si) => {
+                            switch(s.type){
+                                case 'string': {return <StringSwitch s={s} si={si} handle={test}/>};break;
+                                case 'number': {return <NumberSwitch s={s} si={si} handle={test}/>};break;
+                                case 'array': {return <OptionSwitch s={s} si={si} handle={test} />};break;
+                                case 'boolean': {return <BooleanSwitch s={s} si={si} handle={test} />};break;
+                            }
+
+                        }
+                            // <LoadItem 
+                            //     currentSETTING={x} 
+                            //     currentIndex={i} 
+                            //     handleActiveSwap={handleActiveSwap}
            
                                 
-                                />
+                            //     />
                         )}
                       
                     </Box>
@@ -250,7 +234,7 @@ const LoadModal = props => {
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={()=>console.log('reset settings')}>Reset</Button>
                         <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={()=>console.log('done with settings')}>Done</Button>
                     </Flex>
-            </Flex>
+            </>
             
 
 

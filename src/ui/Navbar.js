@@ -129,12 +129,13 @@ const Navbar = forwardRef((props, ref) => {
 const [toggle, setToggle] = useState(true)
 
 const toggleLayout = () => {
+  console.log('toggle layout????')
   if(toggle){
     setToggle(false)
-    props.setLayout() && props.setLayout('editor')
+    props.setLayout('editor')
   }else{
     setToggle(true)
-    props.setLayout() && props.setLayout('render')
+    props.setLayout('render')
 
   }
 }
@@ -143,7 +144,7 @@ const splitWindow = () => {
   props.setLayout('split')
 }
 
-const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
+const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
 
 useEffect(()=>{
   SD.getActive()
@@ -201,10 +202,10 @@ useEffect(()=>{
               {props.editor ?
               <Flex sx={{fontSize: 1, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
                 <Box>
-                  {activeFileData.name}
+                  {activeFileData && activeFileData.name}
                 </Box>
                 <Box>
-                  {activeFileData.date }
+                  {activeFileData && activeFileData.date }
                 </Box>
               </Flex>
               :

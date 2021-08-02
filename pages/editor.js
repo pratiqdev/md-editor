@@ -48,7 +48,7 @@ const MDPage = props => {
   // let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
 
 
-  const [parentContent, setParentContent] = useState('LOADING')
+  const [parentContent, setParentContent] = useState('LOADING') //!!!!!!!!!! STEP 3
   const [currentSettings, setCurrentSettings] = useState()
 
   const [editorLayout, setEditorLayout] = useState({})
@@ -58,24 +58,28 @@ const MDPage = props => {
 
 
 
-  const handleChange = val => {
+  const handleChange = (val, line, column) => {
       console.log('EDITOR | handleChange - 034958')
       setParentContent(val) 
-      SD.updateContent(val)
+      if(line && column && line !== 0 && column !== 0){
+        SD.updateContent(val, line + 1, column + 1)
+      }else{
+        SD.updateContent(val)
+      }
   }
 
-  const loadContent = async () => {
+  const loadContent = () => {
     SD.getActive()
-      .then(x=>setParentContent(x.content))
-      .catch(e=>console.log(`couldnt get result from getACtive: ${err}`))
+      .then(x=>setParentContent(x.content)) //!!!!!!!!!!!!!! STEP 2
+      .catch(err=>console.log(`couldnt get result from getActive: ${err}`))
   }
 
   useEffect(()=>{
     console.log('EDITOR | useEffect | parentTrigger triggered')
  
-    loadContent()
+    loadContent() //!!!!!!!!!!!! STEP 1 
 
-  }, [parentTrigger])
+  }, [parentTrigger]) //!!!!!! ORIGIN
 
   useEffect(()=>{
     if(!DONE_LOADING){
@@ -93,6 +97,7 @@ const MDPage = props => {
   
   //* useEffect for layout changes
   useEffect(()=>{
+    console.log(`new layout type: ${layoutType}`)
 
     if(layoutType === 'editor'){
       setEditorLayout({
@@ -206,7 +211,7 @@ const MDPage = props => {
             }} >
             <Ace 
               setLayout={setLayoutType}
-              parentContent={parentContent} 
+              parentContent={parentContent} //!!!!!!!! STEP 4
               handleChange={handleChange} 
               layout={editorLayout}
               fontSize={fontSize}
