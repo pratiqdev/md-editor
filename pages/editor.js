@@ -35,7 +35,7 @@ const Render = dynamic(
   )
 
 
-let parentFinishedLoading = false 
+let DONE_LOADING = false 
 
 const MDPage = props => {
 
@@ -61,32 +61,27 @@ const MDPage = props => {
   const handleChange = val => {
       console.log('EDITOR | handleChange - 034958')
       setParentContent(val) 
-      SD.updateContent(val) ? SD.updateContent(val) : console.log('EDITOR | failed to call SD.updateContent')
+      SD.updateContent(val)
   }
 
+  const loadContent = async () => {
+    SD.getActive()
+      .then(x=>setParentContent(x.content))
+      .catch(e=>console.log(`couldnt get result from getACtive: ${err}`))
+  }
 
-  //* useEffect for load only - loading should only happen in the parent
   useEffect(()=>{
-    if(!parentFinishedLoading){
-      parentFinishedLoading = true
-    
-      console.log(`running load useEffect - should only happen once!`)
-      
-      if(typeof SD !== 'undefined'){
-        SD.init() && SD.init() // check if SD.init exists before calling
-        // check if getActivve exists before calling
-        setTimeout(() => {
-          let contentReturnedFromSD = SD.getActive() ? SD.getActive().content : false
-          
-          setParentContent(contentReturnedFromSD || 'no content to pass from parent 65434635642') //! causing errors in BUST ??????
+    console.log('EDITOR | useEffect | parentTrigger triggered')
+ 
+    loadContent()
 
-          setParentTrigger(!parentTrigger)
-      
-        }, 100);
-      }
+  }, [parentTrigger])
 
+  useEffect(()=>{
+    if(!DONE_LOADING){
+      setParentTrigger(!parentTrigger)
+      DONE_LOADING = true
     }
-
   })
 
   //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
@@ -192,7 +187,7 @@ const MDPage = props => {
 
 
 
-  //~ RETURN ELEMENTS __________________________________________________________________________________________________________________
+  //! RETURN ELEMENTS __________________________________________________________________________________________________________________
   return(
       <>
       <Navbar 

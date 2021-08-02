@@ -1,8 +1,6 @@
-import { Sd } from '@emotion-icons/material'
 import {get, set} from 'idb-keyval'
 import moment from 'moment'
 import toasty from './toasty'
-import intro from './intro'
 import {debounce} from 'lodash'
 
 
@@ -29,49 +27,7 @@ let SD_ARRAY = [
     }
 ]
 
-let SETTINGS_ARRAY = [
-    {
-        name: 'A boolean setting',
-        type: 'boolean',
-        state: true,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    },
-    {
-        name: 'Another boolean setting',
-        type: 'boolean',
-        state: false,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    },
-    {
-        name: 'An array setting',
-        type: 'array',
-        state: 2,
-        options: ['option 1', 'option 2', 'option 3'],
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    },
-    {
-        name: 'A number setting',
-        type: 'number',
-        state: 17,
-        min: 0,
-        max: 100,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    },
-    {
-        name: 'A string setting',
-        type: 'string',
-        state: `Yup, that's a string`,
-        min: 0,
-        max: 30,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    }
 
-]
 
 
 
@@ -103,10 +59,6 @@ const SAVE_TO_DISK = debounce(() => {
         set('MD_EDITOR_SD', SD_ARRAY)
             .then(()=>console.log('SAVE | SAVE_TO_DISK | saved'))
             .catch(err=>console.log(`SAVE | SAVE_TO_DISK | no local storage: ${err}`))
-
-        set('MD_EDITOR_SETTINGS', SETTINGS_ARRAY)
-            .then(()=>console.log('SAVE | SAVE_TO_DISK | saved settings'))
-            .catch(err=>console.log(`SAVE | SAVE_TO_DISK | no local storage: ${err}`))
     }
  
 },
@@ -122,7 +74,6 @@ const SAVE_TO_DISK = debounce(() => {
 /** Initialize the SD object and load data from memory, or create new object and save to memory if it does not exist */
 const INITIALIZE = () => {
 
-
     console.log('SAVE | INIT ---------')
     get('MD_EDITOR_SD')
         .then(x=>{
@@ -132,44 +83,11 @@ const INITIALIZE = () => {
             }else{
                 console.log('SAVE | INIT | no data in LSD ')
             }
-            SD_INITIALIZED = true
         })
         .catch(err=>{
             console.log(`SAVE | INIT | data not available...${err}`)
-            SD_INITIALIZED = true
-        })
-
-    get('MD_EDITOR_SETTINGS')
-        .then(x=>{
-            if(x && x.length !== 0){
-                console.log('SAVE | INIT| got settings from LSD')
-                SETTINGS_ARRAY = x
-            }else{
-                console.log('SAVE | INIT | no settings in LSD ')
-            }
-            SD_INITIALIZED = true
-        })
-        .catch(err=>{
-            console.log(`SAVE | INIT | settings not available...${err}`)
-            SD_INITIALIZED = true
         })
                     
-}
-
-const WAIT_FOR_INIT = () => {
-    return new Promise((resolve, reject) => {
-        const waitLoop = () => {
-            if(!SD_INITIALIZED){
-                setTimeout(() => {
-                    waitLoop()
-                }, 200);
-            }else{
-                resolve()
-            }
-        }
-        waitLoop()
-    })
-    
 }
 
 //~ ___________________________________________________________________________________________________________________________________
@@ -363,137 +281,4 @@ export const deleteById = (givenId) => {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-//! //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//= SETTINGS
-//! //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-export const getAllSettings = () => {
-    return new Promise((resolve, reject) => {
-        console.log('SETTINGS | getAllSettings() ')
-        WAIT_FOR_INIT()
-        .then(()=>{
-            resolve(SETTINGS_ARRAY)
-        })
-        .catch(err=>{
-            console.log(err)
-            reject(err)
-        })
-    })
-}
-
-export const getSettingByIndex = (i) => {
-    return SETTINGS_ARRAY[i]
-}
-
-/**
- * Toggle or set a setting to true or false, cycle through options, or set to specified option by index.
- * 
- * @param index - target a setting to modify 
- * 
- * @param newState - the state to be selected  
- * 
- * ---
- * 
- * bool: toggle or set to `newState` if provided  
- * array: cycle to next option or set to `newState` if provided  
- * string: set string to the value of `newState`
- * number: set number to the value of `newState`
- */
-export const toggleSetting= (index, newState) => {
-    let s = SETTINGS_ARRAY[index]
-
-    switch(s.type){
-        //* handle array type settings
-        case 'arr':
-        case 'array':
-            {
-                // if no new state was provided - cycle to next or first element
-                if(typeof newState === 'null' || typeof newState === 'undefined'){
-                    // if there is room to increment++, or set to 0
-                    s.state < s.options.length ? s.state++ : s.state = 0
-                    console.log(`SETTING | set '${s.name}' to ${s.state}`)
-                    return true
-                }else{
-                    if(typeof newState === 'number'){
-                        // check if within range
-                        if(newState >= 0 && newState <= s.options.length){
-                            s.state = newState
-                            console.log(`SETTING | set '${s.name}' to ${s.state}`)
-                            return true
-                        }else{
-                            console.log(`SETTING | '${s.name}' : newState must be between 0 and ${s.options.length}`)
-                            return false
-                        }
-                    }else{
-                        console.log(`SETTING | '${s.name}' : newState must be of type number`)
-                        return false
-                    }
-                }
-            }; break;
-
-        //* handle number type settings
-        case 'num':
-        case 'number':
-            {
-                // handle setting the new state directly to given number
-                if(typeof newState === 'number'){
-                    let outOfRange = 0
-                    // check if max exists && not greater than max
-                    if(s.max && newState > s.max){
-                        outOfRange++
-                        console.log(`SETTING | '${s.name}' : must be <= ${s.max}`)
-                    }
-                    // check if min exists && not less than min
-                    if(s.min && newState < s.min){
-                        outOfRange++
-                        console.log(`SETTING | '${s.name}' : must be >= ${s.min}`)
-                    }
-                    if(outOfRange === 0){
-                        s.state = newState
-                    }
-                    
-                }else{
-                    console.log(`SETTING | '${s.name}' : newState must be of type number`)
-                }
-            }; break;
-
-        //* handle string type settings
-        case 'str':
-        case 'string':
-            {
-                if(typeof newState === 'string'){
-                    s.state = newState
-                    console.log(`SETTING | set '${s.name}' to ${s.state}`)
-                }else{
-                    console.log(`SETTING | '${s.name}' : newState must be of type string`)
-                }
-            }; break;
-
-        //* handle boolean type settings
-        default:
-            {
-                switch(newState){
-                    case 'true':
-                    case true: { s.state = true };break;
-                    case 'false':
-                    case false: { s.state = false };break;
-                    default: {s.state = !s.state}
-                }
-                console.log(`SETTING | set '${s.name}' to ${s.state}`)
-
-            }
-    }
-    // SETTINGS_ARRAY[index].state = val
-    SAVE_TO_DISK()
-}
+// createNew = .createNew.bind(SD);

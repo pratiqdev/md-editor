@@ -22,7 +22,6 @@ import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-textmate";
 
-let aceFinishedLoading = false
 
 
 const Ace = props => {
@@ -44,43 +43,36 @@ const Ace = props => {
 
     let editor
 
-
-
-
+    //* define the editor at start
     useEffect(()=>{
         const reactAceComponent = REF_ACE.current;
         editor = reactAceComponent.editor;
-        colorMode === 'dark' ? editor.setTheme('ace/theme/monokai') : editor.setTheme('ace/theme/dawn')
+    })
 
+
+    //* change themes and bg on colorMode or theme change
+    useEffect(()=>{
         if(colorMode === 'dark'){
+            editor.setTheme('ace/theme/monokai')
             gsap.to([editor.container], {background: '#191919', duration: .3})
         }else{
+            editor.setTheme('ace/theme/dawn')
             gsap.to([editor.container], {background: '#ccc', duration: .3})
         }
-
-    }, [colorMode, props, theme])
+    }, [colorMode, theme])
     
 
 
 
-    //! load sd content here ONCE - because it triggers handleUpdate and causes rerender on parent and renderer
-
-    // useEffect(()=>{
-        
-    //     if(!aceFinishedLoading){
-    //         aceFinishedLoading = true
-    //         editor.setValue(props.parentContent || 'ACE | loading content once')
-    //       }
-        
-
-    // })
     
 
-    //! load content from parent only when useTrigger fires
+    //! load content from parent only when useTrigger fires 
     useEffect(()=>{
-        console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
+        // console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
+        SD.getActive()
+            .then(x=>editor.setValue(x.content))
             
-            editor.setValue(props.parentContent || 'ACE | no content passed from parent 563724')
+            // editor.setValue(props.parentContent || '97asdf876')
     }, [props.useTrigger])
 
 

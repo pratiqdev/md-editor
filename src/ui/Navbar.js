@@ -69,12 +69,14 @@ const Navbar = forwardRef((props, ref) => {
   const [showLoad, setShowLoad] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
 
+  const [activeFileData, setActiveFileData] = useState({name: '-Title-', date: '-date-'})
+
 
 
   //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
   const showLoadModal = () => {
       setShowLoad(true)
-      props.causeParentTrigger()
+      // props.causeParentTrigger()
   }
 
   const hideLoadModal = () => {
@@ -143,7 +145,10 @@ const splitWindow = () => {
 
 const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
 
-
+useEffect(()=>{
+  SD.getActive()
+    .then(x=>setActiveFileData(x))
+})
 
 
 
@@ -196,10 +201,10 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 300)
               {props.editor ?
               <Flex sx={{fontSize: 1, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
                 <Box>
-                  {SD.getActive() && SD.getActive().name  }
+                  {activeFileData.name}
                 </Box>
                 <Box>
-                  {SD.getActive() && SD.getActive().date  }
+                  {activeFileData.date }
                 </Box>
               </Flex>
               :

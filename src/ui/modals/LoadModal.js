@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react'
-import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input} from 'theme-ui'
+import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input, Textarea} from 'theme-ui'
 
 import * as SD from '../../lib/save-version-4'
 import gsap from 'gsap'
@@ -15,28 +15,39 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 
 const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete}) => {
     const [isSelected, setIsSelected] = useState(false)
+    const [newName, setNewName] = useState(currentSD.name)
+    const [newSum, setNewSum] = useState(currentSD.sum)
 
     const handleSelection = () => {
-        setTimeout(() => {
-            setIsSelected(!isSelected)
-        }, 200);
+        setIsSelected(!isSelected)
     }
     const handleSwap = e => {
         e.stopPropagation()
         handleActiveSwap(currentIndex)
     }
 
+    const handleUpdateName = e => {
+        setNewName(e.target.value)
+        SD.updateNameByIndex(e.target.value, currentIndex)
+    }
+
+    const handleUpdateSum = e => {
+        setNewSum(e.target.value)
+        SD.updateSummaryByIndex(e.target.value, currentIndex)
+    }
+
 
 
     return(
-        <Box sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3}}>
+        <Box sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3, cursor: 'pointer'}}>
         <Flex 
             onClick={handleSelection}
 
             sx={{width: '100%',alignItems: 'center', justifyContent: 'space-between', color: 'grey_15' }}>
             <Flex sx={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                <Box sx={{fontSize: 2}}>{currentSD.name}</Box>
-                <Box sx={{fontSize: 0}}>{currentSD.date}</Box>
+                {/* <Box sx={{fontSize: 3}}>{currentSD.name}</Box> */}
+                <Input value={newName} onChange={handleUpdateName} onClick={e=>e.stopPropagation()} sx={{p:0,fontSize: 3, border: '0px solid', cursor: 'auto', width: 'auto', minWidth: '2rem'}}/>
+                <Box sx={{fontSize: 1, color: 'grey_10', cursor: 'pointer'}}>{currentSD.date}</Box>
             </Flex>
 
 
@@ -46,16 +57,17 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
         </Flex>
 
                 {isSelected && 
-                    <Flex sx={{flexDirection: 'column', borderTop: '1px solid', borderColor: 'grey_4', mt:3}}>
-                        <Flex sx={{pt:1, fontSize: 2, color: 'grey_8'}}>
-                            {currentSD.sum}
-                        </Flex>
+                    <Flex sx={{flexDirection: 'column'}}>
 
+                    <Flex sx={{borderBottom: '1px solid', fontSize: 1, borderColor: 'grey_4', color: 'grey_10', my:1, pb: 1}}>
+                        {currentSD.content.length} Characters
+                    </Flex>
 
-                        <Flex sx={{mt: 4}}>
-                            <Button variant='outline.secondary' sx={{flex: 1, mr: 2}} onClick={()=>handleDelete(currentIndex)}>Delete</Button>
-                            <Button variant='outline.secondary' sx={{flex: 1, mr: 2}} onClick={()=>handleEdit(currentIndex)}>Rename</Button>
-                            <Button variant='outline.secondary' sx={{flex: 1}} onClick={()=>console.log('create template from this file')}>Save as Template</Button>
+                        <Textarea value={newSum} onChange={handleUpdateSum} onClick={e=>e.stopPropagation()} rows={8} sx={{p:0, color: 'grey_12', fontFamily: 'body', fontSize: 2, cursor: 'auto',  maxHeight:'6rem',  border: '0px solid'}}/>
+
+                        <Flex sx={{mt: 4, justifyContent: 'space-between'}}>
+                            <Button variant='outline.secondary' sx={{minWidth: '6rem', mr: 2}} onClick={()=>handleDelete(currentIndex)}>Delete</Button>
+                            <Button variant='outline.secondary' sx={{minWidth: '6rem'}} onClick={()=>console.log('create template from this file')}>Save as Template</Button>
                         </Flex>
 
                     </Flex>
@@ -94,10 +106,6 @@ const LoadModal = props => {
     const REF_TITLE = useRef(null)
 
     const [localTrigger, setLocalTrigger] = useState(false)
-    const [isEditMode, setIsEditMode] = useState(false)
-    const [indexToEdit, setIndexToEdit] = useState(0)
-    const [newSummary, setNewSummary] = useState('')
-    const [newTitle, setNewTitle] = useState('')
 
     const handleOpen = () => {
         openUpAnim()
@@ -150,14 +158,7 @@ const LoadModal = props => {
 
     }
 
-    const handleEdit = givenId => {
-        setIsEditMode(true)
-        setIndexToEdit(givenId)
-        setNewTitle(SD.getById(givenId).name)
-        setNewSummary(SD.getById(givenId).sum)
-        console.log('LOADMODAL | handleEdit')
 
-    }
 
     const handleDelete = givenId => {
         console.log('LOADMODAL | handleDelete')
@@ -172,15 +173,7 @@ const LoadModal = props => {
         setLocalTrigger(!localTrigger)
     }
 
-    const handleUpdateInfo = () => {
-        console.log('LOADMODAL | handleUpdateInfo ')
 
-        SD.updateName(newTitle)
-        SD.updateSummary(newSummary)
-        setTimeout(() => {
-            setIsEditMode(false)
-        }, 200);
-    }
 
 
     //~ useEffect ____________________________________________________________________________________
@@ -216,22 +209,24 @@ const LoadModal = props => {
             onClick={e=>e.stopPropagation()}
             sx={{
                 opacity: '0',
+                p: [3,4,6],
+                py: [4,4,6],
                 transform: 'translateY(3rem)',
                 width: ['98vw', 'auto', 'auto'],
-                minWidth: ['98vw', '30rem', '30rem'],
+                minWidth: ['98vw', '40rem', '40rem'],
+                maxWidth: '98vw',
+                height: '40rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'stretch',
+                alignItems: 'center'
+                
             }}>
 
 
             {/* LOAD CONTENT SECTION /////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {!isEditMode &&
-                <Flex sx={{
-                    p: [3,4,6],
-                    py: [4,4,6],
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    minWidth: ['90vw', 'auto', 'auto']
-                }}>
+   
+                <>
 
                     {/* TITLE ------------------------------------------*/}
                     <Box
@@ -246,11 +241,12 @@ const LoadModal = props => {
                     </Box>
 
                     <Box sx={{
-                        minHeight: '30vh',
-                        maxHeight: '30vh',
+                        // height: '40rem',
+                        flex: 1,
+                        // maxHeight: '70vh',
                         overflowY: 'auto',
                         border: '1px solid',
-                        borderColor: 'grey_3',
+                        borderColor: 'grey_4',
                         borderRadius: 2,
                         bg: 'grey_2',
                         width: '100%',
@@ -264,7 +260,6 @@ const LoadModal = props => {
                                 currentSD={x} 
                                 currentIndex={i} 
                                 handleActiveSwap={handleActiveSwap}
-                                handleEdit={handleEdit}
                                 handleDelete={handleDelete}
                                 
                                 />
@@ -278,70 +273,11 @@ const LoadModal = props => {
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleDeny}>Cancel</Button>
                         <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleNew}>New</Button>
                     </Flex>
-            </Flex>
-            }
+            </>
 
 
 
-            {/* EDIT CONTENT SECTION /////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {isEditMode &&
-                <Flex sx={{
-                    p: [2,4,6],
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                }}>
-
-                    {/* TITLE ------------------------------------------*/}
-                    <Box
-                    ref={REF_TITLE} 
-                    sx={{color: 'grey_0', fontSize: [1,2,3], fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
-                        Edit Document Info
-                    </Box>
-
-                    {/* SUBTITLE ------------------------------------------*/}
-                    <Input sx={{color: 'grey_6', my:6,
-                    border: '1px solid',
-                    borderColor: 'grey_3',
-                    borderRadius: 2,
-                    bg: 'grey_2',
-                    width: '100%',
-                    mb: 4,
-                    color: 'grey_12',
-                    p:2,
-                    textAlign: 'center'
-                    }} 
-                    value={newTitle}
-                    onChange={e=>setNewTitle(e.target.value)}
-                    />
-
-                    <Input sx={{
-                        minHeight: '30vh',
-                        maxHeight: '30vh',
-                        overflowY: 'auto',
-                        border: '1px solid',
-                        borderColor: 'grey_3',
-                        borderRadius: 2,
-                        bg: 'grey_2',
-                        width: '100%',
-                        mb: 6,
-                        color: 'grey_12',
-                        p:2,
-                        textAlign: 'center'
-                    }}
-                    value={newSummary}
-                    onChange={e=>setNewSummary(e.target.value)}
-                    />
-
-
-                    
-                    {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
-                    <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
-                        <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={()=>setIsEditMode(false)}>Cancel</Button>
-                        <Button  sx={{p:2, minWidth: '6rem',}} onClick={handleUpdateInfo}>Update</Button>
-                    </Flex>
-            </Flex>
-            }
+            
 
 
 
