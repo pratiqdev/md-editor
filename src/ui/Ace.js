@@ -8,6 +8,7 @@ import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
 import SaveModal from './modals/SaveModal'
+import * as ALERT from '../lib/alert' 
 
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/mode-java";
@@ -49,26 +50,7 @@ const Ace = props => {
     const REF_ACE = useRef(null)
 
     const handleSave = () => {
-        console.log('save file to machine')
-
-        SD.getActive().then(x=>{
-            let filename = `${x.name}.md`
-            var pom = document.createElement('a');
-            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(x.content));
-            pom.setAttribute('download', filename);
-        
-            if (document.createEvent) {
-                var event = document.createEvent('MouseEvents');
-                event.initEvent('click', true, true);
-                pom.dispatchEvent(event);
-            }
-            else {
-                pom.click();
-            }
-        })
-
-
-
+        SD.saveActiveFile()
     }
 
     

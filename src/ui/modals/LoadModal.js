@@ -1,6 +1,7 @@
 import {useState, useEffect, useRef} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input, Textarea} from 'theme-ui'
 
+import * as ALERT from '../../lib/alert'
 import * as SD from '../../lib/save-version-4'
 import gsap from 'gsap'
 
@@ -38,26 +39,7 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
 
     const handleSave = (e) => {
         e.stopPropagation()
-        console.log('save file to machine')
-
-
-            let filename = `${currentSD.name}.md`
-            var pom = document.createElement('a');
-            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(currentSD.content));
-            pom.setAttribute('download', filename);
-        
-            if (document.createEvent) {
-                var event = document.createEvent('MouseEvents');
-                event.initEvent('click', true, true);
-                pom.dispatchEvent(event);
-            }
-            else {
-                pom.click();
-            }
-    
-
-
-
+        SD.saveFileById(currentIndex)
     }
 
     useEffect(()=>{

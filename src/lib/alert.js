@@ -67,6 +67,18 @@ export const welcomeAlerts = () => {
 
 
 
+
+//! file save alert ==============================================================================
+export const fileSaveAlert = () => {
+        toasty({
+          text: `Saving file!`,
+          type: 'success',
+          time: 6000,
+        })
+}
+
+
+
 //! data validation alerts ==============================================================================
 
 export const nanAlert = debounce((val) => {

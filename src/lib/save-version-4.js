@@ -4,6 +4,7 @@ import moment from 'moment'
 import toasty from './toasty'
 import intro from './intro'
 import {debounce} from 'lodash'
+import * as ALERT from './alert'
 
 
 
@@ -355,7 +356,7 @@ export const getAll = () => {
 export const getById = (id) => {
 
     if(SD_ARRAY && SD_ARRAY.length !== 0){
-        return getAll()[id]
+        return SD_ARRAY[id]
     }else{
         createNew()
         setActiveById(0)
@@ -465,6 +466,48 @@ export const deleteById = (givenId) => {
         SD_ARRAY.splice(givenId, 1);
     }
     SAVE_TO_DISK()
+}
+
+/** Save the current file to the users machine */
+export const saveActiveFile = () => {
+    getActive().then(x=>{
+        let filename = `${x.name}.md`
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(x.content));
+        pom.setAttribute('download', filename);
+    
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            pom.dispatchEvent(event);
+        }
+        else {
+            pom.click();
+        }
+        ALERT.fileSaveAlert()
+    })
+}
+
+
+/** Save the current file to the users machine */
+export const saveFileById = (givenId) => {
+    let x = getById(givenId)
+
+        let filename = `${x.name}.md`
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(x.content));
+        pom.setAttribute('download', filename);
+    
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            pom.dispatchEvent(event);
+        }
+        else {
+            pom.click();
+        }
+        ALERT.fileSaveAlert()
+    
 }
 
 
