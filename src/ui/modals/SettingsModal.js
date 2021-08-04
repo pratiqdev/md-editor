@@ -267,7 +267,7 @@ const LoadModal = props => {
                 sx={{
                     position: 'absolute',
                     // width: '20rem',
-                    // maxWidth: '98vw',
+                    maxWidth: '90vw',
                     // height: '10rem',
                     bg: 'grey_0',
                     border: '2px solid',

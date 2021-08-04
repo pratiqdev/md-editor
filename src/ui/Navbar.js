@@ -228,6 +228,9 @@ useEffect(()=>{
                 <Box>
                   {activeFileData && activeFileData.date }
                 </Box>
+                <Box>
+                  {activeFileData && activeFileData.edit }
+                </Box>
               </Flex>
               }
 

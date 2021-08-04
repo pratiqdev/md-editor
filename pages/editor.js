@@ -126,7 +126,7 @@ const MDPage = props => {
 
 
 
-  const [fontSize, setFontSize] = useState('1rem')
+  const [fontSize, setFontSize] = useState(10)
   
   //* useEffect for layout changes
   useEffect(()=>{
@@ -240,12 +240,12 @@ const MDPage = props => {
 
         
           <Flex ref={REF_SPINNER} sx={{zIndex: '100000', top: '0', position: 'absolute', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh', bg: 'grey_2'}}>
-            <Box ref={REF_SPINNER_LOGO_OUTLINE} sx={{position: 'absolute', width:'1vw', height: '1vw', borderRadius: '50%', 
-            boxShadow: theme => `0 0 5px 5px ${theme.colors.grey_3}`, 
+            <Box ref={REF_SPINNER_LOGO_OUTLINE} sx={{position: 'absolute', width:'1rem', height: '1rem', borderRadius: '50%', 
+            boxShadow: theme => `0 0 .2rem .2rem ${theme.colors.grey_3}`, 
             // border: '1px solid', 
             // borderColor: 'grey_6'
             }} />
-            <Box ref={REF_SPINNER_LOGO} sx={{width: '5vw', height: '5vw'}}>
+            <Box ref={REF_SPINNER_LOGO} sx={{width: '5rem', height: '5rem'}}>
               <MdeLogo  />
             </Box>
           </Flex>
