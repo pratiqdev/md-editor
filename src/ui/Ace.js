@@ -169,17 +169,7 @@ const Ace = props => {
 
                      
                       }, false);
-                      let num = 0
-                      document.addEventListener("keydown", function(e) {
-                        if (e.key === 'l' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-                          e.preventDefault();
-                          props.handleNewFromShortcut()
-                          num++
-                          console.log(`new file shortcut ${num}`)
-                        }
-
-                     
-                      }, false);
+                  
 
                     
                      

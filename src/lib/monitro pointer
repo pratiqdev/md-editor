@@ -1,0 +1,10 @@
+monitro pointer
+
+DP-5
+DP-3
+
+HUION Huion Tablet Pen Pen (0)          	id=18	[slave  pointer  (2)]
+
+
+ORIGINAL ANSWER: xinput map-to-output 20 DVI-I-1
+MY SETUP: xinput map-to-output 18 DP-5
