@@ -40,6 +40,7 @@ const Ace = props => {
     const { theme, components, colorMode, setColorMode } = context;
 
     const [showSaveModal, setShowSaveModal] = useState(false)
+    const [contentForSave, setContentForSave] = useState('')
 
     const breakIndex = useBreakpointIndex();
 
@@ -48,7 +49,26 @@ const Ace = props => {
     const REF_ACE = useRef(null)
 
     const handleSave = () => {
-        setShowSaveModal(true)
+        console.log('save file to machine')
+
+        SD.getActive().then(x=>{
+            let filename = `${x.name}.md`
+            var pom = document.createElement('a');
+            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(x.content));
+            pom.setAttribute('download', filename);
+        
+            if (document.createEvent) {
+                var event = document.createEvent('MouseEvents');
+                event.initEvent('click', true, true);
+                pom.dispatchEvent(event);
+            }
+            else {
+                pom.click();
+            }
+        })
+
+
+
     }
 
     
@@ -207,6 +227,7 @@ const Ace = props => {
             column = editor.getCursorPosition().column
         }
         props.handleChange(val, line, column)
+        setContentForSave(val)
     }
 
 
@@ -245,7 +266,7 @@ const Ace = props => {
                   style={{zIndex: '2', }}
                 />
             </Box>
-            {showSaveModal && <SaveModal handleDeny={()=>setShowSaveModal(false)}/>}
+            {/* {showSaveModal && <SaveModal handleDeny={()=>setShowSaveModal(false)} contentForSave={contentForSave}/>} */}
         </>
     )
 }
