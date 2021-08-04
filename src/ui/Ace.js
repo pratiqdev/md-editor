@@ -7,6 +7,7 @@ import {useEffect, useState, useRef } from 'react'
 import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
+import SaveModal from './modals/SaveModal'
 
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/mode-java";
@@ -38,11 +39,17 @@ const Ace = props => {
     const context = useThemeUI();
     const { theme, components, colorMode, setColorMode } = context;
 
+    const [showSaveModal, setShowSaveModal] = useState(false)
+
     const breakIndex = useBreakpointIndex();
 
 
     
     const REF_ACE = useRef(null)
+
+    const handleSave = () => {
+        setShowSaveModal(true)
+    }
 
     
 
@@ -139,7 +146,25 @@ const Ace = props => {
                                     console.log('Keybinding successful')
                             }
                         })
+
+
+                        // ed.commands.addCommand({
+                        //     name: "testKeybindings",
+                        //     bindKey: {win: "Ctrl-s", mac: "Command-s"},
+                        //     exec: function(ed) {
+                        //             console.log('Save file')
+                        //             handleSave()
+                        //     }
+                        // })
                     })
+
+
+                    document.addEventListener("keydown", function(e) {
+                        if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                          e.preventDefault();
+                          handleSave()
+                        }
+                      }, false);
 
                     
                      
@@ -220,6 +245,7 @@ const Ace = props => {
                   style={{zIndex: '2', }}
                 />
             </Box>
+            {showSaveModal && <SaveModal handleDeny={()=>setShowSaveModal(false)}/>}
         </>
     )
 }

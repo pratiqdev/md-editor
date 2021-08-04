@@ -88,6 +88,16 @@ const Navbar = forwardRef((props, ref) => {
     setShowSettings(true)
   }
 
+  useImperativeHandle(ref,
+    () => {
+        test: () => {// function name
+            // the above func. is customized function as it can 
+            // behave differently than its normal behavior 
+            console.log('useImperativeHandleRef')
+         } 
+    });  
+  
+
 
 
 

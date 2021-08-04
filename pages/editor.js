@@ -17,10 +17,8 @@ import marked from 'marked'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-// import LoadModal from '../src/ui/modals/LoadModal'
-// import SettingsModal from '../src/ui/modals/SettingsModal'
-import toasty from '../src/lib/toasty';
 import * as SD from '../src/lib/save-version-4.js'
+import * as ALERT from '../src/lib/alert'
 
 
 
@@ -75,68 +73,7 @@ const MDPage = props => {
   }
 
 
-  let WELCOME_LIMIT = 0
 
-  const welcomeAlerts = () => {
-    WELCOME_LIMIT++
-    if(WELCOME_LIMIT === 0){
-    setTimeout(() => {
-        toasty({
-          text: `Using version ${version}`,
-          type: 'special',
-          time: 3000,
-          agree: {
-            text: 'Got it',
-          },
-          closeAnyway: true
-        })
-
-
-        
-        
-      }, 1000);
-
-      setTimeout(() => {
-        toasty({
-          text: `View the documentation for more info or guides on how to use this application`,
-          type: 'info',
-          time: 6000,
-          dismiss: {
-            text: 'Nah',
-          },
-          agree: {
-            text: 'View docs',
-            func: () => {router.push('/docs')},
-          },
-          closeAnyway: true
-        })
-
-
-        
-        
-      }, 4000);
-
-      setTimeout(() => {
-        toasty({
-          text: `If you discover any problems please submit a new issue on the github repository!`,
-          type: 'alert',
-          time: 6000,
-          dismiss: {
-            text: 'Maybe Later',
-          },
-          agree: {
-            text: 'GitHub',
-            func: () => {location.replace('https://github.com/pratiqdev/md-editor/issues')},
-          },
-          closeAnyway: true
-        })
-
-
-        
-        
-      }, 10000);
-    }
-  }
 
   useEffect(()=>{
     console.log('EDITOR | useEffect | parentTrigger triggered')
@@ -149,7 +86,7 @@ const MDPage = props => {
     if(!DONE_LOADING){
       setParentTrigger(!parentTrigger)
       DONE_LOADING = true
-      welcomeAlerts()
+      ALERT.welcomeAlerts()
     }
   })
 
