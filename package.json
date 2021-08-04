@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "0.0.305",
+  "version": "0.0.310",
   "description": "personal web dev portfolio using next.js",
   "main": "index.js",
   "scripts": {

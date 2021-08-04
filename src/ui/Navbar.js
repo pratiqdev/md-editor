@@ -24,10 +24,12 @@ import useLongPress from '../lib/longPress'
 
 import LoadModal from './modals/LoadModal'
 import SettingsModal from './modals/SettingsModal'
+import Tipper from './Tipper'
 
 
 import { showInstallPrompt, libInstallStatus, triggerInstallFlow, deferredPrompt } from '../lib/install'
 
+import MdeLogo from './MdeLogo'
 
 //* external deps
 import { get, set } from 'idb-keyval';
@@ -140,13 +142,14 @@ const [toggle, setToggle] = useState(true)
 
 const toggleLayout = () => {
   console.log('toggle layout????')
-  if(toggle){
-    setToggle(false)
-    props.setLayout('editor')
-  }else{
-    setToggle(true)
-    props.setLayout('render')
-
+  if(props.setLayout){
+    if(toggle){
+      setToggle(false)
+      props.setLayout('editor')
+    }else{
+      setToggle(true)
+      props.setLayout('render')
+    }
   }
 }
 
@@ -206,12 +209,12 @@ useEffect(()=>{
         />
         <Flex sx={{ alignItems: "center", zIndex: 1, justifyContent: 'space-between', flex:1 }}>
 
-          <Flex>
+          <Flex sx={{alignItems: 'center'}}>
 
 
           <Link href='/'>
-            <Flex sx={{ ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
-              MD {!props.editor && 'Editor'}
+            <Flex sx={{  height: '4rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
+              <MdeLogo /> 
             </Flex>
           </Link>
 
@@ -240,16 +243,17 @@ useEffect(()=>{
                   <CaretLeft size='22'/>
               </Button>
             } */}
+              <Tipper tip="Click to toggle view, hold to split view" delay={[1000, 0]}>
+                <Button variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
+                    {(props.layoutType === 'editor' && breakIndex <=0) &&<CaretUp size='22'/>}
+                    {(props.layoutType === 'render' && breakIndex <=0) &&<CaretDown size='22'/>}
+                    {(props.layoutType === 'split' && breakIndex <=0) &&<LayoutSplit  style={{transform: 'rotate(90deg)'}} size='18'/>}
 
-              <Button variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
-                  {(props.layoutType === 'editor' && breakIndex <=0) &&<CaretUp size='22'/>}
-                  {(props.layoutType === 'render' && breakIndex <=0) &&<CaretDown size='22'/>}
-                  {(props.layoutType === 'split' && breakIndex <=0) &&<LayoutSplit  style={{transform: 'rotate(90deg)'}} size='18'/>}
-
-                  {(props.layoutType === 'editor' && breakIndex > 0) &&<CaretLeft size='22'/>}
-                  {(props.layoutType === 'render' && breakIndex > 0) &&<CaretRight size='22'/>}
-                  {(props.layoutType === 'split' && breakIndex > 0) &&<LayoutSplit size='18'/>}
-              </Button>
+                    {(props.layoutType === 'editor' && breakIndex > 0) &&<CaretLeft size='22'/>}
+                    {(props.layoutType === 'render' && breakIndex > 0) &&<CaretRight size='22'/>}
+                    {(props.layoutType === 'split' && breakIndex > 0) &&<LayoutSplit size='18'/>}
+                </Button>
+              </Tipper>
             
           </Flex>
           }

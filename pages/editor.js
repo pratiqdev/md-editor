@@ -21,6 +21,7 @@ import { debounce } from 'lodash'
 import Navbar from "../src/ui/Navbar";
 import * as SD from '../src/lib/save-version-4.js'
 import * as ALERT from '../src/lib/alert'
+import MdeLogo from '../src/ui/MdeLogo'
 
 
 
@@ -48,6 +49,8 @@ const MDPage = props => {
   // let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
 
   const REF_SPINNER = useRef(null)
+  const REF_SPINNER_LOGO = useRef(null)
+  const REF_SPINNER_LOGO_OUTLINE = useRef(null)
 
   const [parentContent, setParentContent] = useState('LOADING') //!!!!!!!!!! STEP 3
   const [currentSettings, setCurrentSettings] = useState()
@@ -70,7 +73,13 @@ const MDPage = props => {
       }
   }
 
+  var tl = gsap.timeline({repeat: -1, repeatDelay: 0});
   const loadContent = () => {
+    gsap.to([REF_SPINNER_LOGO.current], { duration: .5, repeat: -1, yoyo: true, scale: 1.2, ease: 'Power1.easeInOut'})
+
+    tl.to([REF_SPINNER_LOGO_OUTLINE.current], { duration: .5,  scale: 8, ease: 'Power1.easeInOut'})
+    tl.to([REF_SPINNER_LOGO_OUTLINE.current], { duration: .5,  opacity: '0', ease: 'Power1.easeInOut'})
+
     SD.getActive()
       .then(x=>setParentContent(x.content)) //!!!!!!!!!!!!!! STEP 2
       .catch(err=>console.log(`couldnt get result from getActive: ${err}`))
@@ -78,6 +87,10 @@ const MDPage = props => {
 
   const hideSpinner = () => {
     gsap.to([REF_SPINNER.current], {opacity: '0', pointerEvents: 'none', duration: 1, delay: 1.5})
+    setTimeout(() => {
+      tl.pause()
+    }, 1500);
+
   }
 
 
@@ -221,11 +234,20 @@ const MDPage = props => {
         setLayout={setLayoutType}
         layoutType={layoutType}
         causeParentTrigger={()=>setParentTrigger(!parentTrigger)}
+        handleNewFromShortcut={handleNewFromShortcut}
+
         />
 
         
           <Flex ref={REF_SPINNER} sx={{zIndex: '100000', top: '0', position: 'absolute', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh', bg: 'grey_2'}}>
-            <Spinner size={80} strokeWidth={2} speed={10}/>
+            <Box ref={REF_SPINNER_LOGO_OUTLINE} sx={{position: 'absolute', width:'1vw', height: '1vw', borderRadius: '50%', 
+            boxShadow: theme => `0 0 5px 5px ${theme.colors.grey_3}`, 
+            // border: '1px solid', 
+            // borderColor: 'grey_6'
+            }} />
+            <Box ref={REF_SPINNER_LOGO} sx={{width: '5vw', height: '5vw'}}>
+              <MdeLogo  />
+            </Box>
           </Flex>
 
 
@@ -241,7 +263,6 @@ const MDPage = props => {
               layout={editorLayout}
               fontSize={fontSize}
               useTrigger={parentTrigger}
-              handleNewFromShortcut={handleNewFromShortcut}
             />
           </Box>
 
