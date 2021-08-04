@@ -122,6 +122,14 @@ edited: {{edit}}
         {
             find: '{{author}}',
             replace: 'Some Dude',
+        },
+        {
+            find: '{{test}}',
+            replace: 'IT REPLACED ME!'
+        },
+        {
+            find: /-test-/gm,
+            replace: 'REGEX REPLACED ME!'
         }
     ],
     default: [

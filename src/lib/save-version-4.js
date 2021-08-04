@@ -388,8 +388,22 @@ const REPLACE_CONTENT = x => {
         let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace-values')?.state
 
         replacerObjects.forEach(r => {
-            let reg = new RegExp(`${r.find}`,'mg')
-            x = x.replace(reg, r.replace)
+            if(r.find instanceof RegExp){
+                let useReplacer = r.replace
+                if(r.replace === '{{date}}'){
+                    useReplacer = x.date
+                }
+                if(r.replace === '{{edit}}'){
+                    useReplacer = x.edit
+                }
+                if(r.replace === '{{filename}}'){
+                    useReplacer = x.name
+                }
+                x.content = x.content.replace(r.find, useReplacer)
+            }else{
+                let reg = new RegExp(`${r.find}`,'mg')
+                x.content = x.content.replace(reg, r.replace)
+            }
         })
 
         resolve(x)
