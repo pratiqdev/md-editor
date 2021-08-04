@@ -143,9 +143,9 @@ const Ace = props => {
 
                         ed.commands.addCommand({
                             name: "testKeybindings",
-                            bindKey: {win: "Ctrl-Shift-m", mac: "Command-Alt-h"},
+                            bindKey: {win: "Ctrl-Shift-n", mac: "Command-Shift-n"},
                             exec: function(ed) {
-                                    console.log('Keybinding successful')
+                                    props.handleNewFromShortcut()
                             }
                         })
 
@@ -166,6 +166,19 @@ const Ace = props => {
                           e.preventDefault();
                           handleSave()
                         }
+
+                     
+                      }, false);
+                      let num = 0
+                      document.addEventListener("keydown", function(e) {
+                        if (e.key === 'l' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                          e.preventDefault();
+                          props.handleNewFromShortcut()
+                          num++
+                          console.log(`new file shortcut ${num}`)
+                        }
+
+                     
                       }, false);
 
                     

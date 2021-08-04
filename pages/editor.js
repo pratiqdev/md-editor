@@ -15,6 +15,7 @@ import Tippy from '@tippyjs/react'
 import { get, set } from 'idb-keyval';
 import marked from 'marked'
 import gsap from 'gsap'
+import { debounce } from 'lodash'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
@@ -77,6 +78,16 @@ const MDPage = props => {
 
   const hideSpinner = () => {
     gsap.to([REF_SPINNER.current], {opacity: '0', pointerEvents: 'none', duration: 1, delay: 1.5})
+  }
+
+
+  const handleNewFromShortcut = () => {
+    
+    SD.createNewAndActivate()
+      .then(()=>{
+        setParentTrigger(!parentTrigger)
+      })
+
   }
 
 
@@ -230,6 +241,7 @@ const MDPage = props => {
               layout={editorLayout}
               fontSize={fontSize}
               useTrigger={parentTrigger}
+              handleNewFromShortcut={handleNewFromShortcut}
             />
           </Box>
 

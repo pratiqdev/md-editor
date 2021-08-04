@@ -244,6 +244,22 @@ export const createNew = () => {
 }
 
 
+export const createNewAndActivate = debounce(() => {
+    return new Promise((resolve, reject) => {
+        
+        
+        
+        createNew()
+        let newIndex = getAll().length - 1
+        console.log(`NEW FILE | INDEX: ${newIndex}`)
+        setActiveById(newIndex)
+        resolve()
+    })
+  },
+  3000,
+  { leading: false, trailing: true }
+  );
+
 
 
 
