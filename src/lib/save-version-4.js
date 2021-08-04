@@ -308,6 +308,7 @@ export const updateContent = (val, line, column) => {
     // console.log('WHO IS CALLING UPDATE CONTENT???')
     getActive().then(x=>{
         x.content = val
+        x.edit = date
         if(line){
             x.position.line = line 
         }
@@ -388,21 +389,20 @@ const REPLACE_CONTENT = x => {
         let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace-values')?.state
 
         replacerObjects.forEach(r => {
+            let useReplacer
+                if(r.replace === '{{date}}'){ useReplacer = x.date }
+                    else if(r.replace === '{{edit}}'){ useReplacer = x.edit }
+                    else if(r.replace === '{{filename}}'){ useReplacer = x.name }
+                    else if(r.replace === '{{word-count}}'){ useReplacer = x.content.trim().split(/\s+/).length }
+                    else if(r.replace === '{{line-count}}'){ useReplacer = x.content.split(/\r|\n|\r\n/).length }
+                    else if(r.replace === '{{character-count}}'){ useReplacer = x.content.replace(/ /g, "").replace(/\r\n/g, "").length }
+                    else{ useReplacer = r.replace }
+
             if(r.find instanceof RegExp){
-                let useReplacer = r.replace
-                if(r.replace === '{{date}}'){
-                    useReplacer = x.date
-                }
-                if(r.replace === '{{edit}}'){
-                    useReplacer = x.edit
-                }
-                if(r.replace === '{{filename}}'){
-                    useReplacer = x.name
-                }
                 x.content = x.content.replace(r.find, useReplacer)
             }else{
                 let reg = new RegExp(`${r.find}`,'mg')
-                x.content = x.content.replace(reg, r.replace)
+                x.content = x.content.replace(reg, useReplacer)
             }
         })
 

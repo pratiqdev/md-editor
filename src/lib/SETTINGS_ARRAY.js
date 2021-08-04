@@ -120,6 +120,22 @@ edited: {{edit}}
             replace: '{{filename}}',
         },
         {
+            find: '{{edit}}',
+            replace: '{{edit}}',
+        },
+        {
+            find: '{{line-count}}',
+            replace: '{{line-count}}',
+        },
+        {
+            find: '{{word-count}}',
+            replace: '{{word-count}}',
+        },
+        {
+            find: '{{character-count}}',
+            replace: '{{character-count}}',
+        },
+        {
             find: '{{author}}',
             replace: 'Some Dude',
         },
