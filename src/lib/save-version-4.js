@@ -80,44 +80,64 @@ let NUM_FILES = SD_ARRAY.length
 let SETTINGS_ARRAY = [
     {
         name: 'A boolean setting',// name on menu
-        type: 'boolean', // type for display and toggle
-        state: true, // state for display and functionality
         group: 'editorSettings', // group for grouping or filtering or details
         desc: 'This setting controls things about stuff', // description to explain setting
+        type: 'boolean', // type for display and toggle
+        state: true, // state for display and functionality
         default: true, // default to revert to defaults
     },
     {
         name: 'Another boolean setting',
-        type: 'boolean',
-        state: false,
         group: 'editorSettings',
         desc: 'This setting controls things about stuff',
+        type: 'boolean',
+        state: false,
+        default: false,
     },
     {
         name: 'An array setting',
-        type: 'array',
-        state: 2,
-        options: ['option One here', 'option 2 here', 'option three here', 'Option number is over 9000! what will we do?'],
         group: 'editorSettings',
         desc: 'This setting controls things about stuff',
+        type: 'array',
+        state: 2,
+        default: 1,
+        options: [
+            {          
+               name: 'Option One Full Name',
+               shortName: 'Option One',
+               desc: 'This is the option one to control something'
+            },
+            {          
+                name: 'Option Two Long Text Name',
+                shortName: 'Option Two',
+                desc: 'This is the option two to control something else'
+            },
+            {          
+                name: 'Option Three Really Long Text Name',
+                shortName: 'Option Three',
+                desc: 'This is the option three to control something completely different'
+            },
+        ]
     },
     {
         name: 'A number setting',
+        group: 'editorSettings',
+        desc: 'This setting controls things about stuff',
         type: 'number',
         state: 17,
         min: 0,
         max: 100,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
+        default: 50
     },
     {
-        name: 'A string setting',
+        name: 'Auto prefix content',
+        group: 'editorSettings',
+        desc: 'This setting controls things about stuff',
         type: 'string',
         state: `Yup, that's a string`,
         min: 0,
-        max: 30,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
+        max: 5000,
+        default: ''
     }
 
 ]
@@ -387,7 +407,7 @@ export const updateContent = (val, line, column) => {
         if(column){
             x.position.column = column 
         }
-        // console.log(`SAVE | saving position ${line || 'no line'} @ ${column || 'no column'}`)
+        // console.log(`SD | saving position ${line || 'no line'} @ ${column || 'no column'}`)
     })
     SAVE_TO_DISK()
 }
@@ -465,7 +485,7 @@ export const deleteById = (givenId) => {
 
 export const getAllSettings = () => {
     return new Promise((resolve, reject) => {
-        console.log('SETTINGS | getAllSettings() ')
+        console.log('SD | getAllSettings() ')
         WAIT_FOR_INIT()
         .then(()=>{
             resolve(SETTINGS_ARRAY)
@@ -479,6 +499,18 @@ export const getAllSettings = () => {
 
 export const getSettingByIndex = (i) => {
     return SETTINGS_ARRAY[i]
+}
+
+
+export const resetAllSettingsToDefault = () => {
+    return new Promise((resolve, reject) => {
+        console.log('SD | reset all settings to defaults')
+        SETTINGS_ARRAY.forEach(x=>{
+            x.state = x.default
+
+        })
+        resolve()
+    })
 }
 
 /**

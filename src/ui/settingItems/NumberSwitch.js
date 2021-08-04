@@ -2,15 +2,21 @@ import {useState, useEffect} from 'react'
 import {Flex, Box, Input, Switch, Button, Select} from 'theme-ui'
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
 import { CaretRight } from "@emotion-icons/boxicons-regular/CaretRight";
+import * as ALERT from '../../lib/alert'
 
 
 const NumberSwitch = ({s, si, handle}) => {
     const [showDetails, setShowDetails] = useState(false)
     const [newValue, setNewValue] = useState(s.state)
 
+    const reg = /[^0-9]/g
     const handleChange = (si, val) => {
-        setNewValue(val)
-        handle(si, parseInt(val))
+        if(!val.match(reg)){
+            setNewValue(val)
+            handle(si, parseInt(val))
+        }else{
+            ALERT.nanAlert(val)
+        }
     }
    return(
 
@@ -21,18 +27,21 @@ const NumberSwitch = ({s, si, handle}) => {
             color: 'grey_15', 
             bg: 'grey_0',
             mb:2, 
-            p:2, 
-            py: 3,
+            p:1, 
+            py: 2,
             cursor: 'pointer',
             }}>
 
             <Flex sx={{alignItems: 'center'}}>
 
-            <Flex sx={{width: '100%',}} onClick={()=>setShowDetails(!showDetails)}>
+            <Flex sx={{width: '100%', alignItems: 'center'}} >
 
-                <Box sx={{mr:2}}>
+                <Button 
+                variant='icon.primary'
+                onClick={()=>setShowDetails(!showDetails)}
+                sx={{mr:2}}>
                     {showDetails ? <CaretDown size='22' /> : <CaretRight size='22'/>}
-                </Box>
+                </Button>
                 <Box sx={{
                     cursor: 'pointer',
                     borderBottom: '1px solid', 
@@ -42,9 +51,9 @@ const NumberSwitch = ({s, si, handle}) => {
                 </Box>
 
             </Flex>
-            <Box sx={{width: '100%', mr: 1}}>
+            <Box sx={{width: '14rem', mr: 2}}>
                 {/* <Switch checked={s.state} onChange={()=>handle(si, !s.state)}/> */}
-                <Input value={newValue} onChange={(e)=>handleChange(si, e.target.value)}/>
+                <Input placeholder={s.default} sx={{height: '1.6rem', fontSize: 1}} value={newValue} onChange={(e)=>handleChange(si, e.target.value)}/>
             </Box>
             </Flex>
             {showDetails && 

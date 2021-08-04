@@ -8,6 +8,15 @@ import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
 
+import "ace-builds/src-noconflict/ace";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/ext-language_tools"
+import "ace-builds/src-noconflict/ext-keybinding_menu"
+import "ace-builds/src-noconflict/ext-settings_menu"
+import "ace-builds/src-noconflict/ext-error_marker"
+import "ace-builds/src-noconflict/snippets/markdown"
+
 import * as SD from '../lib/save-version-4'
 
 
@@ -45,6 +54,8 @@ const Ace = props => {
     useEffect(()=>{
         const reactAceComponent = REF_ACE.current;
         editor = reactAceComponent.editor;
+        
+        
     })
 
 
@@ -66,6 +77,7 @@ const Ace = props => {
             SD.getActive()
             .then(x=>{
                 if(x){
+                    
                         console.log('ACE |  triggered useEffect')    
                         editor.setValue(x.content)
                         if(x.position.line && x.position.column){
@@ -81,6 +93,64 @@ const Ace = props => {
                 }
                 // editor.focus()
             })
+            
+        }else{
+            setTimeout(() => {
+                loadContent()
+            }, 200);
+        }
+    }
+
+
+
+    const loadSettings = () => {
+        console.log('EDITOR | loadSettings fired')
+        if(editor){
+            SD.getAllSettings()
+            .then(x=>{
+                if(x){
+                    // set keybinds
+                    // require.config({paths: { "ace" : "../lib/ace"}});
+                    // require()
+                    // require.config({paths: { "ace" : "../../node_modules/lib/ace"}});
+                    require(["ace-builds/src-noconflict/ace"], function(ace) {
+                        var ed = ace.edit("UNIQUE_ID_OF_DIV")
+                        // editor.setTheme("ace/theme/twilight")
+                        ed.session.setMode("ace/mode/markdown")
+                        
+                        // add command to lazy-load keybinding_menu extension
+                        ed.commands.addCommand({
+                            name: "showKeyboardShortcuts",
+                            bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-h"},
+                            exec: function(ed) {
+                                ace.config.loadModule("ace/ext/keybinding_menu", function(module) {
+                                    console.log('???')
+                                    module.init(editor);
+                                    editor.showKeyboardShortcuts()
+                                })
+                            }
+                        })
+                        
+
+                        ed.commands.addCommand({
+                            name: "testKeybindings",
+                            bindKey: {win: "Ctrl-Shift-m", mac: "Command-Alt-h"},
+                            exec: function(ed) {
+                                    console.log('Keybinding successful')
+                            }
+                        })
+                    })
+
+                    
+                     
+                }else{
+                    setTimeout(() => {
+                        loadContent()
+                    }, 200);
+                }
+                // editor.focus()
+            })
+            
         }else{
             setTimeout(() => {
                 loadContent()
@@ -93,8 +163,11 @@ const Ace = props => {
     //! load content from parent only when useTrigger fires 
     useEffect(()=>{
         // console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
-        
-        loadContent()
+        setTimeout(() => {
+            
+            loadContent()
+            loadSettings()
+        }, 200);
             
             // editor.setValue(props.parentContent || '97asdf876')
     }, [props.useTrigger])
@@ -140,7 +213,8 @@ const Ace = props => {
                 setOptions={{
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
-                    enableSnippets: false,
+                    enableSnippets: true,
+                    markers: true,
                     fontSize: props.fontSize
                   }}
                   style={{zIndex: '2', }}

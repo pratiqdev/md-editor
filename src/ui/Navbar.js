@@ -200,8 +200,8 @@ useEffect(()=>{
             <Flex sx={{ ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
               MD
               {props.editor ?
-              <Flex sx={{fontSize: 1, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
-                <Box>
+              <Flex sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
+                <Box sx={{fontSize: 2}}>
                   {activeFileData && activeFileData.name}
                 </Box>
                 <Box>
@@ -281,6 +281,7 @@ useEffect(()=>{
 
           {showSettings && 
             <SettingsModal 
+            causeParentTrigger={props.causeParentTrigger}
             handleDeny={()=>setShowSettings(false)} 
             handleAccept={()=>setShowSettings(false)}/>}
       
