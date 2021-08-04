@@ -36,6 +36,30 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
         SD.updateSummaryByIndex(e.target.value, currentIndex)
     }
 
+    const handleSave = (e) => {
+        e.stopPropagation()
+        console.log('save file to machine')
+
+
+            let filename = `${currentSD.name}.md`
+            var pom = document.createElement('a');
+            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(currentSD.content));
+            pom.setAttribute('download', filename);
+        
+            if (document.createEvent) {
+                var event = document.createEvent('MouseEvents');
+                event.initEvent('click', true, true);
+                pom.dispatchEvent(event);
+            }
+            else {
+                pom.click();
+            }
+    
+
+
+
+    }
+
     useEffect(()=>{
         setNewName(currentSD.name)
         setNewSum(currentSD.newSum)
@@ -55,9 +79,10 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
                 <Box sx={{fontSize: 1, color: 'grey_10', cursor: 'pointer'}}>{currentSD.date}</Box>
             </Flex>
 
-
+            <Flex>
+            <Button variant='outline.primary' onClick={handleSave} sx={{mr:3}}>Save</Button>
             <Button  onClick={handleSwap}>Load</Button>
-            
+            </Flex>
 
         </Flex>
 
@@ -111,6 +136,8 @@ const LoadModal = props => {
     const REF_TITLE = useRef(null)
 
     const [localTrigger, setLocalTrigger] = useState(false)
+
+
 
     const handleOpen = () => {
         openUpAnim()
@@ -243,12 +270,12 @@ const LoadModal = props => {
                     <Box
                     ref={REF_TITLE} 
                     sx={{color: 'grey_0', fontSize: [1,2,3], fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
-                        Load a Document
+                        Files
                     </Box>
 
                     {/* SUBTITLE ------------------------------------------*/}
                     <Box sx={{color: 'grey_6', my:6}}>
-                        Select and load a document.
+                        Load, save or view a documents details.
                     </Box>
 
                     <Box sx={{

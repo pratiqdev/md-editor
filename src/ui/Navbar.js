@@ -206,11 +206,19 @@ useEffect(()=>{
         />
         <Flex sx={{ alignItems: "center", zIndex: 1, justifyContent: 'space-between', flex:1 }}>
 
+          <Flex>
+
+
           <Link href='/'>
             <Flex sx={{ ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
-              MD
-              {props.editor ?
-              <Flex sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
+              MD {!props.editor && 'Editor'}
+            </Flex>
+          </Link>
+
+            {props.editor &&
+              <Flex sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
+              onClick={(e)=>setShowLoad(true)}
+              >
                 <Box sx={{fontSize: 2}}>
                   {activeFileData && activeFileData.name}
                 </Box>
@@ -218,11 +226,9 @@ useEffect(()=>{
                   {activeFileData && activeFileData.date }
                 </Box>
               </Flex>
-              :
-              ' Editor'}
-            </Flex>
-          </Link>
+              }
 
+              </Flex>
 
           {props.editor &&
           <Flex>
