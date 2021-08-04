@@ -88,6 +88,16 @@ const Navbar = forwardRef((props, ref) => {
     setShowSettings(true)
   }
 
+  useImperativeHandle(ref,
+    () => {
+        test: () => {// function name
+            // the above func. is customized function as it can 
+            // behave differently than its normal behavior 
+            console.log('useImperativeHandleRef')
+         } 
+    });  
+  
+
 
 
 
@@ -196,23 +206,29 @@ useEffect(()=>{
         />
         <Flex sx={{ alignItems: "center", zIndex: 1, justifyContent: 'space-between', flex:1 }}>
 
+          <Flex>
+
+
           <Link href='/'>
             <Flex sx={{ ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
-              MD
-              {props.editor ?
-              <Flex sx={{fontSize: 1, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap'}}>
-                <Box>
+              MD {!props.editor && 'Editor'}
+            </Flex>
+          </Link>
+
+            {props.editor &&
+              <Flex sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
+              onClick={(e)=>setShowLoad(true)}
+              >
+                <Box sx={{fontSize: 2}}>
                   {activeFileData && activeFileData.name}
                 </Box>
                 <Box>
                   {activeFileData && activeFileData.date }
                 </Box>
               </Flex>
-              :
-              ' Editor'}
-            </Flex>
-          </Link>
+              }
 
+              </Flex>
 
           {props.editor &&
           <Flex>
@@ -281,6 +297,7 @@ useEffect(()=>{
 
           {showSettings && 
             <SettingsModal 
+            causeParentTrigger={props.causeParentTrigger}
             handleDeny={()=>setShowSettings(false)} 
             handleAccept={()=>setShowSettings(false)}/>}
       

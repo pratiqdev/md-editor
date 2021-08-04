@@ -7,20 +7,20 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 //* THEME _________________________________________________________________________________________
-import { Button, Box, Flex, Text } from "theme-ui";
+import { Button, Box, Flex, Text, Spinner } from "theme-ui";
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 
 //* EXTERNAL ______________________________________________________________________________________
 import Tippy from '@tippyjs/react'
 import { get, set } from 'idb-keyval';
 import marked from 'marked'
+import gsap from 'gsap'
+import { debounce } from 'lodash'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-// import LoadModal from '../src/ui/modals/LoadModal'
-// import SettingsModal from '../src/ui/modals/SettingsModal'
-import toasty from '../src/lib/toasty';
 import * as SD from '../src/lib/save-version-4.js'
+import * as ALERT from '../src/lib/alert'
 
 
 
@@ -47,6 +47,7 @@ const MDPage = props => {
   //~ DEFAULTS ___________________________________________________________________________________________________________________________________
   // let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
 
+  const REF_SPINNER = useRef(null)
 
   const [parentContent, setParentContent] = useState('LOADING') //!!!!!!!!!! STEP 3
   const [currentSettings, setCurrentSettings] = useState()
@@ -55,6 +56,7 @@ const MDPage = props => {
   const [renderLayout, setRenderLayout] = useState({})
   const [layoutType, setLayoutType] = useState('split')
   const [parentTrigger, setParentTrigger] = useState(false)
+  // const [showSpinner, setShowSpinner] = useState(true)
 
 
 
@@ -74,6 +76,22 @@ const MDPage = props => {
       .catch(err=>console.log(`couldnt get result from getActive: ${err}`))
   }
 
+  const hideSpinner = () => {
+    gsap.to([REF_SPINNER.current], {opacity: '0', pointerEvents: 'none', duration: 1, delay: 1.5})
+  }
+
+
+  const handleNewFromShortcut = () => {
+    
+    SD.createNewAndActivate()
+      .then(()=>{
+        setParentTrigger(!parentTrigger)
+      })
+
+  }
+
+
+
   useEffect(()=>{
     console.log('EDITOR | useEffect | parentTrigger triggered')
  
@@ -85,6 +103,8 @@ const MDPage = props => {
     if(!DONE_LOADING){
       setParentTrigger(!parentTrigger)
       DONE_LOADING = true
+      hideSpinner()
+      ALERT.welcomeAlerts()
     }
   })
 
@@ -203,6 +223,11 @@ const MDPage = props => {
         causeParentTrigger={()=>setParentTrigger(!parentTrigger)}
         />
 
+        
+          <Flex ref={REF_SPINNER} sx={{zIndex: '100000', top: '0', position: 'absolute', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh', bg: 'grey_2'}}>
+            <Spinner size={80} strokeWidth={2} speed={10}/>
+          </Flex>
+
 
         <Flex sx={{flexDirection: ['column', 'row', 'row']}}>
           <Box sx={{
@@ -216,6 +241,7 @@ const MDPage = props => {
               layout={editorLayout}
               fontSize={fontSize}
               useTrigger={parentTrigger}
+              handleNewFromShortcut={handleNewFromShortcut}
             />
           </Box>
 

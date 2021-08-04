@@ -2,10 +2,11 @@ import { Sd } from '@emotion-icons/material'
 import {get, set} from 'idb-keyval'
 import moment from 'moment'
 import toasty from './toasty'
+import {debounce, replace} from 'lodash'
+import * as ALERT from './alert'
+
 import intro from './intro'
-import {debounce} from 'lodash'
-
-
+import SETTINGS_ARRAY from './SETTINGS_ARRAY'
 
 
 //= Variables /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,92 +36,7 @@ let SD_ARRAY = [
 
 let NUM_FILES = SD_ARRAY.length
 
-//! boolean type___________________________________________
-// name: '',        // name on menu
-// type: '',        // type for display and toggle
-// state: false,    // state for display and functionality
-// group: '',       // group for grouping or filtering or details
-// desc: '',        // description to explain setting
-// default: true,   // default to revert to defaults
 
-//! array type ___________________________________________
-// name: '',
-// type: 'array',
-// state: 2,
-// options: [{          // an array of objects containing the options and details
-//    name: ''          // a full name to show in the description or dropdown
-//    shortName: '',    // a short name to display in the active option slot
-//    desc: ''          // an extended description with details
-// }, {}, {}...]
-// group: '',
-// desc: '',
-// default: 1
-
-//! number type ___________________________________________
-// name: '',
-// type: 'number',
-// state: 27,
-// group: '',
-// desc: '',
-// default: 12,
-// min: 0,              // a min value
-// max: 100             // a max value
-
-//! string type ___________________________________________
-// name: '',
-// type: 'string',
-// state: 'watermelon',
-// group: '',
-// desc: '',
-// default: 'peach',
-// min: 0,              // a min string length
-// max: 42              // a max string length
-
-
-let SETTINGS_ARRAY = [
-    {
-        name: 'A boolean setting',// name on menu
-        type: 'boolean', // type for display and toggle
-        state: true, // state for display and functionality
-        group: 'editorSettings', // group for grouping or filtering or details
-        desc: 'This setting controls things about stuff', // description to explain setting
-        default: true, // default to revert to defaults
-    },
-    {
-        name: 'Another boolean setting',
-        type: 'boolean',
-        state: false,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    },
-    {
-        name: 'An array setting',
-        type: 'array',
-        state: 2,
-        options: ['option One here', 'option 2 here', 'option three here', 'Option number is over 9000! what will we do?'],
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    },
-    {
-        name: 'A number setting',
-        type: 'number',
-        state: 17,
-        min: 0,
-        max: 100,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    },
-    {
-        name: 'A string setting',
-        type: 'string',
-        state: `Yup, that's a string`,
-        min: 0,
-        max: 30,
-        group: 'editorSettings',
-        desc: 'This setting controls things about stuff',
-    }
-
-]
 
 
 
@@ -295,9 +211,21 @@ export const getNumberOfDocuments = () => {
 /** Create a new document with the default object */
 export const createNew = () => {
 
-    let date = moment().format("dddd, MMMM Do, h:mm:ss a")
     NUM_FILES++
     let num = NUM_FILES
+
+    let newContent = ''
+    let usePrepend = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content-enabled')?.state
+    let useAppend = SETTINGS_ARRAY.find(x=> x.id === 'auto-append-content-enabled')?.state
+    let prependString = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content-string')?.state
+    let appendString = SETTINGS_ARRAY.find(x=> x.id === 'auto-append-content-string')?.state
+
+    if(usePrepend){
+        newContent = prependString + '\r\n \r\n' + newContent
+    }
+    if(useAppend){
+        newContent = newContent + '\r\n \r\n' + appendString
+    }
 
     SD_ARRAY.push({
         active: false, // is the current file active
@@ -305,8 +233,7 @@ export const createNew = () => {
         sum: 'A new file', // a short summary used in the load document selection window
         date: `${date}`, // the date of creation
         edit: `${date}`, // the date of the last edit
-        content: `New File ${num}
-Created ${date}`, // the content of the document
+        content: newContent, // the content of the document
         position: {
             line: 99999,
             column: 999999
@@ -316,6 +243,22 @@ Created ${date}`, // the content of the document
     
 }
 
+
+export const createNewAndActivate = debounce(() => {
+    return new Promise((resolve, reject) => {
+        
+        
+        
+        createNew()
+        let newIndex = getAll().length - 1
+        console.log(`NEW FILE | INDEX: ${newIndex}`)
+        setActiveById(newIndex)
+        resolve()
+    })
+  },
+  3000,
+  { leading: false, trailing: true }
+  );
 
 
 
@@ -335,7 +278,7 @@ export const getAll = () => {
 export const getById = (id) => {
 
     if(SD_ARRAY && SD_ARRAY.length !== 0){
-        return getAll()[id]
+        return SD_ARRAY[id]
     }else{
         createNew()
         setActiveById(0)
@@ -381,13 +324,14 @@ export const updateContent = (val, line, column) => {
     // console.log('WHO IS CALLING UPDATE CONTENT???')
     getActive().then(x=>{
         x.content = val
+        x.edit = date
         if(line){
             x.position.line = line 
         }
         if(column){
             x.position.column = column 
         }
-        // console.log(`SAVE | saving position ${line || 'no line'} @ ${column || 'no column'}`)
+        // console.log(`SD | saving position ${line || 'no line'} @ ${column || 'no column'}`)
     })
     SAVE_TO_DISK()
 }
@@ -452,6 +396,88 @@ export const deleteById = (givenId) => {
 
 
 
+//! SAVE FILE TO MACHINE  /////////////////////////////////////////////////////////////////////////////////
+
+
+/** Use the find - replace fields from settings before saving the file  */
+const REPLACE_CONTENT = x => {
+    return new Promise((resolve, reject) => {
+        let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace-values')?.state
+
+        replacerObjects.forEach(r => {
+            let useReplacer
+                if(r.replace === '{{date}}'){ useReplacer = x.date }
+                    else if(r.replace === '{{edit}}'){ useReplacer = x.edit }
+                    else if(r.replace === '{{filename}}'){ useReplacer = x.name }
+                    else if(r.replace === '{{word-count}}'){ useReplacer = x.content.trim().split(/\s+/).length }
+                    else if(r.replace === '{{line-count}}'){ useReplacer = x.content.split(/\r|\n|\r\n/).length }
+                    else if(r.replace === '{{character-count}}'){ useReplacer = x.content.replace(/ /g, "").replace(/\r\n/g, "").length }
+                    else{ useReplacer = r.replace }
+
+            if(r.find instanceof RegExp){
+                x.content = x.content.replace(r.find, useReplacer)
+            }else{
+                let reg = new RegExp(`${r.find}`,'mg')
+                x.content = x.content.replace(reg, useReplacer)
+            }
+        })
+
+        resolve(x)
+    })
+}
+
+
+/** Save the current file to the users machine */
+export const saveActiveFile = () => {
+    getActive().then(x=>{
+        REPLACE_CONTENT(x)
+            .then(x=>{
+
+                let filename = `${x.name}.md`
+                var pom = document.createElement('a');
+                pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(x.content));
+                pom.setAttribute('download', filename);
+                
+                if (document.createEvent) {
+                    var event = document.createEvent('MouseEvents');
+                    event.initEvent('click', true, true);
+                    pom.dispatchEvent(event);
+                }
+                else {
+                    pom.click();
+                }
+                ALERT.fileSaveAlert()
+            })
+        })
+}
+
+
+/** Save the current file to the users machine */
+export const saveFileById = (givenId) => {
+    let x = getById(givenId)
+
+        let filename = `${x.name}.md`
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(x.content));
+        pom.setAttribute('download', filename);
+    
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            pom.dispatchEvent(event);
+        }
+        else {
+            pom.click();
+        }
+        ALERT.fileSaveAlert()
+    
+}
+
+
+
+
+
+
 
 
 
@@ -465,7 +491,7 @@ export const deleteById = (givenId) => {
 
 export const getAllSettings = () => {
     return new Promise((resolve, reject) => {
-        console.log('SETTINGS | getAllSettings() ')
+        console.log('SD | getAllSettings() ')
         WAIT_FOR_INIT()
         .then(()=>{
             resolve(SETTINGS_ARRAY)
@@ -479,6 +505,18 @@ export const getAllSettings = () => {
 
 export const getSettingByIndex = (i) => {
     return SETTINGS_ARRAY[i]
+}
+
+
+export const resetAllSettingsToDefault = () => {
+    return new Promise((resolve, reject) => {
+        console.log('SD | reset all settings to defaults')
+        SETTINGS_ARRAY.forEach(x=>{
+            x.state = x.default
+
+        })
+        resolve()
+    })
 }
 
 /**

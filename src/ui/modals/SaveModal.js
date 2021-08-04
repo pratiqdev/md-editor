@@ -1,7 +1,6 @@
 import {useState, useEffect, useRef} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input, Textarea} from 'theme-ui'
 
-import * as ALERT from '../../lib/alert'
 import * as SD from '../../lib/save-version-4'
 import gsap from 'gsap'
 
@@ -14,102 +13,11 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 
 
 
-const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete, loadModalTrigger}) => {
-    const [isSelected, setIsSelected] = useState(false)
-    const [newName, setNewName] = useState()
-    const [newSum, setNewSum] = useState()
-
-    const handleSelection = () => {
-        setIsSelected(!isSelected)
-    }
-    const handleSwap = e => {
-        e.stopPropagation()
-        handleActiveSwap(currentIndex)
-    }
-
-    const handleUpdateName = e => {
-        setNewName(e.target.value)
-        SD.updateNameByIndex(e.target.value, currentIndex)
-    }
-
-    const handleUpdateSum = e => {
-        setNewSum(e.target.value)
-        SD.updateSummaryByIndex(e.target.value, currentIndex)
-    }
-
-    const handleSave = (e) => {
-        e.stopPropagation()
-        SD.saveFileById(currentIndex)
-    }
-
-    useEffect(()=>{
-        setNewName(currentSD.name)
-        setNewSum(currentSD.newSum)
-    })
-
-
-
-    return(
-        <Box sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3, cursor: 'pointer'}}>
-        <Flex 
-            onClick={handleSelection}
-
-            sx={{width: '100%',alignItems: 'center', justifyContent: 'space-between', color: 'grey_15' }}>
-            <Flex sx={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                {/* <Box sx={{fontSize: 3}}>{currentSD.name}</Box> */}
-                <Input value={newName} onChange={handleUpdateName} onClick={e=>e.stopPropagation()} sx={{p:0,fontSize: 3, border: '0px solid', cursor: 'auto', width: 'auto', minWidth: '2rem'}}/>
-                <Box sx={{fontSize: 1, color: 'grey_10', cursor: 'pointer'}}>{currentSD.date}</Box>
-            </Flex>
-
-            <Flex>
-            <Button variant='outline.primary' onClick={handleSave} sx={{mr:3}}>Save</Button>
-            <Button  onClick={handleSwap}>Load</Button>
-            </Flex>
-
-        </Flex>
-
-                {isSelected && 
-                    <Flex sx={{flexDirection: 'column'}}>
-
-                    <Flex sx={{borderBottom: '1px solid', fontSize: 1, borderColor: 'grey_4', color: 'grey_10', my:1, pb: 1}}>
-                        {currentSD.content.length} Characters
-                    </Flex>
-
-                        <Textarea value={newSum} onChange={handleUpdateSum} onClick={e=>e.stopPropagation()} rows={8} sx={{p:0, color: 'grey_12', fontFamily: 'body', fontSize: 2, cursor: 'auto',  maxHeight:'6rem',  border: '0px solid'}}/>
-
-                        <Flex sx={{mt: 4, justifyContent: 'space-between'}}>
-                            <Button variant='outline.secondary' sx={{minWidth: '6rem', mr: 2}} onClick={()=>handleDelete(currentIndex)}>Delete</Button>
-                            <Button variant='outline.secondary' sx={{minWidth: '6rem'}} onClick={()=>console.log('create template from this file')}>Save as Template</Button>
-                        </Flex>
-
-                    </Flex>
-                }
-        </Box>
-    )
-}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const LoadModal = props => {
+const SaveModal = props => {
 
 
     //~ open and close handlers ______________________________________________________________________
@@ -118,7 +26,14 @@ const LoadModal = props => {
     const REF_TITLE = useRef(null)
 
     const [localTrigger, setLocalTrigger] = useState(false)
+    const [currentSD, setCurrentSD] = useState({name:'Loading current file...'})
+    const [saveFileAs, setSaveFileAs] = useState('File Name')
 
+
+    const handleFileName = e => {
+        setSaveFileAs(e.target.value)
+        console.log('check if this file exists on the machine already')
+    }
 
 
     const handleOpen = () => {
@@ -161,31 +76,13 @@ const LoadModal = props => {
 
 
 
-    const handleActiveSwap = givenId => {
-        console.log(`handleActiveSwap: ${givenId}`)
-            SD.setActiveById(givenId)
-            setLocalTrigger(!localTrigger)
-            props.causeParentTrigger()
-            setTimeout(() => {
-                handleClose()
-            }, 500);
-        console.log('LOADMODAL | handleActiveSwap')
-
-    }
 
 
 
-    const handleDelete = givenId => {
-        console.log(`LOADMODAL | handleDelete - index: ${givenId}`)
-        SD.deleteById(givenId)
-        props.causeParentTrigger()
-        setLocalTrigger(!localTrigger)
-    }
+    const handleSave = () => {
+        console.log('SAVE | handleSave ')
 
-    const handleNew = () => {
-        console.log('LOADMODAL | handleNew ')
-
-        SD.createNew()
+        // SD.createNew()
         setLocalTrigger(!localTrigger)
     }
 
@@ -195,6 +92,7 @@ const LoadModal = props => {
     //~ useEffect ____________________________________________________________________________________
     useEffect(()=>{
         handleOpen()
+        SD.getActive().then(x=>setCurrentSD(x))
     })
 
     useEffect(()=>{
@@ -235,7 +133,7 @@ const LoadModal = props => {
                 width: ['98vw', 'auto', 'auto'],
                 minWidth: ['98vw', '40rem', '40rem'],
                 maxWidth: '98vw',
-                height: '40rem',
+                height: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'stretch',
@@ -252,47 +150,41 @@ const LoadModal = props => {
                     <Box
                     ref={REF_TITLE} 
                     sx={{color: 'grey_0', fontSize: [1,2,3], fontWeight: 'bold', color: 'primary_b', fontFamily: 'special'}}>
-                        Files
+                        Save File
                     </Box>
 
                     {/* SUBTITLE ------------------------------------------*/}
                     <Box sx={{color: 'grey_6', my:6}}>
-                        Load, save or view a documents details.
+                        Save the current document to your machine
                     </Box>
+
+                    <Box sx={{width: '100%', textAlign: 'center', fontSize: 6, color:'grey_15', mb:6}}>File: {currentSD.name}</Box>
+
+                    <Box sx={{width: '100%', textAlign: 'center', fontSize: 3, color:'grey_15', mb:2}}>Save file as</Box>
 
                     <Box sx={{
                         // height: '40rem',
                         flex: 1,
                         // maxHeight: '70vh',
                         overflowY: 'auto',
-                        border: '1px solid',
-                        borderColor: 'grey_4',
-                        borderRadius: 2,
-                        bg: 'grey_2',
                         width: '100%',
                         mb: 6,
-                        color: 'grey_4',
+                        color: 'grey_15',
                         p:2,
                         textAlign: 'center'
                     }}>
-                        {SD.getAll().map((x, i) => 
-                            <LoadItem 
-                                currentSD={x} 
-                                currentIndex={i} 
-                                handleActiveSwap={handleActiveSwap}
-                                handleDelete={handleDelete}
-                                loadModalTrigger={localTrigger}
-                                
-                                />
-                        )}
+                       
+                    <Input value={saveFileAs} onChange={handleFileName}  />
                     </Box>
+
+                    
 
 
                     
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleDeny}>Cancel</Button>
-                        <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleNew}>New</Button>
+                        <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleSave}>Save</Button>
                     </Flex>
             </>
 
@@ -308,4 +200,4 @@ const LoadModal = props => {
         </Flex>
     )
 }
-export default LoadModal
+export default SaveModal

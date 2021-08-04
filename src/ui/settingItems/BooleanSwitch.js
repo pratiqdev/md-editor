@@ -15,18 +15,21 @@ const BooleanSwitch = ({s, si, handle}) => {
             color: 'grey_15', 
             bg: 'grey_0',
             mb:2, 
-            p:2, 
-            py: 3,
+            p:1, 
+            py: 2,
             cursor: 'pointer',
             }}>
 
             <Flex sx={{alignItems: 'center'}}>
 
-            <Flex sx={{width: '100%',}} onClick={()=>setShowDetails(!showDetails)}>
+            <Flex sx={{width: '100%',alignItems: 'center',}} onClick={()=>setShowDetails(!showDetails)}>
 
-                <Box sx={{mr:2}}>
+                <Button
+                variant='icon.primary' 
+                onClick={()=>setShowDetails(!showDetails)}
+                sx={{mr:2}}>
                     {showDetails ? <CaretDown size='22' /> : <CaretRight size='22'/>}
-                </Box>
+                </Button>
                 <Box sx={{
                     cursor: 'pointer',
                     borderBottom: '1px solid', 
