@@ -2,7 +2,7 @@ import { Sd } from '@emotion-icons/material'
 import {get, set} from 'idb-keyval'
 import moment from 'moment'
 import toasty from './toasty'
-import {debounce} from 'lodash'
+import {debounce, replace} from 'lodash'
 import * as ALERT from './alert'
 
 import intro from './intro'
@@ -385,9 +385,14 @@ export const deleteById = (givenId) => {
 /** Use the find - replace fields from settings before saving the file  */
 const REPLACE_CONTENT = x => {
     return new Promise((resolve, reject) => {
-        let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace').state
+        let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace-values')?.state
 
+        replacerObjects.forEach(r => {
+            let reg = new RegExp(`${r.find}`,'mg')
+            x = x.replace(reg, r.replace)
+        })
 
+        resolve(x)
     })
 }
 

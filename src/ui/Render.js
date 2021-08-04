@@ -30,7 +30,7 @@ const Render = (props) => {
 
     const renderText = text => {
         let t = text || ''
-        t = replace(/^---[\s\S]+?---$/m, '')
+        t = t.replace(/^---[\s\S]+?---$/m, '')
 
         const __html = marked(t)
         return { __html }
