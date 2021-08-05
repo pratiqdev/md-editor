@@ -33,7 +33,7 @@ import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-textmate";
 
-
+let useFontSize =  12
 
 const Ace = props => {
 
@@ -53,7 +53,6 @@ const Ace = props => {
         SD.saveActiveFile()
     }
 
-    
 
 
 
@@ -151,13 +150,24 @@ const Ace = props => {
 
 
                         // ed.commands.addCommand({
-                        //     name: "testKeybindings",
-                        //     bindKey: {win: "Ctrl-s", mac: "Command-s"},
+                        //     name: "increaseFontSize",
+                        //     bindKey: {win: "Ctrl-+", mac: "Command-+"},
                         //     exec: function(ed) {
-                        //             console.log('Save file')
-                        //             handleSave()
+                        //             useFontSize+=2
+                        //             ed.setFontSize(useFontSize)
                         //     }
                         // })
+
+                        // ed.commands.addCommand({
+                        //     name: "decreaseFontSize",
+                        //     bindKey: {win: "Ctrl--", mac: "Command-+"},
+                        //     exec: function(ed) {
+                        //             useFontSize-=2
+                        //             ed.setFontSize(useFontSize)
+                        //     }
+                        // })
+                         
+                        
                     })
 
 
@@ -165,6 +175,31 @@ const Ace = props => {
                         if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                           e.preventDefault();
                           handleSave()
+                        }
+
+                     
+                      }, false);
+
+                      document.addEventListener("keydown", function(e) {
+                        if (e.key === '+' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
+                          e.preventDefault();
+                          e.stopPropagation()
+                          useFontSize+=2
+                          editor.setFontSize(useFontSize)
+                          console.log(`increase font size: ${useFontSize}`)
+
+                        }
+
+                     
+                      }, false);
+
+                      document.addEventListener("keydown", function(e) {
+                        if (e.key === '-' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
+                          e.preventDefault();
+                          e.stopPropagation()
+                          useFontSize-=2
+                          editor.setFontSize(useFontSize)
+                          console.log(`decrease font size: ${useFontSize}`)
                         }
 
                      

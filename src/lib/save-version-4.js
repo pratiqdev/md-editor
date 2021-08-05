@@ -16,16 +16,16 @@ let INIT_ALERT_NUM = 0
 
 let SD_INITIALIZED = false
 
-let MOMENT_FORMAT = "dddd, MMMM Do, h:mm:ss a"
-let date = moment().format(MOMENT_FORMAT)
+let MOMENT_FORMAT = "ddd, MMM D, h:mm:ss a"
+let getNow = () => moment().format(MOMENT_FORMAT)
 
 let SD_ARRAY = [
     {
         active: true, // is the current file active
         name: `Intro File`, // the short name used as the title
         sum: 'A simple intro to this application', // a short summary used in the load document selection window
-        date: `${date}`, // the date of creation
-        edit: `${date}`, // the date of the last edit
+        date: `${getNow()}`, // the date of creation
+        edit: `${getNow()}`, // the date of the last edit
         content: intro, // the content of the document
         position: {
             line: 0, // the vertical line position of the cursor
@@ -231,8 +231,8 @@ export const createNew = () => {
         active: false, // is the current file active
         name: `New File ${num}`, // the short name used as the title
         sum: 'A new file', // a short summary used in the load document selection window
-        date: `${date}`, // the date of creation
-        edit: `${date}`, // the date of the last edit
+        date: `${getNow()}`, // the date of creation
+        edit: `${getNow()}`, // the date of the last edit
         content: newContent, // the content of the document
         position: {
             line: 99999,
@@ -324,7 +324,7 @@ export const updateContent = (val, line, column) => {
     // console.log('WHO IS CALLING UPDATE CONTENT???')
     getActive().then(x=>{
         x.content = val
-        x.edit = date
+        x.edit = getNow()
         if(line){
             x.position.line = line 
         }
