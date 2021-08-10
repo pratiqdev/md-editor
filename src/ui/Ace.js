@@ -7,7 +7,7 @@ import {useEffect, useState, useRef } from 'react'
 import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
-import SaveModal from './modals/SaveModal'
+// import SaveModal from './modals/SaveModal'
 import * as ALERT from '../lib/alert' 
 
 import "ace-builds/src-noconflict/ace";
@@ -136,15 +136,16 @@ const Ace = props => {
 
     const loadSettings = () => {
         console.log('EDITOR | loadSettings fired')
-        let snippets = []
+        let snippetsArr = []
         SD.getAllSnippets().then(x=> {
+
+            console.log('all snippets returned', x)
+            snippetsArr = x
             
-            x.map(s => {
-                if(s.name && s.code){
-                    snippets.push({name: s.name, code: s.code})
-                }
-            })
+
+
         })
+        
  
         
         if(editor){
@@ -152,7 +153,7 @@ const Ace = props => {
             .then(x=>{
                 if(x){
                     // set keybinds
-                    // require.config({paths: { "ace" : "../lib/ace"}});
+                    require.config({paths: { "ace" : "../lib/ace"}});
                     // require()
                     // require.config({paths: { "ace" : "../../node_modules/ace-builds/ace"}});
                     require(["ace-builds/src-noconflict/ace"], function(ace) {
@@ -160,13 +161,18 @@ const Ace = props => {
                         // editor.setTheme("ace/theme/twilight")
                         ed.session.setMode("ace/mode/markdown")
 
-                        
-                        registerSnippets(
-                            ed,
-                            ed.session,
-                            'markdown',
-                            createSnippets(snippets)
-                        )
+                    
+
+                  
+                            
+
+                            registerSnippets(
+                                ed,
+                                ed.session,
+                                'markdown',
+                                createSnippets(snippetsArr)
+                            )
+            
                         
                         // add command to lazy-load keybinding_menu extension
                         ed.commands.addCommand({

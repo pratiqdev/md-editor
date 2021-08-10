@@ -1,10 +1,11 @@
 import ace from 'ace-builds'
 
 export const registerSnippets = function(editor, session, mode, snippetText) {
-    // editor.setOptions({
-    //     enableBasicAutocompletion: true,
-    //     enableSnippets: true,
-    // })
+    console.log('snippetText:', snippetText)
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+    })
 
     var snippetManager = ace.require('ace/snippets').snippetManager
 
@@ -21,15 +22,16 @@ export const registerSnippets = function(editor, session, mode, snippetText) {
 export const createSnippets = snippets =>
     (Array.isArray(snippets) ? snippets : [snippets])
         .map(({ name, code }) => {
-                
-                [
+            if(code){
+
+               return  [
                     'snippet ' + name,
                     code
                     .split('\n')
                     .map(c => '\t' + c)
                     .join('\n'),
                 ].join('\n')
-                // console.log(`SNIPPET MGR | name: ${name} - code: ${code}`)
+            }
         }
         )
         .join('\n')
