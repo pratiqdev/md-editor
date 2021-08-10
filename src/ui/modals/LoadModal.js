@@ -335,7 +335,7 @@ const LoadModal = props => {
                         overflowY: 'auto',
                         border: '1px solid',
                         borderColor: 'grey_4',
-                        borderRadius: 2,
+                        borderRadius: 0,
                         bg: 'grey_2',
                         width: '100%',
                         mb: 6,

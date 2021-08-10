@@ -27,7 +27,7 @@ const StringSwitch = ({s, si, handle}) => {
 
     const handleBool = () => {
         setNewBool(!newBool)
-        updateValue()
+        handle(si, [!newBool, newValue])
     }
 
 
@@ -43,13 +43,17 @@ const StringSwitch = ({s, si, handle}) => {
         <Flex sx={{
             width: '100%', 
             flexDirection: 'column', 
-            border: '1px solid #444', 
+            border: '1px solid', 
             color: 'grey_15', 
             bg: 'grey_0',
             mb:2, 
             p:1, 
             py: 2,
             cursor: 'pointer',
+            borderColor: 'transparent',
+            '&:hover':{
+                borderColor: 'grey_15'
+            }
             }}
             >
 
@@ -95,7 +99,7 @@ const StringSwitch = ({s, si, handle}) => {
             </Flex>
 
             <Box sx={{minWidth: '3rem'}}>
-                <Switch checked={s.state[0]} onChange={handleBool}/>
+                <Switch checked={newBool} onChange={handleBool}/>
             </Box>
 
             

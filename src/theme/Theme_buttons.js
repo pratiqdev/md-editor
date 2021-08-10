@@ -211,7 +211,7 @@ export default {
       ...outlineStandard,
       color: 'text',
       borderColor: 'text',
-      fontWeight: "bold",
+      // fontWeight: "bold",
       boxShadow: plain.shadowInset,
 
 
@@ -232,7 +232,7 @@ export default {
       ...outlineStandard,
       color: "primary_b",
       borderColor: "primary_b",
-      fontWeight: "bold",
+      // fontWeight: "bold",
       boxShadow: primary.shadowInset,
 
       ":hover": {
@@ -267,7 +267,7 @@ export default {
       ...outlineStandard,
       position: "relative",
       transition: 1,
-      fontWeight: "bold",
+      // fontWeight: "bold",
       // border: "2px solid transparent",
       // color: accent.color,
       // borderColor: accent.bg,

@@ -10,6 +10,7 @@ import NumberSwitch from '../settingItems/NumberSwitch'
 import StringSwitch from '../settingItems/StringSwitch'
 import DualString from '../settingItems/DualString'
 import BoolString from '../settingItems/BoolString'
+import Snippets from '../settingItems/Snippets'
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
 import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
@@ -41,7 +42,7 @@ import { setSyntheticTrailingComments } from 'typescript';
 
 
 
-const LoadModal = props => {
+const SettingsModal = props => {
 
 
     //~ open and close handlers ______________________________________________________________________
@@ -216,7 +217,7 @@ const LoadModal = props => {
                         overflowY: 'auto',
                         border: '1px solid',
                         borderColor: 'grey_4',
-                        borderRadius: 2,
+                        borderRadius: 0,
                         bg: 'grey_2',
                         width: '100%',
                         mb: 6,
@@ -234,6 +235,7 @@ const LoadModal = props => {
                                 case 'boolean': {return <BooleanSwitch s={s} si={si} handle={test} />};break;
                                 case 'bool-string': {return <BoolString s={s} si={si} handle={test} />};break;
                                 case 'find-and-replace': {return <DualString s={s} si={si} handle={test} />};break;
+                                case 'snippets': {return <Snippets s={s} si={si} handle={test} />};break;
                             }
 
                         }
@@ -293,4 +295,4 @@ const LoadModal = props => {
         </Flex>
     )
 }
-export default LoadModal
+export default SettingsModal

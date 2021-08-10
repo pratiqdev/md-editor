@@ -363,6 +363,27 @@ export const updateSummaryByIndex = (val, i) => {
 }
 
 
+export const addNewConditionToReplacers = () => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'find-and-replace-values').state
+    .push({
+            active: true,
+            name: 'New condition',
+            description: 'Optional Description',
+            find: '`Find` keyword or RegExp',
+            replace: '`Replace` keyword',
+    })
+    SAVE_TO_DISK()
+}
+
+export const removeConditionFromReplacersById = (givenId) => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'find-and-replace-values').state
+    .splice(givenId, 1);
+    SAVE_TO_DISK()
+}
+
+
 
 
 
@@ -404,23 +425,28 @@ const REPLACE_CONTENT = x => {
     return new Promise((resolve, reject) => {
         let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace-values')?.state
 
-        replacerObjects.forEach(r => {
-            let useReplacer
-                if(r.replace === '{{date}}'){ useReplacer = x.date }
-                    else if(r.replace === '{{edit}}'){ useReplacer = x.edit }
-                    else if(r.replace === '{{filename}}'){ useReplacer = x.name }
-                    else if(r.replace === '{{word-count}}'){ useReplacer = x.content.trim().split(/\s+/).length }
-                    else if(r.replace === '{{line-count}}'){ useReplacer = x.content.split(/\r|\n|\r\n/).length }
-                    else if(r.replace === '{{character-count}}'){ useReplacer = x.content.replace(/ /g, "").replace(/\r\n/g, "").length }
-                    else{ useReplacer = r.replace }
+        if(replacerObjects[0]){ // check if the globalActive state is true
 
-            if(r.find instanceof RegExp){
-                x.content = x.content.replace(r.find, useReplacer)
-            }else{
-                let reg = new RegExp(`${r.find}`,'mg')
-                x.content = x.content.replace(reg, useReplacer)
-            }
-        })
+            replacerObjects
+            .filter(x=> x.active) // only use replacers that are active
+            .forEach(r => {
+                let useReplacer
+                    if(r.replace === '{{date}}'){ useReplacer = x.date }
+                        else if(r.replace === '{{edit}}'){ useReplacer = x.edit }
+                        else if(r.replace === '{{filename}}'){ useReplacer = x.name }
+                        else if(r.replace === '{{word-count}}'){ useReplacer = x.content.trim().split(/\s+/).length }
+                        else if(r.replace === '{{line-count}}'){ useReplacer = x.content.split(/\r|\n|\r\n/).length }
+                        else if(r.replace === '{{character-count}}'){ useReplacer = x.content.replace(/ /g, "").replace(/\r\n/g, "").length }
+                        else{ useReplacer = r.replace }
+
+                if(r.find instanceof RegExp){
+                    x.content = x.content.replace(r.find, useReplacer)
+                }else{
+                    let reg = new RegExp(`${r.find}`,'mg')
+                    x.content = x.content.replace(reg, useReplacer)
+                }
+            })
+        }
 
         resolve(x)
     })
@@ -604,6 +630,8 @@ export const toggleSetting= (index, newState) => {
             }; break;
         //* handle string type settings
         case 'bool-string':
+        case 'find-and-replace':
+        case 'snippets':
             {
                 s.state = newState
                 console.log(`SETTING 11 | set '${s.name}' to ${s.state}`)
@@ -624,5 +652,46 @@ export const toggleSetting= (index, newState) => {
             }
     }
     // SETTINGS_ARRAY[index].state = val
+    SAVE_TO_DISK()
+}
+
+
+//! //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//= SNIPPETS
+//! //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const getAllSnippets = () => {
+    return new Promise((resolve, reject) => {
+        console.log('SD | getAllSnippets() ')
+        WAIT_FOR_INIT()
+        .then(()=>{
+            let res = SETTINGS_ARRAY.find(x=>x.id==='custom-snippets').state
+            resolve(res)
+        })
+        .catch(err=>{
+            console.log(err)
+            reject(err)
+        })
+    })
+}
+
+
+export const addNewSnippet = () => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'custom-snippets').state
+    .push({
+            active: true,
+            title: 'New snippet',
+            description: 'Optional Description',
+            name: '`name` of snippet',
+            code: '`code` of snippet',
+    })
+    SAVE_TO_DISK()
+}
+
+export const removeSnippetById = (givenId) => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'custom-snippets').state
+    .splice(givenId, 1);
     SAVE_TO_DISK()
 }

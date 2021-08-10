@@ -11,13 +11,17 @@ const BooleanSwitch = ({s, si, handle}) => {
         <Flex sx={{
             width: '100%', 
             flexDirection: 'column', 
-            border: '1px solid #444', 
+            border: '1px solid', 
             color: 'grey_15', 
             bg: 'grey_0',
             mb:2, 
             p:1, 
             py: 2,
             cursor: 'pointer',
+            borderColor: 'transparent',
+            '&:hover':{
+                borderColor: 'grey_15'
+            }
             }}>
 
             <Flex sx={{alignItems: 'center'}}>

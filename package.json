@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "0.0.313",
+  "version": "0.0.323",
   "description": "personal web dev portfolio using next.js",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "ace-builds": "^1.4.12",
     "dotenv": "^10.0.0",
     "emotion-icons": "^3.13.0",
+    "file-loader": "^6.2.0",
     "gray-matter": "^4.0.3",
     "gsap": "^3.6.1",
     "highlight.js": "^11.1.0",

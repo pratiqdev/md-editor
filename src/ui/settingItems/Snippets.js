@@ -14,16 +14,30 @@ import { CloseOutline as Close } from "@emotion-icons/evaicons-outline/CloseOutl
 const Strings = ({o, oi, handleInner, handleRemove}) => {
 
     const [showDetails, setShowDetails] = useState(false)
-    const [newActive, setNewActive] = useState(o.active)
-    const [newFind, setNewFind] = useState(o.find)
-    const [newReplace, setNewReplace] = useState(o.replace)
-    const [newName, setNewName] = useState(o.name)
-    const [newDesc, setNewDesc] = useState(o.description)
+    const [newActive, setNewActive] = useState(o.active)    // is this item active
+    const [newName, setNewName] = useState(o.name)          // name used for snippet shortcut
+    const [newCode, setNewCode] = useState(o.code)    // code used for snippet code
+    const [newTitle, setNewTitle] = useState(o.title)        // title used for settings menu
+    const [newDesc, setNewDesc] = useState(o.description)   // desc used for settings menu
 
     const handleActive = e => {
         o.active = !newActive
         handleInner(oi, o)
         setNewActive(!newActive)
+    }
+
+    const handleTitle = e => {
+        o.title = e.target.value
+        handleInner(oi, o)
+        setNewTitle(e.target.value)
+    }
+
+
+
+    const handleDesc = e => {
+        o.description = e.target.value
+        handleInner(oi, o)
+        setNewDesc(e.target.value)
     }
 
     const handleName = e => {
@@ -32,22 +46,10 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
         setNewName(e.target.value)
     }
 
-    const handleDesc = e => {
-        o.description = e.target.value
+    const handleCode = e => {
+        o.code = e.target.value
         handleInner(oi, o)
-        setNewDesc(e.target.value)
-    }
-
-    const handleFind = e => {
-        o.find = e.target.value
-        handleInner(oi, o)
-        setNewFind(e.target.value)
-    }
-
-    const handleReplace = e => {
-        o.replace = e.target.value
-        handleInner(oi, o)
-        setNewReplace(e.target.value)
+        setNewCode(e.target.value)
     }
 
 
@@ -84,8 +86,8 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
                             border: '0px solid',
                             textOverflow: 'ellipsis'
                         }} 
-                        value={newName} 
-                        onChange={handleName}
+                        value={newTitle} 
+                        onChange={handleTitle}
                     />
 
                     <Button variant='icon.primary' onClick={() => handleRemove(oi)} ><Close size='20' /></Button>
@@ -135,8 +137,8 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
 
 
                                 }} 
-                                value={newFind} 
-                                onChange={handleFind}
+                                value={newName} 
+                                onChange={handleName}
                             />
                             <Textarea 
                                 placeholder='replace' 
@@ -151,8 +153,8 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
                                     borderTopColor: 'grey_8',
                                     borderRadius: 0,
                                 }} 
-                                    value={newReplace} 
-                                    onChange={handleReplace}
+                                    value={newCode} 
+                                    onChange={handleCode}
                                 />
                         </Box>
 
@@ -170,7 +172,7 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
 
 
 
-const DualString = ({s, si, handle}) => {
+const Snippets = ({s, si, handle}) => {
     const REF_REMOVE_CARD = useRef(null)
 
     const [showDetails, setShowDetails] = useState(false)
@@ -183,7 +185,7 @@ const DualString = ({s, si, handle}) => {
         s.state[0] = !newGlobalActive
         handle(si, s.state)
         setNewGlobalActive(!newGlobalActive)
-
+        // console.log('state', s)
     }
 
     const handleInner = (index, vals) => {
@@ -193,7 +195,7 @@ const DualString = ({s, si, handle}) => {
     }
 
     const handleNewCondition = () => {
-        SD.addNewConditionToReplacers()
+        SD.addNewSnippet()
         setTrigger(!trigger)
     }
 
@@ -221,7 +223,7 @@ const DualString = ({s, si, handle}) => {
     const handleConfirmRemove = (e) => {
         e.stopPropagation()
 
-        SD.removeConditionFromReplacersById(currentIdForRemove)
+        SD.removeSnippetById(currentIdForRemove)
         
         closeDownRemoveAnim()
         setTrigger(!trigger)
@@ -358,4 +360,4 @@ const DualString = ({s, si, handle}) => {
    )
 }
 
-export default DualString
+export default Snippets

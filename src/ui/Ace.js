@@ -17,15 +17,8 @@ import "ace-builds/src-noconflict/ext-language_tools"
 import "ace-builds/src-noconflict/ext-keybinding_menu"
 import "ace-builds/src-noconflict/ext-settings_menu"
 import "ace-builds/src-noconflict/ext-error_marker"
-import "ace-builds/src-noconflict/snippets/markdown"
-
-import * as SD from '../lib/save-version-4'
-
-
-import AceEditor from "react-ace";
-
 import "ace-builds/src-noconflict/mode-markdown";
-import "ace-builds/src-noconflict/snippets/markdown"
+// import "ace-builds/src-noconflict/snippets/markdown"
 import "ace-builds/src-noconflict/theme-tomorrow_night";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/theme-chaos";
@@ -33,8 +26,37 @@ import "ace-builds/src-noconflict/theme-dawn";
 import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-textmate";
+import 'ace-builds/webpack-resolver'
+
+// import ace from 'ace-builds'
+// import { Range, EditSession } from 'ace-builds'
+
+import {
+    registerSnippets,
+    createSnippets,
+} from '../lib/ace-snippet-manager'
+
+
+
+
+import * as SD from '../lib/save-version-4'
+
+
+import AceEditor from "react-ace";
+import { Insert } from '@emotion-icons/fluentui-system-filled';
+
+
+
+
+// let Range = require("ace-builds/src-noconflict/range").Range;
+
 
 let useFontSize =  12
+
+let currentlyCopyingLine = false
+let currentlyCopyingText = ''
+let currentRow 
+let currentCol 
 
 const Ace = props => {
 
@@ -87,10 +109,10 @@ const Ace = props => {
             .then(x=>{
                 if(x){
                     
-                        console.log('ACE |  triggered useEffect')    
+                        // console.log('ACE |  triggered useEffect')    
                         editor.setValue(x.content)
                         if(x.position.line && x.position.column){
-                        console.log(`ACE | loaded with cursor: ${x.position.line} @ ${x.position.column}`)
+                        // console.log(`ACE | loaded with cursor: ${x.position.line} @ ${x.position.column}`)
                         editor.gotoLine(x.position.line, x.position.column)
                     }else{
                         editor.gotoLine(0,0)
@@ -114,6 +136,17 @@ const Ace = props => {
 
     const loadSettings = () => {
         console.log('EDITOR | loadSettings fired')
+        let snippets = []
+        SD.getAllSnippets().then(x=> {
+            
+            x.map(s => {
+                if(s.name && s.code){
+                    snippets.push({name: s.name, code: s.code})
+                }
+            })
+        })
+ 
+        
         if(editor){
             SD.getAllSettings()
             .then(x=>{
@@ -126,6 +159,14 @@ const Ace = props => {
                         var ed = ace.edit("UNIQUE_ID_OF_DIV")
                         // editor.setTheme("ace/theme/twilight")
                         ed.session.setMode("ace/mode/markdown")
+
+                        
+                        registerSnippets(
+                            ed,
+                            ed.session,
+                            'markdown',
+                            createSnippets(snippets)
+                        )
                         
                         // add command to lazy-load keybinding_menu extension
                         ed.commands.addCommand({
@@ -167,6 +208,83 @@ const Ace = props => {
                         //             ed.setFontSize(useFontSize)
                         //     }
                         // })
+
+                        
+                        // delete the entire current line VSCode style
+                        ed.commands.addCommand({
+                            name: "deleteSelection",
+                            bindKey: {win: "Ctrl-x", mac: "Command-x"},
+                            exec: function(ed) {
+                                if(ed.getSelectedText().length === 0){  // if no text is selected
+                                    ed.removeLines()                    // remove the entire line
+                                }else{                                  // else
+                                    ed.remove()                         // remove the selected content
+                                }
+                            }
+                        })
+
+
+                        // copy the entire current line VSCode style _________________________________________________________________
+                        ed.commands.addCommand({
+                            name: "copySelection",
+                            bindKey: {win: "Ctrl-c", mac: "Command-c"},
+                            exec: function(ed) {
+                                console.log('KYBD COPY')
+                                if(ed.getSelectedText().length === 0){ 
+                                    // select line
+                                    // ed.selection.selectLine() //! selects the first char from the next line also...
+                                    currentRow = ed.getCursorPosition().row
+                                    currentCol = ed.getCursorPosition().column
+                                    // console.log(ed.selection.getSel().length)
+                                    ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:999999}})
+                                    // ed.addSelectionMarker(12, 20)
+
+                                    currentlyCopyingText = ed.getSelectedText() // copy selection
+                                    currentlyCopyingLine = true
+                                    ed.selection.setRange({start:{row:currentRow, column:currentCol}, end:{row:currentRow, column:currentCol}})  
+                                    ed.clearSelection()
+
+                                    
+                                    console.log(`COPY | whole line: ${currentlyCopyingText}`)
+                                }else{                 
+                                    currentlyCopyingText = ed.getSelectedText() // copy selection
+                                    currentlyCopyingLine = false
+                                    console.log(`COPY | selection only: ${currentlyCopyingText}`)
+                                    currentlyCopyingLine = false
+
+                                }
+                            }
+                        })
+
+
+
+
+                        // paste the entire current line VSCode style _________________________________________________________________
+                        ed.commands.addCommand({
+                            name: "pasteSelection",
+                            bindKey: {win: "Ctrl-v", mac: "Command-v"},
+                            exec: function(ed) {
+                                console.log('KYBD PASTE')
+                                // ed.clearSelection() // always clear the selection when pasting?
+                                if(currentlyCopyingLine){ 
+                                    currentRow = ed.getCursorPosition().row
+                                    currentCol = ed.getCursorPosition().column
+                                    console.log('PASTE | paste line down from line copy')
+                                    let currentRow = ed.getCursorPosition().row                                                 
+                                    ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:0}})  
+                                    ed.insert(currentlyCopyingText + '\r\n')                  
+                                    ed.selection.setRange({start:{row:currentRow + 1, column:currentCol}, end:{row:currentRow + 1, column:currentCol}})  
+
+                                    // ed.selection.setRange({start:{row:currentRow + 1, column:999999}, end:{row:currentRow + 1, column:999999}})   
+
+                                }else{                 
+                                    console.log('PASTE | paste selection only')
+                                    ed.insert(currentlyCopyingText)
+
+
+                                }
+                            }
+                        })
                          
                         
                     })
@@ -228,7 +346,7 @@ const Ace = props => {
 
     //! load content from parent only when useTrigger fires 
     useEffect(()=>{
-        // console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
+        console.log(`ACE | useTrigger `)
         setTimeout(() => {
             
             loadContent()
@@ -237,6 +355,10 @@ const Ace = props => {
             
             // editor.setValue(props.parentContent || '97asdf876')
     }, [props.useTrigger])
+
+
+    
+
 
 
 
@@ -281,7 +403,7 @@ const Ace = props => {
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
                     enableSnippets: true,
-                    markers: true,
+                    // markers: true,
                     fontSize: 14
                   }}
                   style={{zIndex: '2', }}
