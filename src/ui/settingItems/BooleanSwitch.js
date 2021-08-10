@@ -48,7 +48,7 @@ const BooleanSwitch = ({s, si, handle}) => {
                 <Flex sx={{fontSize: 1}}>
                     {s.group}
                 </Flex>
-                <Flex sx={{fontSize: 2}}>
+                <Flex sx={{fontSize: 2, textAlign: 'left'}}>
                     {s.desc}
                 </Flex>
             </Box>

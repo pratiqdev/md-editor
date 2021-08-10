@@ -17,7 +17,6 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 
 //* local deps
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
-const Logo = dynamic(() => import("./Logo"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
 import * as SD from '../lib/save-version-4'
 import useLongPress from '../lib/longPress'
@@ -63,7 +62,6 @@ const Navbar = forwardRef((props, ref) => {
   const router = useRouter()
   const context = useThemeUI();
   const { theme, components, colorMode, setColorMode } = context;
-  const [logoColor, setLogoColor] = useState('#ffffff')
   const [themeColor, setThemeColor] = useState('#0000ffff')
   const [appInstallStatus, setAppInstallStatus] = useState(libInstallStatus)
   const [deferred, setDeferred] = useState()
@@ -127,9 +125,6 @@ const Navbar = forwardRef((props, ref) => {
     }
 
 
-    colorMode === undefined || colorMode === "dark"
-    ? setLogoColor('#ffffff')
-    : setLogoColor('#000000')
 
 
  
@@ -213,7 +208,7 @@ useEffect(()=>{
 
 
           <Link href='/'>
-            <Flex sx={{  height: '4rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
+            <Flex sx={{  height: '3rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
               <MdeLogo /> 
             </Flex>
           </Link>
@@ -222,13 +217,13 @@ useEffect(()=>{
               <Flex sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
               onClick={(e)=>setShowLoad(true)}
               >
-                <Box sx={{fontSize: 2}}>
+                <Box sx={{fontSize: 1, p:0, m:0}}>
                   {activeFileData && activeFileData.name}
                 </Box>
-                <Box>
+                <Box sx={{my: '-.2rem',}}>
                   {activeFileData && activeFileData.date }
                 </Box>
-                <Box>
+                <Box sx={{ p:0, m:0}}>
                   {activeFileData && activeFileData.edit }
                 </Box>
               </Flex>
@@ -238,14 +233,7 @@ useEffect(()=>{
 
           {props.editor &&
           <Flex>
-            {/* {
-            props.layoutType === 'editor' && 
-              <Button variant='icon.plain' sx={{mr:3}} 
-                onClick={()=>props.setLayout('render')} 
-                onDoubleClick={()=>props.setLayout('split')}>
-                  <CaretLeft size='22'/>
-              </Button>
-            } */}
+
               <Tipper tip="Click to toggle view, hold to split view" delay={[1000, 0]}>
                 <Button variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
                     {(props.layoutType === 'editor' && breakIndex <=0) &&<CaretUp size='22'/>}

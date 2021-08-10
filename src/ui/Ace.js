@@ -25,6 +25,7 @@ import * as SD from '../lib/save-version-4'
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-markdown";
+import "ace-builds/src-noconflict/snippets/markdown"
 import "ace-builds/src-noconflict/theme-tomorrow_night";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/theme-chaos";
@@ -120,7 +121,7 @@ const Ace = props => {
                     // set keybinds
                     // require.config({paths: { "ace" : "../lib/ace"}});
                     // require()
-                    // require.config({paths: { "ace" : "../../node_modules/lib/ace"}});
+                    // require.config({paths: { "ace" : "../../node_modules/ace-builds/ace"}});
                     require(["ace-builds/src-noconflict/ace"], function(ace) {
                         var ed = ace.edit("UNIQUE_ID_OF_DIV")
                         // editor.setTheme("ace/theme/twilight")
@@ -281,7 +282,7 @@ const Ace = props => {
                     enableLiveAutocompletion: true,
                     enableSnippets: true,
                     markers: true,
-                    fontSize: props.fontSize
+                    fontSize: 14
                   }}
                   style={{zIndex: '2', }}
                 />

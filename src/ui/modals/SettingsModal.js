@@ -8,6 +8,8 @@ import BooleanSwitch from '../settingItems/BooleanSwitch'
 import OptionSwitch  from '../settingItems/OptionSwitch'
 import NumberSwitch from '../settingItems/NumberSwitch'
 import StringSwitch from '../settingItems/StringSwitch'
+import DualString from '../settingItems/DualString'
+import BoolString from '../settingItems/BoolString'
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
 import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
@@ -230,6 +232,8 @@ const LoadModal = props => {
                                 case 'number': {return <NumberSwitch s={s} si={si} handle={test}/>};break;
                                 case 'array': {return <OptionSwitch s={s} si={si} handle={test} />};break;
                                 case 'boolean': {return <BooleanSwitch s={s} si={si} handle={test} />};break;
+                                case 'bool-string': {return <BoolString s={s} si={si} handle={test} />};break;
+                                case 'find-and-replace': {return <DualString s={s} si={si} handle={test} />};break;
                             }
 
                         }

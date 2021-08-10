@@ -5,8 +5,10 @@ import * as ALERT from '../../lib/alert'
 import * as SD from '../../lib/save-version-4'
 import gsap from 'gsap'
 
+
+
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
-import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
+import { CaretRight } from "@emotion-icons/boxicons-regular/CaretRight";
 
 
 
@@ -14,18 +16,21 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 
 
 
-const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete, loadModalTrigger}) => {
-    const [isSelected, setIsSelected] = useState(false)
+const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handleDelete, loadModalTrigger, itemKey}) => {
+    const [showDetails, setShowDetails] = useState(false)
     const [newName, setNewName] = useState()
     const [newSum, setNewSum] = useState()
 
-    const handleSelection = () => {
-        setIsSelected(!isSelected)
+    const handleDetails = () => {
+        setShowDetails(!showDetails)
     }
+
     const handleSwap = e => {
         e.stopPropagation()
         handleActiveSwap(currentIndex)
     }
+
+
 
     const handleUpdateName = e => {
         setNewName(e.target.value)
@@ -42,23 +47,39 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
         SD.saveFileById(currentIndex)
     }
 
+
+
     useEffect(()=>{
         setNewName(currentSD.name)
         setNewSum(currentSD.newSum)
     })
 
+ 
+
+    
+
+
 
 
     return(
-        <Box sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3, cursor: 'pointer'}}>
-        <Flex 
-            onClick={handleSelection}
+        <Box key={itemKey} sx={{border: '1px solid', borderColor: currentSD.active ? 'grey_15' : 'grey_3', borderRadius: 2, bg: 'grey_0', p: [2,3,3], m:1, mb:3}}>
 
-            sx={{width: '100%',alignItems: 'center', justifyContent: 'space-between', color: 'grey_15' }}>
-            <Flex sx={{flexDirection: 'column', alignItems: 'flex-start'}}>
+
+        <Flex 
+
+            sx={{alignItems: 'center', justifyContent: 'space-between', color: 'grey_15' }}>
+            <Flex sx={{alignItems: 'center'}}>
                 {/* <Box sx={{fontSize: 3}}>{currentSD.name}</Box> */}
-                <Input value={newName} onChange={handleUpdateName} onClick={e=>e.stopPropagation()} sx={{p:0,fontSize: 3, border: '0px solid', cursor: 'auto', width: 'auto', minWidth: '2rem'}}/>
-                <Box sx={{fontSize: 1, color: 'grey_10', cursor: 'pointer'}}>{currentSD.date}</Box>
+                <Button
+                variant='icon.primary' 
+                onClick={handleDetails}
+                sx={{mr:2}}>
+                    {showDetails ? <CaretDown size='22' /> : <CaretRight size='22'/>}
+                </Button>
+                <Box>
+                    <Input value={newName} onChange={handleUpdateName} onClick={e=>e.stopPropagation()} sx={{p:0,fontSize: 3, border: '0px solid', cursor: 'auto', width: 'auto', minWidth: '2rem'}}/>
+                    <Box sx={{fontSize: 1, color: 'grey_10', textAlign: 'left'}}>{currentSD.date}</Box>
+                </Box>
             </Flex>
 
             <Flex>
@@ -68,7 +89,9 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
 
         </Flex>
 
-                {isSelected && 
+
+
+                {showDetails && 
                     <Flex sx={{flexDirection: 'column'}}>
 
                     <Flex sx={{borderBottom: '1px solid', fontSize: 1, borderColor: 'grey_4', color: 'grey_10', my:1, pb: 1}}>
@@ -84,6 +107,8 @@ const LoadItem = ({currentSD, currentIndex, handleActiveSwap, handleEdit, handle
 
                     </Flex>
                 }
+
+
         </Box>
     )
 }
@@ -116,8 +141,12 @@ const LoadModal = props => {
     const REF_CARD = useRef(null)
     const REF_BOX = useRef(null)
     const REF_TITLE = useRef(null)
+    const REF_DELETE_CARD = useRef(null)
 
     const [localTrigger, setLocalTrigger] = useState(false)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+    const [currentIdForDelete, setCurrentIdForDelete] = useState()
+
 
 
 
@@ -146,6 +175,14 @@ const LoadModal = props => {
         gsap.to([REF_BOX.current],  {opacity: 0, duration: .3})
     }
 
+    const openUpDeleteAnim = () => {
+        gsap.to([REF_DELETE_CARD.current],  {opacity: 1, y: '0', delay: .2, duration: .3})
+    }
+    
+    const closeDownDeleteAnim = () => {
+        gsap.to([REF_DELETE_CARD.current], {opacity: 0, y: '3rem', duration: .3})
+    }
+
 
     //~ accept / deny handlers _______________________________________________________________________
     const handleAccept = () => {
@@ -170,23 +207,53 @@ const LoadModal = props => {
                 handleClose()
             }, 500);
         console.log('LOADMODAL | handleActiveSwap')
+        ALERT.fileLoaded(SD.getById(givenId).name)
 
     }
 
 
+    // brought these from the settings modal and they need to be refactored to work with this modal
+    const handleShowConfirmDelete = givenId => {
+        setCurrentIdForDelete(givenId)
+        // console.log('DELETE -> '+SD.getById(currentIdForDelete).name)
+        setShowDeleteConfirm(true)
+        setTimeout(() => {
+            openUpDeleteAnim()
+        }, 100);
+    }
 
-    const handleDelete = givenId => {
-        console.log(`LOADMODAL | handleDelete - index: ${givenId}`)
-        SD.deleteById(givenId)
+
+    const handleCancelDelete = (e) => {
+        e.stopPropagation()
+        closeDownDeleteAnim()
+        setTimeout(() => {
+            setShowDeleteConfirm(false)
+        }, 300);
+    }
+
+    const handleConfirmDelete = (e) => {
+        e.stopPropagation()
+        ALERT.fileDeleted(SD.getById(currentIdForDelete).name)
+
+        SD.deleteById(currentIdForDelete)
         props.causeParentTrigger()
         setLocalTrigger(!localTrigger)
+
+        closeDownDeleteAnim()
+        setTimeout(() => {
+            setShowDeleteConfirm(false)
+            // handleClose() // dont close the parent modal when this action is complete
+        }, 300);
     }
+
+
 
     const handleNew = () => {
         console.log('LOADMODAL | handleNew ')
 
         SD.createNew()
         setLocalTrigger(!localTrigger)
+        ALERT.fileCreated()
     }
 
 
@@ -235,7 +302,8 @@ const LoadModal = props => {
                 width: ['98vw', 'auto', 'auto'],
                 minWidth: ['98vw', '40rem', '40rem'],
                 maxWidth: '98vw',
-                height: '40rem',
+                minHeight: '30.4rem',
+                maxHeight: '40vh',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'stretch',
@@ -277,10 +345,11 @@ const LoadModal = props => {
                     }}>
                         {SD.getAll().map((x, i) => 
                             <LoadItem 
+                                itemKey={x}
                                 currentSD={x} 
                                 currentIndex={i} 
                                 handleActiveSwap={handleActiveSwap}
-                                handleDelete={handleDelete}
+                                handleDelete={handleShowConfirmDelete}
                                 loadModalTrigger={localTrigger}
                                 
                                 />
@@ -305,6 +374,33 @@ const LoadModal = props => {
 
 
             </Card>
+
+            {showDeleteConfirm && 
+                <Card variant='modal'
+                ref={REF_DELETE_CARD}
+                sx={{
+                    position: 'absolute',
+                    // width: '20rem',
+                    maxWidth: '90vw',
+                    // height: '10rem',
+                    bg: 'grey_0',
+                    border: '2px solid',
+                    borderColor: 'red',
+                    color: 'red',
+                    transform: 'translateY(3rem)',
+                    opacity: '0',
+                }}>
+                    <Box sx={{width: '100%', textAlign: 'center', fontSize: [4,6,8]}}>DELETE FILE</Box>
+                    <Box sx={{color: 'grey_15', fontWeight: 'bold', textAlign: 'center', m:1,}}>{SD.getById(currentIdForDelete).name}</Box>
+                    <Box sx={{color: 'grey_15',  textAlign: 'center', m:3, my:6}}>This will delete the selected file. This action is not reversible</Box>
+                    <Flex sx={{justifyContent: 'space-between', m:3}}>
+
+                    <Button variant='outline.primary' onClick={handleCancelDelete}>Cancel</Button>
+                    <Button sx={{bg:'red'}} onClick={handleConfirmDelete}>Delete</Button>
+                    </Flex>
+
+                </Card>
+            }
         </Flex>
     )
 }

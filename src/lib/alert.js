@@ -66,20 +66,48 @@ export const welcomeAlerts = () => {
 }
 
 
+//! FILES
+//! ==========================================================================================================
 
 
-//! file save alert ==============================================================================
-export const fileSaveAlert = () => {
-        toasty({
-          text: `Saving file!`,
-          type: 'success',
-          time: 6000,
-        })
+export const fileSaved = () => {
+  toasty({
+    text: `Saving file!`,
+    type: 'success',
+    time: 3000,
+  })
+}
+
+
+export const fileDeleted = (file) => {
+  toasty({
+    text: `File deleted! ${file && (`(${file}) `)}`,
+    type: 'error',
+    time: 6000,
+  })
+}
+
+export const fileLoaded = (file) => {
+  toasty({
+    text: `File loaded! ${file && (`(${file}) `)}`,
+    type: 'success',
+    time: 1000,
+  })
+}
+
+export const fileCreated = () => {
+  toasty({
+    text: `New file created!`,
+    type: 'info',
+    time: 1000,
+  })
 }
 
 
 
-//! data validation alerts ==============================================================================
+//! DATA VALIDATION
+//! ==========================================================================================================
+
 
 export const nanAlert = debounce((val) => {
     toasty({

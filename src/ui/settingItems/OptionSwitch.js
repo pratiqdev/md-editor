@@ -65,7 +65,7 @@ const OptionSwitch = ({ s, si, handle }) => {
       {showDetails && (
         <Box sx={{ color: "grey_10", p: 2 }}>
           <Flex sx={{ fontSize: 1 }}>{s.group}</Flex>
-          <Flex sx={{ fontSize: 2 }}>{s.desc}</Flex>
+          <Flex sx={{ fontSize: 2, textAlign: 'left' }}>{s.desc}</Flex>
         </Box>
       )}
       {showOptions && (

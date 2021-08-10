@@ -12,18 +12,27 @@ const StringSwitch = ({s, si, handle}) => {
     const REF_LARGE_INPUT = useRef(null)
 
     const [showDetails, setShowDetails] = useState(false)
-    const [newValue, setNewValue] = useState(s.state)
+    const [newValue, setNewValue] = useState(s.state[1])
+    const [newBool, setNewBool] = useState(s.state[0])
 
-    const handleChange = (si, e) => {
+    const handleValue = (si, e) => {
         const { selectionStart, selectionEnd, value } = e.target;
         if(s.min <= value.length && value.length <= s.max){
-
             setNewValue(value)
-            handle(si, value)
-            
         }else{
             ALERT.minMaxAlert(s.min, s.max)
         }
+        updateValue()
+    }
+
+    const handleBool = () => {
+        setNewBool(!newBool)
+        updateValue()
+    }
+
+
+    const updateValue = () => {
+        handle(si, [newBool, newValue])
     }
 
  
@@ -46,10 +55,31 @@ const StringSwitch = ({s, si, handle}) => {
 
             <Flex sx={{alignItems: 'center'}}>
 
-            <Flex sx={{width: '100%',alignItems: 'center'}} >
+            {/* <Flex sx={{width: '100%',alignItems: 'center'}} >
 
                 <Button
                 variant='icon.primary'
+                onClick={()=>setShowDetails(!showDetails)}
+                sx={{mr:2}}>
+                    {showDetails ? <CaretDown size='22' /> : <CaretRight size='22'/>}
+                </Button>
+                <Box sx={{
+                    cursor: 'pointer',
+                    borderBottom: '1px solid', 
+                    borderColor: showDetails ? 'grey_8' : 'transparent'
+                    }}>
+                        bool-string: {s.name}
+                </Box>
+
+            </Flex>
+            
+            */}
+
+
+            <Flex sx={{width: '100%',alignItems: 'center',}} onClick={()=>setShowDetails(!showDetails)}>
+
+                <Button
+                variant='icon.primary' 
                 onClick={()=>setShowDetails(!showDetails)}
                 sx={{mr:2}}>
                     {showDetails ? <CaretDown size='22' /> : <CaretRight size='22'/>}
@@ -63,6 +93,10 @@ const StringSwitch = ({s, si, handle}) => {
                 </Box>
 
             </Flex>
+
+            <Box sx={{minWidth: '3rem'}}>
+                <Switch checked={s.state[0]} onChange={handleBool}/>
+            </Box>
 
             
             
@@ -82,7 +116,7 @@ const StringSwitch = ({s, si, handle}) => {
                 </Box>
 
 
-                <Textarea ref={REF_LARGE_INPUT} sx={{ fontFamily: 'body', fontSize: 1, borderRadius: 1, m:2, width: 'auto', borderColor: 'grey_6', '&:focus':{borderColor:'grey_6'}}} value={newValue} onChange={(e)=>handleChange(si, e)}/>
+                <Textarea ref={REF_LARGE_INPUT} sx={{ fontFamily: 'body', fontSize: 1, borderRadius: 1, m:2, width: 'auto', borderColor: 'grey_6', '&:focus':{borderColor:'grey_6'}}} value={newValue} onChange={(e)=>handleValue(si, e)}/>
             </>
             }
         </Flex>

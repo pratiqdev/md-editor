@@ -17,7 +17,7 @@ import {
 } from "../lib/install";
 
 import Tipper from "./Tipper";
-import Logo from "./Logo";
+import MdeLogo from "./MdeLogo";
 import ThemeToggle from "./ThemeToggle";
 import InstallMenuItem from './InstallMenuItem'
 
@@ -111,12 +111,13 @@ const NavMenu = (props) => {
             justifyContent: "space-between",
             borderBottom: "1px solid",
             borderColor: "grey_7",
+            alignItems: 'center',
             p: 3,
             pr: 3,
           }}
         >
-          <Box sx={{ width: "1.6em", ml: 2 }}>
-            <Logo />
+          <Box sx={{ height: "1em", ml: 3 }}>
+            {/* <MdeLogo /> */}
           </Box>
           <Flex>
             <ThemeToggle />
