@@ -17,6 +17,7 @@ export default {
       fontWeight: "body",
       margin: 0,
       padding: 0,
+      fontSize: [1,2,2],
       code: {
         ...inlineCode,
       },
@@ -26,12 +27,12 @@ export default {
     },
     h1: {
       variant: "text.heading",
-      fontSize: [9,10,10],
+      fontSize: [7,8,9],
       fontFamily: "heading",
       color: "primary_a",
       borderBottom: '2px solid',
       borderColor: 'primary_a',
-      mt: 4,
+      mt: 8,
     '&:first-of-type':{
       mt: 1,
     },
@@ -43,10 +44,11 @@ export default {
       mb: 4,
       fontFamily: "body",
       borderTop: '1px solid',
-      borderColor: 'grey_4',
+      borderColor: 'grey_6',
       mt: 4,
-    '&:first-of-type':{
-      mt: 1,
+    'h1 h2:first-of-type':{
+      mt: 0,
+      borderTop: '0px solid',
     },
     },
     h3: {
@@ -54,23 +56,24 @@ export default {
       fontSize: [6,7,7],
       mt: 5,
       // mb: 3,
+
     },
     h4: {
       variant: "text.heading",
-      fontSize: [5,6,6],
+      fontSize: [3,4,4],
       mt: 5,
       // mb: 3,
     },
     h5: {
       variant: "text.heading",
-      fontSize: [4,5,5],
-      mt: 2,
+      fontSize: [2,3,3],
+      mt: 5,
       // mb: 1,
     },
     h6: {
       variant: "text.heading",
-      fontSize: [3,4,4],
-      mt: 1,
+      fontSize: [1,2,2],
+      mt: 5,
       // mb: 1,
     },
     hr: {
@@ -78,7 +81,7 @@ export default {
       my: 6,
     },
     p: {
-      fontSize: [3,4,4],
+      // fontSize: [1,2,2],
       fontFamily: "body",
       lineHeight: [1.75, 1.75, 2],
       color: 'text',
@@ -138,7 +141,7 @@ export default {
       textDecoration: 'underline',
       borderBottom: '2px solid',
       borderColor: 'transparent',
-      fontSize: [3,4,4],
+      // fontSize: [3,4,4],
       cursor: 'pointer',
       ':hover':{
         // color: 'primary_a'
@@ -153,7 +156,7 @@ export default {
     },
     ul:{
       fontWeight: 'body',
-      ml: 5,
+      ml: 0,
       ' ul':{
         fontWeight: 'lite'
       },
@@ -162,7 +165,7 @@ export default {
       },
       li:{
         '::marker':{
-          color: 'primary_b',
+          color: 'primary_a',
           fontSize: [2,3,4],
         },
       },
@@ -228,7 +231,7 @@ export default {
     // this is the 'marked' text created from search matches
 
     'em':{
-      color: 'blue'
+      color: 'grey_10'
     },
     'strong':{
       color: 'green'

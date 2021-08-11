@@ -13,10 +13,6 @@ import * as ALERT from '../lib/alert'
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
-import "ace-builds/src-noconflict/ext-language_tools"
-import "ace-builds/src-noconflict/ext-keybinding_menu"
-import "ace-builds/src-noconflict/ext-settings_menu"
-import "ace-builds/src-noconflict/ext-error_marker"
 import "ace-builds/src-noconflict/mode-markdown";
 // import "ace-builds/src-noconflict/snippets/markdown"
 import "ace-builds/src-noconflict/theme-tomorrow_night";
@@ -26,6 +22,16 @@ import "ace-builds/src-noconflict/theme-dawn";
 import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-textmate";
+
+import "ace-builds/src-noconflict/ext-language_tools"
+import "ace-builds/src-noconflict/ext-keybinding_menu"
+import "ace-builds/src-noconflict/ext-settings_menu"
+import "ace-builds/src-noconflict/ext-error_marker"
+import "ace-builds/src-noconflict/ext-options"
+import "ace-builds/src-noconflict/ext-prompt"
+import "ace-builds/src-noconflict/ext-searchbox"
+
+
 import 'ace-builds/webpack-resolver'
 
 // import ace from 'ace-builds'
@@ -133,7 +139,6 @@ const Ace = props => {
     }
 
 
-
     const loadSettings = () => {
         console.log('EDITOR | loadSettings fired')
         let snippetsArr = []
@@ -152,6 +157,10 @@ const Ace = props => {
             SD.getAllSettings()
             .then(x=>{
                 if(x){
+
+                        x.map((x, i)=>{
+                            console.log(`LOAD SETTINGS ${i} | ${x.name} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
+                        })
                     // set keybinds
                     require.config({paths: { "ace" : "../lib/ace"}});
                     // require()
@@ -161,23 +170,65 @@ const Ace = props => {
                         // editor.setTheme("ace/theme/twilight")
                         ed.session.setMode("ace/mode/markdown")
 
-                    
 
-                  
+                        // do this before disabling snippets so manager has access to the files required
+                        registerSnippets(
+                            x.find(x=>x.id === 'custom-snippets').state[0],
+                            ed,
+                            ed.session,
+                            'markdown',
+                            createSnippets(snippetsArr)
+                        ).then(()=>{
+
+                            setTimeout(() => {
+                                
+                                ed.setOptions({
+                                    fontSize: 14,
+                                    enableBasicAutocompletion: x.find(x=>x.id === 'enable-basic-autocompletion').state,
+                                    enableLiveAutocompletion: x.find(x=>x.id === 'enable-live-autocompletion').state,
+                                    enableSnippets: x.find(x=>x.id === 'custom-snippets').state[0],
+                                    copyWithEmptySelection:x.find(x=>x.id === 'copy-with-empty-selection').state,
+                                })
+                            }, 250);
+                        })
+
+                        // ed.getSession().setAnnotations([
+                        //     {
+                        //     row: 1,
+                        //     column: 0,
+                        //     text: "Error Message?? dfj;lk asjdlkfjalskdf ja sdflk;a jskdjf alksdjfklja sl;dfjalk sdjfklasjdf klajs;ld kfjl;asdjf l;ajsdfl;ja lsdjfl asdjf lkasdjfl; kajsdflkjasd;fkj a;lksdjf;lkj a;lskdfj l;akjsdlkf ", // Or the Json reply from the parser 
+                        //     type: "error", // also "warning" and "information"
+                        //   },
+                        //   {
+                        //     row: 3,
+                        //     column: 0,
+                        //     text: "warning Message??", // Or the Json reply from the parser 
+                        //     type: "warning" // also "warning" and "information"
+                        //   },
+                        //   {
+                        //     row: 5,
+                        //     column: 0,
+                        //     text: "information Message??", // Or the Json reply from the parser 
+                        //     type: "info" // also "warning" and "information"
+                        //   }
+                        // ]);
+
+
+           
                             
 
-                            registerSnippets(
-                                ed,
-                                ed.session,
-                                'markdown',
-                                createSnippets(snippetsArr)
-                            )
+
+
+
             
+
+
+
                         
-                        // add command to lazy-load keybinding_menu extension
+                        // show current keybindings _________________________________________________________
                         ed.commands.addCommand({
                             name: "showKeyboardShortcuts",
-                            bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-h"},
+                            bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-k"},
                             exec: function(ed) {
                                 ace.config.loadModule("ace/ext/keybinding_menu", function(module) {
                                     console.log('???')
@@ -187,6 +238,7 @@ const Ace = props => {
                             }
                         })
                         
+                        // test keybindings _________________________________________________________________
 
                         ed.commands.addCommand({
                             name: "testKeybindings",
@@ -196,101 +248,82 @@ const Ace = props => {
                             }
                         })
 
-
-                        // ed.commands.addCommand({
-                        //     name: "increaseFontSize",
-                        //     bindKey: {win: "Ctrl-+", mac: "Command-+"},
-                        //     exec: function(ed) {
-                        //             useFontSize+=2
-                        //             ed.setFontSize(useFontSize)
-                        //     }
-                        // })
-
-                        // ed.commands.addCommand({
-                        //     name: "decreaseFontSize",
-                        //     bindKey: {win: "Ctrl--", mac: "Command-+"},
-                        //     exec: function(ed) {
-                        //             useFontSize-=2
-                        //             ed.setFontSize(useFontSize)
-                        //     }
-                        // })
-
                         
-                        // delete the entire current line VSCode style
-                        ed.commands.addCommand({
-                            name: "deleteSelection",
-                            bindKey: {win: "Ctrl-x", mac: "Command-x"},
-                            exec: function(ed) {
-                                if(ed.getSelectedText().length === 0){  // if no text is selected
-                                    ed.removeLines()                    // remove the entire line
-                                }else{                                  // else
-                                    ed.remove()                         // remove the selected content
-                                }
-                            }
-                        })
+                        // delete the entire current line VSCode style _________________________________________________________________
+                        // ed.commands.addCommand({
+                        //     name: "deleteSelection",
+                        //     bindKey: {win: "Ctrl-x", mac: "Command-x"},
+                        //     exec: function(ed) {
+                        //         if(ed.getSelectedText().length === 0){  // if no text is selected
+                        //             ed.removeLines()                    // remove the entire line
+                        //         }else{                                  // else
+                        //             ed.remove()                         // remove the selected content
+                        //         }
+                        //     }
+                        // })
 
 
                         // copy the entire current line VSCode style _________________________________________________________________
-                        ed.commands.addCommand({
-                            name: "copySelection",
-                            bindKey: {win: "Ctrl-c", mac: "Command-c"},
-                            exec: function(ed) {
-                                console.log('KYBD COPY')
-                                if(ed.getSelectedText().length === 0){ 
-                                    // select line
-                                    // ed.selection.selectLine() //! selects the first char from the next line also...
-                                    currentRow = ed.getCursorPosition().row
-                                    currentCol = ed.getCursorPosition().column
-                                    // console.log(ed.selection.getSel().length)
-                                    ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:999999}})
-                                    // ed.addSelectionMarker(12, 20)
+                        // ed.commands.addCommand({
+                        //     name: "copySelection",
+                        //     bindKey: {win: "Ctrl-c", mac: "Command-c"},
+                        //     exec: function(ed) {
+                        //         console.log('KYBD COPY')
+                        //         if(ed.getSelectedText().length === 0){ 
+                        //             // select line
+                        //             // ed.selection.selectLine() //! selects the first char from the next line also...
+                        //             currentRow = ed.getCursorPosition().row
+                        //             currentCol = ed.getCursorPosition().column
+                        //             // console.log(ed.selection.getSel().length)
+                        //             ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:999999}})
+                        //             // ed.addSelectionMarker(12, 20)
 
-                                    currentlyCopyingText = ed.getSelectedText() // copy selection
-                                    currentlyCopyingLine = true
-                                    ed.selection.setRange({start:{row:currentRow, column:currentCol}, end:{row:currentRow, column:currentCol}})  
-                                    ed.clearSelection()
+                        //             currentlyCopyingText = ed.getSelectedText() // copy selection
+                        //             currentlyCopyingLine = true
+                        //             ed.selection.setRange({start:{row:currentRow, column:currentCol}, end:{row:currentRow, column:currentCol}})  
+                        //             ed.clearSelection()
 
                                     
-                                    console.log(`COPY | whole line: ${currentlyCopyingText}`)
-                                }else{                 
-                                    currentlyCopyingText = ed.getSelectedText() // copy selection
-                                    currentlyCopyingLine = false
-                                    console.log(`COPY | selection only: ${currentlyCopyingText}`)
-                                    currentlyCopyingLine = false
+                        //             console.log(`COPY | whole line: ${currentlyCopyingText}`)
+                        //         }else{                 
+                        //             currentlyCopyingText = ed.getSelectedText() // copy selection
+                        //             currentlyCopyingLine = false
+                        //             console.log(`COPY | selection only: ${currentlyCopyingText}`)
+                        //             currentlyCopyingLine = false
 
-                                }
-                            }
-                        })
+                        //         }
+                        //     }
+                        // })
 
 
 
 
                         // paste the entire current line VSCode style _________________________________________________________________
-                        ed.commands.addCommand({
-                            name: "pasteSelection",
-                            bindKey: {win: "Ctrl-v", mac: "Command-v"},
-                            exec: function(ed) {
-                                console.log('KYBD PASTE')
-                                // ed.clearSelection() // always clear the selection when pasting?
-                                if(currentlyCopyingLine){ 
-                                    currentRow = ed.getCursorPosition().row
-                                    currentCol = ed.getCursorPosition().column
-                                    console.log('PASTE | paste line down from line copy')
-                                    let currentRow = ed.getCursorPosition().row                                                 
-                                    ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:0}})  
-                                    ed.insert(currentlyCopyingText + '\r\n')                  
-                                    ed.selection.setRange({start:{row:currentRow + 1, column:currentCol}, end:{row:currentRow + 1, column:currentCol}})  
+                        // ed.commands.addCommand({
+                        //     name: "pasteSelection",
+                        //     bindKey: {win: "Ctrl-v", mac: "Command-v"},
+                        //     exec: function(ed) {
+                        //         console.log('KYBD PASTE')
+                        //         // ed.clearSelection() // always clear the selection when pasting?
+                        //         if(currentlyCopyingLine){ 
+                        //             currentRow = ed.getCursorPosition().row
+                        //             currentCol = ed.getCursorPosition().column
+                        //             console.log('PASTE | paste line down from line copy')
+                        //             let currentRow = ed.getCursorPosition().row                                                 
+                        //             ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:0}})  
+                        //             ed.insert(currentlyCopyingText + '\r\n')                  
+                        //             ed.selection.setRange({start:{row:currentRow + 1, column:currentCol}, end:{row:currentRow + 1, column:currentCol}})  
 
-                                    // ed.selection.setRange({start:{row:currentRow + 1, column:999999}, end:{row:currentRow + 1, column:999999}})   
+                        //             // ed.selection.setRange({start:{row:currentRow + 1, column:999999}, end:{row:currentRow + 1, column:999999}})   
 
-                                }else{                 
-                                    console.log('PASTE | paste selection only')
-                                    ed.insert(currentlyCopyingText)
+                        //         }else{                 
+                        //             console.log('PASTE | paste selection only')
+                        //             ed.insert(currentlyCopyingText)
 
 
-                                }
-                            }
-                        })
+                        //         }
+                        //     }
+                        // })
                          
                         
                     })
@@ -303,32 +336,32 @@ const Ace = props => {
                         }
 
                      
-                      }, false);
+                    }, false);
 
-                      document.addEventListener("keydown", function(e) {
-                        if (e.key === '+' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
-                          e.preventDefault();
-                          e.stopPropagation()
-                          useFontSize+=2
-                          editor.setFontSize(useFontSize)
-                          console.log(`increase font size: ${useFontSize}`)
+                    document.addEventListener("keydown", function(e) {
+                    if (e.key === '+' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
+                        e.preventDefault();
+                        e.stopPropagation()
+                        useFontSize+=2
+                        editor.setFontSize(useFontSize)
+                        console.log(`increase font size: ${useFontSize}`)
 
-                        }
+                    }
 
-                     
-                      }, false);
+                    
+                    }, false);
 
-                      document.addEventListener("keydown", function(e) {
-                        if (e.key === '-' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
-                          e.preventDefault();
-                          e.stopPropagation()
-                          useFontSize-=2
-                          editor.setFontSize(useFontSize)
-                          console.log(`decrease font size: ${useFontSize}`)
-                        }
+                    document.addEventListener("keydown", function(e) {
+                    if (e.key === '-' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
+                        e.preventDefault();
+                        e.stopPropagation()
+                        useFontSize-=2
+                        editor.setFontSize(useFontSize)
+                        console.log(`decrease font size: ${useFontSize}`)
+                    }
 
-                     
-                      }, false);
+                    
+                    }, false);
                   
 
                     
@@ -405,13 +438,7 @@ const Ace = props => {
                 editorProps={{ $blockScrolling: true }}
                 width={'100%'}
                 height={'100%'}
-                setOptions={{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    enableSnippets: true,
-                    // markers: true,
-                    fontSize: 14
-                  }}
+
                   style={{zIndex: '2', }}
                 />
             </Box>

@@ -533,6 +533,10 @@ export const getSettingByIndex = (i) => {
     return SETTINGS_ARRAY[i]
 }
 
+export const getSettingByName = (name) => {
+    return SETTINGS_ARRAY.find(x=> x.id === name)
+}
+
 
 export const resetAllSettingsToDefault = () => {
     return new Promise((resolve, reject) => {

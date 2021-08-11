@@ -54,6 +54,7 @@ const MDPage = props => {
 
   const [parentContent, setParentContent] = useState('LOADING') //!!!!!!!!!! STEP 3
   const [currentSettings, setCurrentSettings] = useState()
+  const [showLoad, setShowLoad] = useState(true)
 
   const [editorLayout, setEditorLayout] = useState({})
   const [renderLayout, setRenderLayout] = useState({})
@@ -75,10 +76,12 @@ const MDPage = props => {
 
   var tl = gsap.timeline({repeat: -1, repeatDelay: 0});
   const loadContent = () => {
-    gsap.to([REF_SPINNER_LOGO.current], { duration: .5, repeat: -1, yoyo: true, scale: 1.2, ease: 'Power1.easeInOut'})
-
-    tl.to([REF_SPINNER_LOGO_OUTLINE.current], { duration: .5,  scale: 8, ease: 'Power1.easeInOut'})
-    tl.to([REF_SPINNER_LOGO_OUTLINE.current], { duration: .5,  opacity: '0', ease: 'Power1.easeInOut'})
+    if(REF_SPINNER.current && REF_SPINNER_LOGO.current && REF_SPINNER_LOGO_OUTLINE.current){
+      gsap.to([REF_SPINNER_LOGO.current], { duration: .5, repeat: -1, yoyo: true, scale: 1.2, ease: 'Power1.easeInOut'})
+      
+      tl.to([REF_SPINNER_LOGO_OUTLINE.current], { duration: .5,  scale: 8, ease: 'Power1.easeInOut'})
+      tl.to([REF_SPINNER_LOGO_OUTLINE.current], { duration: .5,  opacity: '0', ease: 'Power1.easeInOut'})
+    }
 
     SD.getActive()
       .then(x=>setParentContent(x.content)) //!!!!!!!!!!!!!! STEP 2
@@ -86,9 +89,12 @@ const MDPage = props => {
   }
 
   const hideSpinner = () => {
-    gsap.to([REF_SPINNER.current], {opacity: '0', pointerEvents: 'none', duration: 1, delay: 1.5})
+    if(REF_SPINNER.current){
+      gsap.to([REF_SPINNER.current], {opacity: '0', pointerEvents: 'none', duration: 1, delay: 1.5})
+    }
     setTimeout(() => {
       tl.pause()
+      setShowLoad(false)
     }, 1500);
 
   }
@@ -238,17 +244,18 @@ const MDPage = props => {
 
         />
 
-        
+        {showLoad &&
           <Flex ref={REF_SPINNER} sx={{zIndex: '100000', top: '0', position: 'absolute', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh', bg: 'grey_2'}}>
             <Box ref={REF_SPINNER_LOGO_OUTLINE} sx={{position: 'absolute', width:'1rem', height: '1rem', borderRadius: '50%', 
             boxShadow: theme => `0 0 .2rem .2rem ${theme.colors.grey_3}`, 
             // border: '1px solid', 
             // borderColor: 'grey_6'
-            }} />
+          }} />
             <Box ref={REF_SPINNER_LOGO} sx={{width: '5rem', height: '5rem'}}>
               <MdeLogo  />
             </Box>
           </Flex>
+        }
 
 
         <Flex sx={{flexDirection: ['column', 'row', 'row']}}>

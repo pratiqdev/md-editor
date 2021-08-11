@@ -1,20 +1,21 @@
 let SETTINGS_ARRAY = [
-  {    id: "boolean-setting-1",
-    name: "A boolean setting", // name on menu
+  {    id: "enable-basic-autocompletion",
+    name: "Basic Autocompletion", // name on menu
     group: "editorSettings", // group for grouping or filtering or details
-    desc: "This setting controls things about stuff", // description to explain setting
+    desc: "Enable text autocompletion with strings derived from local document", // description to explain setting
     type: "boolean", // type for display and toggle
     state: true, // state for display and functionality
     default: true, // default to revert to defaults
   },
-  {    id: "boolean-setting-2",
-    name: "Another boolean setting",
-    group: "editorSettings",
-    desc: "This setting controls things about stuff",
-    type: "boolean",
-    state: false,
-    default: false,
-  },
+  {    id: "enable-live-autocompletion",
+  name: "Live Autocompletion", // name on menu
+  group: "editorSettings", // group for grouping or filtering or details
+  desc: "Enable text autocompletion with strings derived from local document", // description to explain setting
+  type: "boolean", // type for display and toggle
+  state: true, // state for display and functionality
+  default: true, // default to revert to defaults
+},
+
   {    id: "array-setting",
     name: "An array setting",
     group: "editorSettings",
@@ -186,7 +187,7 @@ edited: {{edit}}
     desc: "Add or remove custom snippets",
     type: "snippets",
     state: [
-        false,
+        true,
     { 
         title: 'Link',
         name: "link", 
@@ -260,5 +261,21 @@ edited: {{edit}}
         },
         ],
   },
+  {    id: "copy-with-empty-selection",
+  name: "Copy / Cut Line", 
+  group: "editorSettings", 
+  desc: "Modify the entire line at cursor location if no text is selected", 
+  type: "boolean", 
+  state: true, 
+  default: true, 
+},
+{    id: "use-soft-tabs",
+name: "Use Soft Tabs", 
+group: "editorSettings", 
+desc: "Use multiple spaces instead of the tab character. Number of spaces can be set with 'Tab Size'", 
+type: "boolean", 
+state: true, 
+default: true, 
+},
 ];
 export default SETTINGS_ARRAY;

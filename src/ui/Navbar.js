@@ -200,6 +200,8 @@ useEffect(()=>{
             bg: props.bg
               ? props.bg
               : "grey_4",
+            borderBottom: '1px solid',
+            borderColor: 'grey_0'
           }}
         />
         <Flex sx={{ alignItems: "center", zIndex: 1, justifyContent: 'space-between', flex:1 }}>
@@ -223,9 +225,9 @@ useEffect(()=>{
                 <Box sx={{my: '-.2rem',}}>
                   {activeFileData && activeFileData.date }
                 </Box>
-                <Box sx={{ p:0, m:0}}>
+                {/* <Box sx={{ p:0, m:0}}>
                   {activeFileData && activeFileData.edit }
-                </Box>
+                </Box> */}
               </Flex>
               }
 

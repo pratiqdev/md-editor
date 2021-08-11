@@ -85,7 +85,7 @@ export default {
         primary_b: "hsla(207, 100%, 60%, 1)",
         primary_c: "hsla(207, 100%, 40%, 1)",
         primary_d: "hsla(207, 100%, 30%, 1)",
-        primary_t: "hsla(207, 100%, 30%, 1)",
+        primary_t: "hsla(207, 100%, 30%, .3)",
 
 
         secondary_a: "hsla(20, 100%, 80%, 1)",

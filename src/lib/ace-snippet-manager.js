@@ -1,32 +1,51 @@
 import ace from 'ace-builds'
 
-export const registerSnippets = function(editor, session, mode, snippetText) {
-    console.log('snippetText:', snippetText)
-    editor.setOptions({
-        enableBasicAutocompletion: true,
-        enableSnippets: true,
+export const registerSnippets = function(active, editor, session, mode, snippetText) {
+   return new Promise((resolve, reject) => {
+       
+       
+       // console.log('snippetText:', snippetText)
+       
+       editor.setOptions({
+           enableSnippets: true,
+        })
+        
+        var snippetManager = ace.require('ace/snippets').snippetManager
+        
+        var id = session.$mode.$id || ''
+        var m = snippetManager.files[id]
+        
+        m.scope = mode
+        m.snippetText = snippetText
+        m.snippet = snippetManager.parseSnippetFile(snippetText, m.scope)
+        if(active){
+            console.log(`SNIPPET MGR | active`)
+            snippetManager.snippetMap = {}
+
+            
+            snippetManager.register(m.snippet, m.scope)
+            resolve()
+        }else{
+            console.log(`SNIPPET MGR | disable snippets!`)
+            snippetManager.snippetMap = {}
+        }
+
+        
+
+
+
     })
-
-    var snippetManager = ace.require('ace/snippets').snippetManager
-
-    var id = session.$mode.$id || ''
-    var m = snippetManager.files[id]
-
-    m.scope = mode
-    m.snippetText = snippetText
-    m.snippet = snippetManager.parseSnippetFile(snippetText, m.scope)
-
-    snippetManager.register(m.snippet, m.scope)
 }
 
 export const createSnippets = snippets =>
     (Array.isArray(snippets) ? snippets : [snippets])
-        .map(({ name, code }) => {
-            if(code){
+    .filter(s=> s.active)
+        .map((s) => {
+            if(s.code){
 
                return  [
-                    'snippet ' + name,
-                    code
+                    'snippet ' + s.name,
+                    s.code
                     .split('\n')
                     .map(c => '\t' + c)
                     .join('\n'),
