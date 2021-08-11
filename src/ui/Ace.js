@@ -188,6 +188,7 @@ const Ace = props => {
                                     enableLiveAutocompletion: x.find(x=>x.id === 'enable-live-autocompletion').state,
                                     enableSnippets: x.find(x=>x.id === 'custom-snippets').state[0],
                                     copyWithEmptySelection:x.find(x=>x.id === 'copy-with-empty-selection').state,
+                                    showPrintMargin:x.find(x=>x.id === 'show-print-margin').state,
                                 })
                             }, 250);
                         })
