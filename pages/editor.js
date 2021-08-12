@@ -3,19 +3,13 @@ import {useState, useRef, useEffect} from 'react'
 
 //* NEXT __________________________________________________________________________________________
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 //* THEME _________________________________________________________________________________________
-import { Button, Box, Flex, Text, Spinner } from "theme-ui";
-import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
+import { Button, Box, Flex, Text } from "theme-ui";
+import { useBreakpointIndex } from "@theme-ui/match-media"; 
 
 //* EXTERNAL ______________________________________________________________________________________
-import Tippy from '@tippyjs/react'
-import { get, set } from 'idb-keyval';
-import marked from 'marked'
 import gsap from 'gsap'
-import { debounce } from 'lodash'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";

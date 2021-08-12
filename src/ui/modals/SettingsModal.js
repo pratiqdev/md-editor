@@ -159,7 +159,7 @@ const SettingsModal = props => {
             left:'0',
             height: '100vh',
             width: '100vw',
-            bg: 'rgba(100,100,100,.8)',
+            bg: 'modal_t',
             opacity: '0',
             zIndex: '1000',
 
@@ -174,13 +174,14 @@ const SettingsModal = props => {
             onClick={e=>e.stopPropagation()}
             sx={{
                 opacity: '0',
-                p: [3,4,6],
-                py: [4,4,6],
+                p: 4,
+                // py: [4,4,6],
                 transform: 'translateY(3rem)',
                 width: ['98vw', 'auto', 'auto'],
                 minWidth: ['98vw', '40rem', '40rem'],
                 maxWidth: '98vw',
                 height: '40rem',
+                maxHeight: '90vh',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'stretch',
@@ -206,7 +207,7 @@ const SettingsModal = props => {
                         Settings                    </Box>
 
                     {/* SUBTITLE ------------------------------------------*/}
-                    <Box sx={{color: 'grey_6', my:6}}>
+                    <Box sx={{color: 'grey_12', my:3, fontSize: 3}}>
                         Alter settings for the editor, renderer and app
                     </Box>
 
@@ -215,14 +216,15 @@ const SettingsModal = props => {
                         flex: 1,
                         // maxHeight: '70vh',
                         overflowY: 'auto',
-                        border: '1px solid',
+                        // borderTop: '1px solid',
+                        // borderBottom: '1px solid',
                         borderColor: 'grey_4',
                         borderRadius: 0,
-                        bg: 'grey_2',
+                        // bg: 'grey_2',
                         width: '100%',
                         mb: 6,
                         color: 'grey_4',
-                        p:2,
+                        // p:2,
                         textAlign: 'center'
                     }}>
 

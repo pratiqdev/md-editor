@@ -210,7 +210,7 @@ useEffect(()=>{
 
 
           <Link href='/'>
-            <Flex sx={{  height: '3rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
+            <Flex sx={{  height: '2rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
               <MdeLogo /> 
             </Flex>
           </Link>

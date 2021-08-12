@@ -32,7 +32,7 @@ import "ace-builds/src-noconflict/ext-prompt"
 import "ace-builds/src-noconflict/ext-searchbox"
 
 
-import 'ace-builds/webpack-resolver'
+// import 'ace-builds/webpack-resolver'
 
 // import ace from 'ace-builds'
 // import { Range, EditSession } from 'ace-builds'

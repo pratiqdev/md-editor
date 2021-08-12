@@ -58,7 +58,7 @@ const NavMenu = (props) => {
   return (
     <>
       <Button
-        sx={{ zIndex: 1 }}
+        sx={{ zIndex: 1, mr:3 }}
         variant="icon.plain"
         onClick={(e) => {
           toggleMenu();
@@ -72,12 +72,12 @@ const NavMenu = (props) => {
           top: "0",
           right: "0",
           // transform: !menuState ? "translateX(100vw)" : "translateX(0vw)",
-          opacity: !menuState ? "0" : ".5",
+          opacity: !menuState ? "0" : "1",
           pointerEvents: !menuState ? "none" : "auto",
           minHeight: "100%",
           height: "100%",
           width: "100%",
-          bg: "grey_0",
+          bg: "modal_t",
           transition: 1,
           overscrollBehavior: "contain",
         }}

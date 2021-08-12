@@ -20,6 +20,8 @@ export default {
     primary_c: "hsla(207, 100%, 70%, 1)",
     primary_d: "hsla(207, 100%, 80%, 1)",
     primary_t: "hsla(207, 100%, 50%, .3)",
+    primary_light: "hsla(207, 100%, 80%, 1)",
+
 
     secondary_a: "hsla(20, 90%, 50%, 1)",
     secondary_b: 'hsla(20, 90%, 60%, 1)',
@@ -76,6 +78,8 @@ export default {
     grey_14: '#111',
     grey_15: '#000',
 
+    modal_t: '#fff8',
+
     modes: {
       dark: {
         text: "#fff",
@@ -86,6 +90,7 @@ export default {
         primary_c: "hsla(207, 100%, 40%, 1)",
         primary_d: "hsla(207, 100%, 30%, 1)",
         primary_t: "hsla(207, 100%, 30%, .3)",
+        primary_light: "hsla(207, 30%, 40%, 1)",
 
 
         secondary_a: "hsla(20, 100%, 80%, 1)",
@@ -139,6 +144,9 @@ export default {
         grey_2: '#222',
         grey_1: '#111',
         grey_0: '#000',
+
+        modal_t: '#222a',
+
       },
     },
 }

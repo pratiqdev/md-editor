@@ -66,29 +66,43 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
     
     
     return(
-        <Flex sx={{flexDirection: 'column', width: 'auto', mx:2, mt: 2, py:2, bg: 'grey_2', }}>
+        <Flex sx={{
+            flexDirection: 'column', 
+            width: 'auto', 
+            mx:2, 
+            py:2, 
+            border: '1px solid transparent', 
+            borderLeft: '3px solid transparent', 
+            borderLeftColor: showDetails ? 'primary_b' : 'transparent',
+            borderBottomColor: 'grey_4',
+
+            '&:hover':{bg:'grey_0'} }}>
                 <Flex sx={{width: '100%', alignItems: 'center', fontSize: 2, }}>
-                <Button
-                variant='icon.primary' 
-                onClick={()=>setShowDetails(!showDetails)}
-                sx={{mr:2}}>
-                    {showDetails ? <CaretDown size='22' /> : <CaretRight size='22'/>}
-                </Button>
-                {`${oi}: `}
-                    <Input 
-                        placeholder={`Condition ${oi}`} 
-                        sx={{
-                            height: '1.6rem', 
-                            width: '100%', 
-                            fontSize: 2, 
-                            mx: 2, 
-                            mb:0,
-                            border: '0px solid',
-                            textOverflow: 'ellipsis'
-                        }} 
-                        value={newTitle} 
-                        onChange={handleTitle}
-                    />
+                      <Flex sx={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+
+                        <Button
+                        variant='icon.primary' 
+                        onClick={()=>setShowDetails(!showDetails)}
+                        sx={{mr:2}}>
+                            {showDetails ? <CaretDown size='22' /> : <CaretRight size='22'/>}
+                        </Button>
+                        {`${oi}: `}
+                            <Input 
+                                placeholder={`Condition ${oi}`} 
+                                sx={{
+                                    height: '1.6rem', 
+                                    width: '100%', 
+                                    fontSize: 2, 
+                                    mx: 2, 
+                                    mb:0,
+                                    border: '0px solid',
+                                    textOverflow: 'ellipsis',
+                                    pointerEvents: showDetails ? 'auto' : 'none',
+                                }} 
+                                value={newTitle} 
+                                onChange={handleTitle}
+                            />
+                            </Flex>
 
                     <Button variant='icon.primary' onClick={() => handleRemove(oi)} ><Close size='20' /></Button>
                     <Box sx={{minWidth: '3rem'}}>
@@ -98,15 +112,19 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
 
 
                 {showDetails && 
-                    <Box sx={{width: 'auto', mx:2, }}>
 
 
+                    <Flex sx={{
+                        flexDirection: 'column',
+                        p:2,
+                        pb:2
+                    }}>
                         <Textarea 
                             placeholder='replace' 
                             rows='2'
                             sx={{ 
                                 fontFamily: 'body', 
-                                fontSize: 0, 
+                                fontSize: 1, 
                                 color: 'grey_10',
                                 borderRadius: 2, 
                                 width: '100%', 
@@ -117,23 +135,17 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
                             value={newDesc} 
                             onChange={handleDesc}
                         />
-                        <Box sx={{
-                            bg: 'grey_0',
-                            border: '1px solid',
-                            borderColor: 'grey_8',
-                            borderRadius: 2,
-                            overflow: 'hidden',
-                            mb:2,
-                        }}>
 
                             <Input 
                                 placeholder='find'  
                                 sx={{
                                     height: '1.6rem', 
-                                    width: '100%', 
+                                    width: 'auto', 
                                     fontSize: 1, 
-                                    borderColor: 'transparent', 
                                     borderRadius: 0,
+                                    borderTopLeftRadius: 2,
+                                    borderTopRightRadius: 2,
+                                    mb: '-1px',
 
 
                                 }} 
@@ -146,19 +158,17 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
                                 sx={{ 
                                     fontFamily: 'body', 
                                     fontSize: 1, 
-                                    borderRadius: 1, 
-                                    width: '100%', 
+                                    width: 'auto', 
                                     height: 'auto',
-                                    borderColor: 'transparent',  
-                                    borderTopColor: 'grey_8',
                                     borderRadius: 0,
+                                    borderBottomLeftRadius: 2,
+                                    borderBottomRightRadius: 2,
                                 }} 
                                     value={newCode} 
                                     onChange={handleCode}
                                 />
-                        </Box>
+                        </Flex>
 
-                    </Box>
                 }
                 
 
@@ -250,16 +260,17 @@ const Snippets = ({s, si, handle}) => {
         <Flex sx={{
             width: '100%', 
             flexDirection: 'column', 
-            border: '1px solid', 
             color: 'grey_15', 
             bg: 'grey_0',
-            mb:2, 
             p:1, 
             py: 2,
             
-            borderColor: 'transparent',
+            border: '1px solid transparent', 
+            borderLeft: '3px solid transparent', 
+            borderLeftColor: showDetails ? 'primary_b' : 'transparent',
+            borderBottomColor: 'grey_2',
             '&:hover':{
-                borderColor: 'grey_15'
+                bg: 'grey_1'
             }
             }}
             >
@@ -300,10 +311,10 @@ const Snippets = ({s, si, handle}) => {
             {showDetails && 
             <>
             <Box sx={{color: 'grey_10', p:2, mx:2, cursor: 'default'}}>
-                <Flex sx={{fontSize: 1}}>
+                <Flex sx={{fontSize: 1, fontStyle: 'italic',}}>
                     {s.group}
                 </Flex>
-                <Flex sx={{fontSize: 2, textAlign: 'left'}}>
+                <Flex sx={{fontSize: 1, textAlign: 'left'}}>
                     {s.desc}
                 </Flex>
             </Box>
@@ -324,7 +335,7 @@ const Snippets = ({s, si, handle}) => {
                         
                 })
             }
-            <Button variant='outline.primary' sx={{mx:2, mt:4, mb:2}} onClick={handleNewCondition}>Add a find/replace condition</Button>
+            <Button variant='outline.primary' sx={{mx:2, mt:4, mb:2}} onClick={handleNewCondition}>Add a Snippet</Button>
             </>
             }
 

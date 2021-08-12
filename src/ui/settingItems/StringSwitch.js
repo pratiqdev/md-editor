@@ -34,14 +34,17 @@ const StringSwitch = ({s, si, handle}) => {
         <Flex sx={{
             width: '100%', 
             flexDirection: 'column', 
-            border: '1px solid', 
             color: 'grey_15', 
             bg: 'grey_0',
             mb:2, 
             p:1, 
             py: 2,
             cursor: 'pointer',
-            borderColor: 'transparent',
+
+            border: '1px solid transparent', 
+            borderLeft: '3px solid transparent', 
+            borderLeftColor: showDetails ? 'primary_b' : 'transparent',
+            borderBottomColor: 'grey_2',
             '&:hover':{
                 borderColor: 'grey_15'
             }

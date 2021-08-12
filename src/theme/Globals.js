@@ -8,7 +8,7 @@ const Globals = (props) => (
         "*": {
           boxSizing: 'border-box',
           scrollPadding: ['10rem', '4rem', '4rem'],
-          // transition: 'background .3s, color .3s'
+          transition: 'background .3s, color .3s'
         },
         // text highlight color
         '::selection': {
