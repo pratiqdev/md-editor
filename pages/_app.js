@@ -28,7 +28,7 @@ import { Info } from '@emotion-icons/evaicons-solid/Info'
 import { version } from '../package.json';
 import toast, { Toaster, useToasterStore } from 'react-hot-toast';
 
-import * as SD from '../src/lib/save-version-4'
+import * as SD from '../src/lib/saveData'
 
 
 toast.remove()

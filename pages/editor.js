@@ -13,7 +13,7 @@ import gsap from 'gsap'
 
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-import * as SD from '../src/lib/save-version-4.js'
+import * as SD from '../src/lib/saveData.js'
 import * as ALERT from '../src/lib/alert'
 import MdeLogo from '../src/ui/MdeLogo'
 

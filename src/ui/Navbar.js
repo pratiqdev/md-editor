@@ -18,11 +18,12 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 //* local deps
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
-import * as SD from '../lib/save-version-4'
+import * as SD from '../lib/saveData'
 import useLongPress from '../lib/longPress'
 
 import LoadModal from './modals/LoadModal'
 import SettingsModal from './modals/SettingsModal'
+import SaveModal from './modals/SaveModal'
 import Tipper from './Tipper'
 
 
@@ -31,11 +32,7 @@ import { showInstallPrompt, libInstallStatus, triggerInstallFlow, deferredPrompt
 import MdeLogo from './MdeLogo'
 
 //* external deps
-import { get, set } from 'idb-keyval';
-
-import { MenuOutline } from "@emotion-icons/evaicons-outline/MenuOutline";
-import { Search } from "@emotion-icons/boxicons-regular/Search";
-import { CloseOutline as Close } from "@emotion-icons/evaicons-outline/CloseOutline";
+import { debounce } from 'lodash'
 
 import {CaretLeft} from '@emotion-icons/boxicons-regular/CaretLeft'
 import {CaretRight} from '@emotion-icons/boxicons-regular/CaretRight'
@@ -55,7 +52,9 @@ const Navbar = forwardRef((props, ref) => {
   const breakIndex = useBreakpointIndex();
 
 
-
+  const REF_LOAD_MODAL = useRef()
+  const REF_SAVE_MODAL = useRef()
+  const REF_SETTINGS_MODAL = useRef()
 
 
 
@@ -68,8 +67,10 @@ const Navbar = forwardRef((props, ref) => {
 
   const [showLoad, setShowLoad] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+  const [showSave, setShowSave] = useState(false)
+  const [currentIdForSave, setCurrentIdForSave] = useState('')
 
-  const [activeFileData, setActiveFileData] = useState({name: '-Title-', date: '-date-'})
+  const [activeFileData, setActiveFileData] = useState()
 
 
 
@@ -78,6 +79,11 @@ const Navbar = forwardRef((props, ref) => {
       setShowLoad(true)
       // props.causeParentTrigger()
   }
+
+  const showSaveModal = () => {
+    setShowSave(true)
+    // props.causeParentTrigger()
+}
 
   const hideLoadModal = () => {
     setShowLoad(false)
@@ -154,10 +160,53 @@ const splitWindow = () => {
 
 const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
 
+
+
+// const handleSave = debounce(() => {
+//   setShowSave(true)
+// },1000,{ leading: true, trailing: false, maxWait: 2000});
+
+const handleSaveWithId = debounce((givenId) => {
+  setCurrentIdForSave(1)
+  // setCurrentIdForSave(givenId ? givenId : 'current')
+  setShowSave(true)
+},1000,{ leading: true, trailing: false, maxWait: 2000});
+
+
+
+const handleCloseAll = debounce(() => {
+  REF_SAVE_MODAL?.current?.close()
+  REF_SETTINGS_MODAL?.current?.close()
+  REF_LOAD_MODAL?.current?.close()
+},1000,{ leading: true, trailing: false, maxWait: 2000});
+
+
+
+
+const handleShortcuts = e => {
+    if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+      e.preventDefault();
+      handleSaveWithId()
+    }
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCloseAll()
+    }
+}
+
+
+
 useEffect(()=>{
+
   SD.getActive()
     .then(x=>setActiveFileData(x))
-})
+    .catch(err=>console.log(err))
+
+
+  window.addEventListener("keydown", e => handleShortcuts(e) ,true);
+  return () => window.removeEventListener("keydown", e => handleShortcuts(e) ,true);
+}, [])
 
 
 
@@ -262,6 +311,7 @@ useEffect(()=>{
             appInstallStatus={appInstallStatus} 
             showSettingsModal={showSettingsModal} 
             showLoad={showLoadModal}
+            showSave={showSaveModal}
             editor={props.editor}
             
             />
@@ -286,7 +336,9 @@ useEffect(()=>{
         
         {showLoad && 
             <LoadModal 
+              ref={REF_LOAD_MODAL}
               causeParentTrigger={props.causeParentTrigger}
+              causeSave={handleSaveWithId}
               handleDeny={hideLoadModal} 
               handleAccept={()=>LoadContent()}/>
           }
@@ -294,9 +346,19 @@ useEffect(()=>{
 
           {showSettings && 
             <SettingsModal 
+            ref={REF_SETTINGS_MODAL}
             causeParentTrigger={props.causeParentTrigger}
             handleDeny={()=>setShowSettings(false)} 
             handleAccept={()=>setShowSettings(false)}/>}
+
+
+          {showSave && 
+            <SaveModal 
+            ref={REF_SAVE_MODAL}
+            causeParentTrigger={props.causeParentTrigger}
+            currentIdForSave={currentIdForSave}
+            handleDeny={()=>setShowSave(false)} 
+            handleAccept={()=>setShowSave(false)}/>}
       
     </>
   );
