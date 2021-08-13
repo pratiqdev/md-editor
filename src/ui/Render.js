@@ -2,11 +2,11 @@
 import React, { useRef, useEffect, useState } from 'react'
 
 
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import markdown from 'highlight.js/lib/languages/markdown';
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('markdown', markdown);
+import hljs from 'highlight.js';
+// import javascript from 'highlight.js/lib/languages/javascript';
+// import markdown from 'highlight.js/lib/languages/markdown';
+// hljs.registerLanguage('javascript', javascript);
+// hljs.registerLanguage('markdown', markdown);
 import 'highlight.js/styles/github.css';
 
 
@@ -49,7 +49,9 @@ const Render = (props) => {
 
     
     useEffect(()=>{
-        highlightResult()
+        // highlightResult()
+        // hljs.highlightAll()
+        hljs.initHighlightingOnLoad()
         // setPassedContent(props.parentContent || 'props.editorContent returned empty')
     }, [ props.useTrigger])
 
