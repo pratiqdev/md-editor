@@ -19,12 +19,18 @@ const OptionSwitch = ({ s, si, handle }) => {
       sx={{
         width: "100%",
         flexDirection: "column",
-        border: "1px solid #444",
         color: "grey_15",
         bg: "grey_0",
-        mb: 2,
         p: 1,
         py: 2,
+
+        border: '1px solid transparent', 
+        borderLeft: '3px solid transparent', 
+        borderLeftColor: showDetails ? 'primary_b' : 'transparent',
+        borderBottomColor: 'grey_2',
+        '&:hover':{
+            bg: 'grey_2'
+        }
       }}
     >
       <Flex sx={{ alignItems: "center" }}>
@@ -40,6 +46,7 @@ const OptionSwitch = ({ s, si, handle }) => {
           </Button>
           <Box
             sx={{
+              cursor: 'default',
               borderBottom: "1px solid",
               borderColor: showDetails ? "grey_8" : "transparent",
             }}
@@ -48,13 +55,18 @@ const OptionSwitch = ({ s, si, handle }) => {
           </Box>
         </Flex>
         <Button
-          variant="outline.primary"
+          variant="outline.secondary"
           sx={{
             whiteSpace: "nowrap",
             fontWeight: "body",
             overflow: "hidden",
-            width: '14rem',
+            width: '13.6rem',
+            color: 'grey_15',
+            '&:hover':{
+              color: 'grey_0',
+            },
             mr: 2,
+            fontSize: [1,1,1],
           }}
           onClick={() => setShowOptions(!showOptions)}
         >
@@ -65,24 +77,34 @@ const OptionSwitch = ({ s, si, handle }) => {
       {showDetails && (
         <Box sx={{ color: "grey_10", p: 2 }}>
           <Flex sx={{ fontSize: 1 }}>{s.group}</Flex>
-          <Flex sx={{ fontSize: 2 }}>{s.desc}</Flex>
+          <Flex sx={{ fontSize: 2, textAlign: 'left' }}>{s.desc}</Flex>
         </Box>
       )}
       {showOptions && (
-        <Box sx={{ m: 2, mr: 3 }}>
+        <Box sx={{ m: 2, mr: 3, }}>
           {s.options.map((x, i) => (
+            <Box sx={{borderTop:'1px solid', borderColor: 'grey_4'}}>
             <Button
               onClick={() => closeAndHandle(si, i)}
-              variant="plain"
+              variant="secondary"
               sx={{
                 bg: s.state === i ? "grey_4" : "grey_1",
                 width: "100%",
-                mb: 1,
+                m:0,
                 textAlign: "left",
+                fontWeight: 'body',
+                justifyContent: 'flex-start',
+                color: 'grey_15',
+                '&:hover':{
+                  color: 'grey_0',
+                },
+                borderRadius: 0,
+                fontSize: [1,1,1],
               }}
             >
               {x.name}
             </Button>
+            </Box>
           ))}
         </Box>
       )}

@@ -363,6 +363,27 @@ export const updateSummaryByIndex = (val, i) => {
 }
 
 
+export const addNewConditionToReplacers = () => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'find-and-replace-values').state
+    .push({
+            active: true,
+            name: 'New condition',
+            description: 'Optional Description',
+            find: '`Find` keyword or RegExp',
+            replace: '`Replace` keyword',
+    })
+    SAVE_TO_DISK()
+}
+
+export const removeConditionFromReplacersById = (givenId) => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'find-and-replace-values').state
+    .splice(givenId, 1);
+    SAVE_TO_DISK()
+}
+
+
 
 
 
@@ -404,23 +425,28 @@ const REPLACE_CONTENT = x => {
     return new Promise((resolve, reject) => {
         let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace-values')?.state
 
-        replacerObjects.forEach(r => {
-            let useReplacer
-                if(r.replace === '{{date}}'){ useReplacer = x.date }
-                    else if(r.replace === '{{edit}}'){ useReplacer = x.edit }
-                    else if(r.replace === '{{filename}}'){ useReplacer = x.name }
-                    else if(r.replace === '{{word-count}}'){ useReplacer = x.content.trim().split(/\s+/).length }
-                    else if(r.replace === '{{line-count}}'){ useReplacer = x.content.split(/\r|\n|\r\n/).length }
-                    else if(r.replace === '{{character-count}}'){ useReplacer = x.content.replace(/ /g, "").replace(/\r\n/g, "").length }
-                    else{ useReplacer = r.replace }
+        if(replacerObjects[0]){ // check if the globalActive state is true
 
-            if(r.find instanceof RegExp){
-                x.content = x.content.replace(r.find, useReplacer)
-            }else{
-                let reg = new RegExp(`${r.find}`,'mg')
-                x.content = x.content.replace(reg, useReplacer)
-            }
-        })
+            replacerObjects
+            .filter(x=> x.active) // only use replacers that are active
+            .forEach(r => {
+                let useReplacer
+                    if(r.replace === '{{date}}'){ useReplacer = x.date }
+                        else if(r.replace === '{{edit}}'){ useReplacer = x.edit }
+                        else if(r.replace === '{{filename}}'){ useReplacer = x.name }
+                        else if(r.replace === '{{word-count}}'){ useReplacer = x.content.trim().split(/\s+/).length }
+                        else if(r.replace === '{{line-count}}'){ useReplacer = x.content.split(/\r|\n|\r\n/).length }
+                        else if(r.replace === '{{character-count}}'){ useReplacer = x.content.replace(/ /g, "").replace(/\r\n/g, "").length }
+                        else{ useReplacer = r.replace }
+
+                if(r.find instanceof RegExp){
+                    x.content = x.content.replace(r.find, useReplacer)
+                }else{
+                    let reg = new RegExp(`${r.find}`,'mg')
+                    x.content = x.content.replace(reg, useReplacer)
+                }
+            })
+        }
 
         resolve(x)
     })
@@ -446,7 +472,7 @@ export const saveActiveFile = () => {
                 else {
                     pom.click();
                 }
-                ALERT.fileSaveAlert()
+                ALERT.fileSaved()
             })
         })
 }
@@ -469,7 +495,7 @@ export const saveFileById = (givenId) => {
         else {
             pom.click();
         }
-        ALERT.fileSaveAlert()
+        ALERT.fileSaved()
     
 }
 
@@ -505,6 +531,10 @@ export const getAllSettings = () => {
 
 export const getSettingByIndex = (i) => {
     return SETTINGS_ARRAY[i]
+}
+
+export const getSettingByName = (name) => {
+    return SETTINGS_ARRAY.find(x=> x.id === name)
 }
 
 
@@ -545,21 +575,21 @@ export const toggleSetting= (index, newState) => {
                 if(typeof newState === 'null' || typeof newState === 'undefined'){
                     // if there is room to increment++, or set to 0
                     s.state < s.options.length ? s.state++ : s.state = 0
-                    console.log(`SETTING | set '${s.name}' to ${s.state}`)
+                    console.log(`SETTING 1 | set '${s.name}' to ${s.state}`)
                     return true
                 }else{
                     if(typeof newState === 'number'){
                         // check if within range
                         if(newState >= 0 && newState <= s.options.length){
                             s.state = newState
-                            console.log(`SETTING | set '${s.name}' to ${s.state}`)
+                            console.log(`SETTING 2 | set '${s.name}' to ${s.state}`)
                             return true
                         }else{
-                            console.log(`SETTING | '${s.name}' : newState must be between 0 and ${s.options.length}`)
+                            console.log(`SETTING 3 | '${s.name}' : newState must be between 0 and ${s.options.length}`)
                             return false
                         }
                     }else{
-                        console.log(`SETTING | '${s.name}' : newState must be of type number`)
+                        console.log(`SETTING 4 | '${s.name}' : newState must be of type number`)
                         return false
                     }
                 }
@@ -575,19 +605,19 @@ export const toggleSetting= (index, newState) => {
                     // check if max exists && not greater than max
                     if(s.max && newState > s.max){
                         outOfRange++
-                        console.log(`SETTING | '${s.name}' : must be <= ${s.max}`)
+                        console.log(`SETTING 5 | '${s.name}' : must be <= ${s.max}`)
                     }
                     // check if min exists && not less than min
                     if(s.min && newState < s.min){
                         outOfRange++
-                        console.log(`SETTING | '${s.name}' : must be >= ${s.min}`)
+                        console.log(`SETTING 6 | '${s.name}' : must be >= ${s.min}`)
                     }
                     if(outOfRange === 0){
                         s.state = newState
                     }
                     
                 }else{
-                    console.log(`SETTING | '${s.name}' : newState must be number. got ${newState}`)
+                    console.log(`SETTING 7 | '${s.name}' : newState must be number. got ${newState}`)
                 }
             }; break;
 
@@ -597,10 +627,18 @@ export const toggleSetting= (index, newState) => {
             {
                 if(typeof newState === 'string'){
                     s.state = newState
-                    console.log(`SETTING | set '${s.name}' to ${s.state}`)
+                    console.log(`SETTING 8 | set '${s.name}' to ${s.state}`)
                 }else{
-                    console.log(`SETTING | '${s.name}' : newState must be of type string`)
+                    console.log(`SETTING 9 | '${s.name}' : newState must be of type string`)
                 }
+            }; break;
+        //* handle string type settings
+        case 'bool-string':
+        case 'find-and-replace':
+        case 'snippets':
+            {
+                s.state = newState
+                console.log(`SETTING 11 | set '${s.name}' to ${s.state}`)
             }; break;
 
         //* handle boolean type settings
@@ -613,10 +651,51 @@ export const toggleSetting= (index, newState) => {
                     case false: { s.state = false };break;
                     default: {s.state = !s.state}
                 }
-                console.log(`SETTING | set '${s.name}' to ${s.state}`)
+                console.log(`SETTING  0 | set '${s.name}' to ${s.state}`)
 
             }
     }
     // SETTINGS_ARRAY[index].state = val
+    SAVE_TO_DISK()
+}
+
+
+//! //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//= SNIPPETS
+//! //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const getAllSnippets = () => {
+    return new Promise((resolve, reject) => {
+        console.log('SD | getAllSnippets() ')
+        WAIT_FOR_INIT()
+        .then(()=>{
+            let res = SETTINGS_ARRAY.find(x=>x.id==='custom-snippets').state
+            resolve(res)
+        })
+        .catch(err=>{
+            console.log(err)
+            reject(err)
+        })
+    })
+}
+
+
+export const addNewSnippet = () => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'custom-snippets').state
+    .push({
+            active: true,
+            title: 'New snippet',
+            description: 'Optional Description',
+            name: '`name` of snippet',
+            code: '`code` of snippet',
+    })
+    SAVE_TO_DISK()
+}
+
+export const removeSnippetById = (givenId) => {
+    SETTINGS_ARRAY
+    .find(x=> x.id === 'custom-snippets').state
+    .splice(givenId, 1);
     SAVE_TO_DISK()
 }

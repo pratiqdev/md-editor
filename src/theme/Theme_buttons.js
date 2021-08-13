@@ -1,4 +1,3 @@
-import { PlayMini } from "@emotion-icons/remix-fill";
 
 //================================================= STANDARDS
 const buttonStandard = {
@@ -77,19 +76,19 @@ const plain = {
   hoverShadow: '',
   // activeShadow: (theme) => `0 2px 2px 2px ${theme.colors.primary_t}`,
   activeShadow: '',
-  shadowInset: (theme) => `inset 0 0 0 2px ${theme.colors.grey_7}`,
+  shadowInset: (theme) => `inset 0 0 0 1px ${theme.colors.grey_7}`,
 
 };
 const primary = {
   color: "text",
   bg: "primary_b",
-  shadowInset: (theme) => `inset 0 0 0 2px ${theme.colors.primary_b}`,
+  shadowInset: (theme) => `inset 0 0 0 1px ${theme.colors.primary_b}`,
   hover: "primary_c",
-  hoverInset: (theme) => `inset 0 0 0 2px ${theme.colors.primary_c}`,
+  hoverInset: (theme) => `inset 0 0 0 1px ${theme.colors.primary_c}`,
   active: "primary_a",
-  activeInset: (theme) => `inset 0 0 0 2px ${theme.colors.primary_a}`,
+  activeInset: (theme) => `inset 0 0 0 1px ${theme.colors.primary_a}`,
   disabled: "grey_4",
-  disabledInset: (theme) => `inset 0 0 0 2px ${theme.colors.grey_4}`,
+  disabledInset: (theme) => `inset 0 0 0 1px ${theme.colors.grey_4}`,
 
   // hoverShadow: (theme) => `0 3px 3px 3px ${theme.colors.primary_t}`,
   // activeShadow: (theme) => `0 2px 2px 2px ${theme.colors.primary_t}`,
@@ -97,12 +96,13 @@ const primary = {
 const secondary = {
   color: "text",
   bg: "grey_7",
-  shadowInset: (theme) => `inset 0 0 0 2px ${theme.colors.grey_7}`,
+  shadowInset: (theme) => `inset 0 0 0 1px ${theme.colors.grey_7}`,
   hover: "grey_8",
-  hoverInset: (theme) => `inset 0 0 0 2px ${theme.colors.grey_8}`,
+  hoverInset: (theme) => `inset 0 0 0 1px ${theme.colors.grey_8}`,
   active: "grey_9",
-  activeInset: (theme) => `inset 0 0 0 2px ${theme.colors.grey_9}`,
+  activeInset: (theme) => `inset 0 0 0 1px ${theme.colors.grey_9}`,
 };
+
 const accent = {
   color: "grey_0",
   bg: (theme) =>
@@ -116,7 +116,7 @@ const accent = {
 const disabled = {
   color: "grey_0",
   bg: "grey_2",
-  shadowInset: (theme) => `inset 0 0 0 2px ${theme.colors.grey_2}`,
+  shadowInset: (theme) => `inset 0 0 0 1px ${theme.colors.grey_2}`,
   cursor: 'not-allowed',
   textDec: 'line-through'
 };
@@ -211,7 +211,7 @@ export default {
       ...outlineStandard,
       color: 'text',
       borderColor: 'text',
-      fontWeight: "bold",
+      // fontWeight: "bold",
       boxShadow: plain.shadowInset,
 
 
@@ -232,7 +232,7 @@ export default {
       ...outlineStandard,
       color: "primary_b",
       borderColor: "primary_b",
-      fontWeight: "bold",
+      // fontWeight: "bold",
       boxShadow: primary.shadowInset,
 
       ":hover": {
@@ -267,7 +267,7 @@ export default {
       ...outlineStandard,
       position: "relative",
       transition: 1,
-      fontWeight: "bold",
+      // fontWeight: "bold",
       // border: "2px solid transparent",
       // color: accent.color,
       // borderColor: accent.bg,

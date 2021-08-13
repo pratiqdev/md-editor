@@ -12,7 +12,7 @@ export default {
   space: [0, 2, 4, 8, 16, 24, 32, 40, 48, 64, 128, 256, 512],
   radii: [0, 2, 4, 6, 12, 24, 48],
   zIndeces: [0, 1, 2, 3, 4, 5],
-  breakpoints: ["40em", "56em", "64em"],
+  breakpoints: ["50em", "64em", "76em"],
   transitions: useAnims ? ["0", ".2s", ".5s", "1s"] : '0',
   shadows: {
     card: "0 4px 4px 2px rgba(0, 0, 0, .07)",

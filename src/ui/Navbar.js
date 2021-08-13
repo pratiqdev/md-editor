@@ -17,13 +17,13 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 
 //* local deps
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false }) //<- set SSr to false
-const Logo = dynamic(() => import("./Logo"), { ssr: false }) //<- set SSr to false
 import NavMenu from './NavMenu'
-import * as SD from '../lib/save-version-4'
+import * as SD from '../lib/saveData'
 import useLongPress from '../lib/longPress'
 
 import LoadModal from './modals/LoadModal'
 import SettingsModal from './modals/SettingsModal'
+import SaveModal from './modals/SaveModal'
 import Tipper from './Tipper'
 
 
@@ -32,11 +32,7 @@ import { showInstallPrompt, libInstallStatus, triggerInstallFlow, deferredPrompt
 import MdeLogo from './MdeLogo'
 
 //* external deps
-import { get, set } from 'idb-keyval';
-
-import { MenuOutline } from "@emotion-icons/evaicons-outline/MenuOutline";
-import { Search } from "@emotion-icons/boxicons-regular/Search";
-import { CloseOutline as Close } from "@emotion-icons/evaicons-outline/CloseOutline";
+import { debounce } from 'lodash'
 
 import {CaretLeft} from '@emotion-icons/boxicons-regular/CaretLeft'
 import {CaretRight} from '@emotion-icons/boxicons-regular/CaretRight'
@@ -56,22 +52,25 @@ const Navbar = forwardRef((props, ref) => {
   const breakIndex = useBreakpointIndex();
 
 
-
+  const REF_LOAD_MODAL = useRef()
+  const REF_SAVE_MODAL = useRef()
+  const REF_SETTINGS_MODAL = useRef()
 
 
 
   const router = useRouter()
   const context = useThemeUI();
   const { theme, components, colorMode, setColorMode } = context;
-  const [logoColor, setLogoColor] = useState('#ffffff')
   const [themeColor, setThemeColor] = useState('#0000ffff')
   const [appInstallStatus, setAppInstallStatus] = useState(libInstallStatus)
   const [deferred, setDeferred] = useState()
 
   const [showLoad, setShowLoad] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+  const [showSave, setShowSave] = useState(false)
+  const [currentIdForSave, setCurrentIdForSave] = useState('')
 
-  const [activeFileData, setActiveFileData] = useState({name: '-Title-', date: '-date-'})
+  const [activeFileData, setActiveFileData] = useState()
 
 
 
@@ -80,6 +79,11 @@ const Navbar = forwardRef((props, ref) => {
       setShowLoad(true)
       // props.causeParentTrigger()
   }
+
+  const showSaveModal = () => {
+    setShowSave(true)
+    // props.causeParentTrigger()
+}
 
   const hideLoadModal = () => {
     setShowLoad(false)
@@ -127,9 +131,6 @@ const Navbar = forwardRef((props, ref) => {
     }
 
 
-    colorMode === undefined || colorMode === "dark"
-    ? setLogoColor('#ffffff')
-    : setLogoColor('#000000')
 
 
  
@@ -159,10 +160,54 @@ const splitWindow = () => {
 
 const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
 
+
+
+// const handleSave = debounce(() => {
+//   setShowSave(true)
+// },1000,{ leading: true, trailing: false, maxWait: 2000});
+
+const handleSaveWithId = debounce((givenId) => {
+  setCurrentIdForSave(1)
+  // setCurrentIdForSave(givenId ? givenId : 'current')
+  setShowSave(true)
+},1000,{ leading: true, trailing: false, maxWait: 2000});
+
+
+
+const handleCloseAll = debounce(() => {
+  REF_SAVE_MODAL?.current?.close()
+  REF_SETTINGS_MODAL?.current?.close()
+  REF_LOAD_MODAL?.current?.close()
+},1000,{ leading: true, trailing: false, maxWait: 2000});
+
+
+
+
+const handleShortcuts = e => {
+    if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+      e.preventDefault();
+      handleSaveWithId()
+    }
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      console.log('Esc - close all')
+      handleCloseAll()
+    }
+}
+
+
+
 useEffect(()=>{
+
   SD.getActive()
     .then(x=>setActiveFileData(x))
-})
+    .catch(err=>console.log(err))
+
+
+  window.addEventListener("keydown", e => handleShortcuts(e) ,true);
+  return () => window.removeEventListener("keydown", e => handleShortcuts(e) ,true);
+}, [])
 
 
 
@@ -205,6 +250,8 @@ useEffect(()=>{
             bg: props.bg
               ? props.bg
               : "grey_4",
+            borderBottom: '1px solid',
+            borderColor: 'grey_0'
           }}
         />
         <Flex sx={{ alignItems: "center", zIndex: 1, justifyContent: 'space-between', flex:1 }}>
@@ -213,7 +260,7 @@ useEffect(()=>{
 
 
           <Link href='/'>
-            <Flex sx={{  height: '4rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
+            <Flex sx={{  height: '2rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
               <MdeLogo /> 
             </Flex>
           </Link>
@@ -222,15 +269,15 @@ useEffect(()=>{
               <Flex sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
               onClick={(e)=>setShowLoad(true)}
               >
-                <Box sx={{fontSize: 2}}>
+                <Box sx={{fontSize: 1, p:0, m:0}}>
                   {activeFileData && activeFileData.name}
                 </Box>
-                <Box>
+                <Box sx={{my: '-.2rem',}}>
                   {activeFileData && activeFileData.date }
                 </Box>
-                <Box>
+                {/* <Box sx={{ p:0, m:0}}>
                   {activeFileData && activeFileData.edit }
-                </Box>
+                </Box> */}
               </Flex>
               }
 
@@ -238,14 +285,7 @@ useEffect(()=>{
 
           {props.editor &&
           <Flex>
-            {/* {
-            props.layoutType === 'editor' && 
-              <Button variant='icon.plain' sx={{mr:3}} 
-                onClick={()=>props.setLayout('render')} 
-                onDoubleClick={()=>props.setLayout('split')}>
-                  <CaretLeft size='22'/>
-              </Button>
-            } */}
+
               <Tipper tip="Click to toggle view, hold to split view" delay={[1000, 0]}>
                 <Button variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
                     {(props.layoutType === 'editor' && breakIndex <=0) &&<CaretUp size='22'/>}
@@ -272,6 +312,7 @@ useEffect(()=>{
             appInstallStatus={appInstallStatus} 
             showSettingsModal={showSettingsModal} 
             showLoad={showLoadModal}
+            showSave={showSaveModal}
             editor={props.editor}
             
             />
@@ -296,7 +337,9 @@ useEffect(()=>{
         
         {showLoad && 
             <LoadModal 
+              ref={REF_LOAD_MODAL}
               causeParentTrigger={props.causeParentTrigger}
+              causeSave={handleSaveWithId}
               handleDeny={hideLoadModal} 
               handleAccept={()=>LoadContent()}/>
           }
@@ -304,9 +347,19 @@ useEffect(()=>{
 
           {showSettings && 
             <SettingsModal 
+            ref={REF_SETTINGS_MODAL}
             causeParentTrigger={props.causeParentTrigger}
             handleDeny={()=>setShowSettings(false)} 
             handleAccept={()=>setShowSettings(false)}/>}
+
+
+          {showSave && 
+            <SaveModal 
+            ref={REF_SAVE_MODAL}
+            causeParentTrigger={props.causeParentTrigger}
+            currentIdForSave={currentIdForSave}
+            handleDeny={()=>setShowSave(false)} 
+            handleAccept={()=>setShowSave(false)}/>}
       
     </>
   );

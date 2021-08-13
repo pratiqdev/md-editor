@@ -7,24 +7,14 @@ import {useEffect, useState, useRef } from 'react'
 import {useThemeUI, Box, Flex} from 'theme-ui'
 import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media"; 
 import gsap from'gsap'
-import SaveModal from './modals/SaveModal'
+// import SaveModal from './modals/SaveModal'
 import * as ALERT from '../lib/alert' 
 
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
-import "ace-builds/src-noconflict/ext-language_tools"
-import "ace-builds/src-noconflict/ext-keybinding_menu"
-import "ace-builds/src-noconflict/ext-settings_menu"
-import "ace-builds/src-noconflict/ext-error_marker"
-import "ace-builds/src-noconflict/snippets/markdown"
-
-import * as SD from '../lib/save-version-4'
-
-
-import AceEditor from "react-ace";
-
 import "ace-builds/src-noconflict/mode-markdown";
+// import "ace-builds/src-noconflict/snippets/markdown"
 import "ace-builds/src-noconflict/theme-tomorrow_night";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/theme-chaos";
@@ -33,7 +23,46 @@ import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-textmate";
 
+import "ace-builds/src-noconflict/ext-language_tools"
+import "ace-builds/src-noconflict/ext-keybinding_menu"
+import "ace-builds/src-noconflict/ext-settings_menu"
+import "ace-builds/src-noconflict/ext-error_marker"
+import "ace-builds/src-noconflict/ext-options"
+import "ace-builds/src-noconflict/ext-prompt"
+import "ace-builds/src-noconflict/ext-searchbox"
+
+
+// import 'ace-builds/webpack-resolver'
+
+// import ace from 'ace-builds'
+// import { Range, EditSession } from 'ace-builds'
+
+import {
+    registerSnippets,
+    createSnippets,
+} from '../lib/ace-snippet-manager'
+
+
+
+
+import * as SD from '../lib/saveData'
+
+
+import AceEditor from "react-ace";
+import { Insert } from '@emotion-icons/fluentui-system-filled';
+
+
+
+
+// let Range = require("ace-builds/src-noconflict/range").Range;
+
+
 let useFontSize =  12
+
+let currentlyCopyingLine = false
+let currentlyCopyingText = ''
+let currentRow 
+let currentCol 
 
 const Ace = props => {
 
@@ -86,10 +115,10 @@ const Ace = props => {
             .then(x=>{
                 if(x){
                     
-                        console.log('ACE |  triggered useEffect')    
+                        // console.log('ACE |  triggered useEffect')    
                         editor.setValue(x.content)
                         if(x.position.line && x.position.column){
-                        console.log(`ACE | loaded with cursor: ${x.position.line} @ ${x.position.column}`)
+                        // console.log(`ACE | loaded with cursor: ${x.position.line} @ ${x.position.column}`)
                         editor.gotoLine(x.position.line, x.position.column)
                     }else{
                         editor.gotoLine(0,0)
@@ -110,26 +139,76 @@ const Ace = props => {
     }
 
 
-
     const loadSettings = () => {
         console.log('EDITOR | loadSettings fired')
+        let snippetsArr = []
+        SD.getAllSnippets().then(x=> {
+
+            console.log('all snippets returned', x)
+            snippetsArr = x
+            
+
+
+        })
+        
+ 
+        
         if(editor){
             SD.getAllSettings()
             .then(x=>{
                 if(x){
+
+                        x.map((x, i)=>{
+                            console.log(`LOAD SETTINGS ${i} | ${x.name} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
+                        })
                     // set keybinds
-                    // require.config({paths: { "ace" : "../lib/ace"}});
+                    require.config({paths: { "ace" : "../lib/ace"}});
                     // require()
-                    // require.config({paths: { "ace" : "../../node_modules/lib/ace"}});
+                    // require.config({paths: { "ace" : "../../node_modules/ace-builds/ace"}});
                     require(["ace-builds/src-noconflict/ace"], function(ace) {
                         var ed = ace.edit("UNIQUE_ID_OF_DIV")
                         // editor.setTheme("ace/theme/twilight")
                         ed.session.setMode("ace/mode/markdown")
+
+
+                        // do this before disabling snippets so manager has access to the files required
+                        registerSnippets(
+                            x.find(x=>x.id === 'custom-snippets').state[0],
+                            ed,
+                            ed.session,
+                            'markdown',
+                            createSnippets(snippetsArr)
+                        ).then(()=>{
+
+                            setTimeout(() => {
+                                
+                                ed.setOptions({
+                                    fontSize: 14,
+                                    enableBasicAutocompletion: x.find(x=>x.id === 'enable-basic-autocompletion').state,
+                                    enableLiveAutocompletion: x.find(x=>x.id === 'enable-live-autocompletion').state,
+                                    enableSnippets: x.find(x=>x.id === 'custom-snippets').state[0],
+                                    copyWithEmptySelection:x.find(x=>x.id === 'copy-with-empty-selection').state,
+                                    showPrintMargin:x.find(x=>x.id === 'show-print-margin').state,
+                                })
+                            }, 250);
+                        })
+
+
+           
+                            
+
+
+
+
+            
+
+
+
                         
-                        // add command to lazy-load keybinding_menu extension
+                        // show current keybindings _________________________________________________________
                         ed.commands.addCommand({
                             name: "showKeyboardShortcuts",
-                            bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-h"},
+                            bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-k"},
                             exec: function(ed) {
                                 ace.config.loadModule("ace/ext/keybinding_menu", function(module) {
                                     console.log('???')
@@ -139,6 +218,7 @@ const Ace = props => {
                             }
                         })
                         
+                        // test keybindings _________________________________________________________________
 
                         ed.commands.addCommand({
                             name: "testKeybindings",
@@ -148,62 +228,19 @@ const Ace = props => {
                             }
                         })
 
+                        
 
-                        // ed.commands.addCommand({
-                        //     name: "increaseFontSize",
-                        //     bindKey: {win: "Ctrl-+", mac: "Command-+"},
-                        //     exec: function(ed) {
-                        //             useFontSize+=2
-                        //             ed.setFontSize(useFontSize)
-                        //     }
-                        // })
 
-                        // ed.commands.addCommand({
-                        //     name: "decreaseFontSize",
-                        //     bindKey: {win: "Ctrl--", mac: "Command-+"},
-                        //     exec: function(ed) {
-                        //             useFontSize-=2
-                        //             ed.setFontSize(useFontSize)
-                        //     }
-                        // })
+
+        
                          
                         
                     })
 
 
-                    document.addEventListener("keydown", function(e) {
-                        if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-                          e.preventDefault();
-                          handleSave()
-                        }
+                  
 
-                     
-                      }, false);
 
-                      document.addEventListener("keydown", function(e) {
-                        if (e.key === '+' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
-                          e.preventDefault();
-                          e.stopPropagation()
-                          useFontSize+=2
-                          editor.setFontSize(useFontSize)
-                          console.log(`increase font size: ${useFontSize}`)
-
-                        }
-
-                     
-                      }, false);
-
-                      document.addEventListener("keydown", function(e) {
-                        if (e.key === '-' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
-                          e.preventDefault();
-                          e.stopPropagation()
-                          useFontSize-=2
-                          editor.setFontSize(useFontSize)
-                          console.log(`decrease font size: ${useFontSize}`)
-                        }
-
-                     
-                      }, false);
                   
 
                     
@@ -227,7 +264,7 @@ const Ace = props => {
 
     //! load content from parent only when useTrigger fires 
     useEffect(()=>{
-        // console.log(`ACE | useTrigger - content reveived: ${props.parentContent ? true : false}`)
+        console.log(`ACE | useTrigger `)
         setTimeout(() => {
             
             loadContent()
@@ -236,6 +273,10 @@ const Ace = props => {
             
             // editor.setValue(props.parentContent || '97asdf876')
     }, [props.useTrigger])
+
+
+    
+
 
 
 
@@ -276,13 +317,7 @@ const Ace = props => {
                 editorProps={{ $blockScrolling: true }}
                 width={'100%'}
                 height={'100%'}
-                setOptions={{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    enableSnippets: true,
-                    markers: true,
-                    fontSize: props.fontSize
-                  }}
+
                   style={{zIndex: '2', }}
                 />
             </Box>

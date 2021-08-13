@@ -4,12 +4,24 @@ export default {
     fontWeight: "body",
   },
   input: {
+    position: 'relative',
+    zIndex: 1,
     borderRadius: 2,
+    px: 2,
+    py:0,
+    border: '1px solid',
     borderColor: "grey_7",
+    '&:hover':{
+      outline: '1px solid',
+      outlineOffset: '-1px',
+      outlineColor: "primary_light",
+    },
     "&:focus": {
-      borderColor: "primary",
-    //   boxShadow: (t) => `0 0 0 2px ${t.colors.primary_c}`,
-      outline: "none",
+      outline: '2px solid',
+      outlineOffset: '-2px',
+      outlineColor: "primary_c",
+      zIndex: 2,
+      // borderColor: 'primary_c',
     },
   },
   select: {
@@ -27,10 +39,22 @@ export default {
   },
   textarea: {
     borderColor: "grey_7",
+    borderRadius: 2,
+    px:2,
+    py:0,
+    position: 'relative',
+    zIndex: 1,
+    '&:hover':{
+      outline: '1px solid',
+      outlineOffset: '-1px',
+      outlineColor: "primary_light",
+    },
     "&:focus": {
-      borderColor: "primary_c",
-    //   boxShadow: (t) => `0 0 0 2px ${t.colors.primary_c}`,
-      outline: "none",
+      zIndex: 2,
+      outline: '2px solid',
+      outlineOffset: '-2px',
+      outlineColor: "primary_c",
+      // borderColor: 'primary_c',
     },
   },
   checkbox:{
@@ -46,6 +70,11 @@ export default {
     bg: "muted",
   },
   switch:{
+    bg: 'grey_3',
+    '&:hover':{
+      bg: 'primary_light'
+    },
+    transition: 1,
     'input:checked ~ &': {
       bg: 'primary_b',
     },

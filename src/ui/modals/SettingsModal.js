@@ -1,13 +1,16 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, forwardRef, useImperativeHandle} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input} from 'theme-ui'
 
-import * as SD from '../../lib/save-version-4'
+import * as SD from '../../lib/saveData'
 import gsap from 'gsap'
 
 import BooleanSwitch from '../settingItems/BooleanSwitch'
 import OptionSwitch  from '../settingItems/OptionSwitch'
 import NumberSwitch from '../settingItems/NumberSwitch'
 import StringSwitch from '../settingItems/StringSwitch'
+import DualString from '../settingItems/DualString'
+import BoolString from '../settingItems/BoolString'
+import Snippets from '../settingItems/Snippets'
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
 import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
@@ -39,7 +42,14 @@ import { setSyntheticTrailingComments } from 'typescript';
 
 
 
-const LoadModal = props => {
+const SettingsModal = forwardRef((props, ref) => {
+
+    useImperativeHandle(ref,() => ({
+        close: () => {
+            handleClose()
+            } 
+    }));  
+      
 
 
     //~ open and close handlers ______________________________________________________________________
@@ -156,7 +166,7 @@ const LoadModal = props => {
             left:'0',
             height: '100vh',
             width: '100vw',
-            bg: 'rgba(100,100,100,.8)',
+            bg: 'modal_t',
             opacity: '0',
             zIndex: '1000',
 
@@ -171,13 +181,14 @@ const LoadModal = props => {
             onClick={e=>e.stopPropagation()}
             sx={{
                 opacity: '0',
-                p: [3,4,6],
-                py: [4,4,6],
+                p: 4,
+                // py: [4,4,6],
                 transform: 'translateY(3rem)',
                 width: ['98vw', 'auto', 'auto'],
                 minWidth: ['98vw', '40rem', '40rem'],
                 maxWidth: '98vw',
                 height: '40rem',
+                maxHeight: '90vh',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'stretch',
@@ -203,7 +214,7 @@ const LoadModal = props => {
                         Settings                    </Box>
 
                     {/* SUBTITLE ------------------------------------------*/}
-                    <Box sx={{color: 'grey_6', my:6}}>
+                    <Box sx={{color: 'grey_12', my:3, fontSize: 3}}>
                         Alter settings for the editor, renderer and app
                     </Box>
 
@@ -212,14 +223,15 @@ const LoadModal = props => {
                         flex: 1,
                         // maxHeight: '70vh',
                         overflowY: 'auto',
-                        border: '1px solid',
+                        // borderTop: '1px solid',
+                        // borderBottom: '1px solid',
                         borderColor: 'grey_4',
-                        borderRadius: 2,
-                        bg: 'grey_2',
+                        borderRadius: 0,
+                        // bg: 'grey_2',
                         width: '100%',
                         mb: 6,
                         color: 'grey_4',
-                        p:2,
+                        // p:2,
                         textAlign: 'center'
                     }}>
 
@@ -230,6 +242,9 @@ const LoadModal = props => {
                                 case 'number': {return <NumberSwitch s={s} si={si} handle={test}/>};break;
                                 case 'array': {return <OptionSwitch s={s} si={si} handle={test} />};break;
                                 case 'boolean': {return <BooleanSwitch s={s} si={si} handle={test} />};break;
+                                case 'bool-string': {return <BoolString s={s} si={si} handle={test} />};break;
+                                case 'find-and-replace': {return <DualString s={s} si={si} handle={test} />};break;
+                                case 'snippets': {return <Snippets s={s} si={si} handle={test} />};break;
                             }
 
                         }
@@ -288,5 +303,5 @@ const LoadModal = props => {
             }
         </Flex>
     )
-}
-export default LoadModal
+}) 
+export default SettingsModal

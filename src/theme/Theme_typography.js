@@ -21,7 +21,7 @@ export default {
       },
       text: {
         default: {
-          fontSize: [2,3,4],
+          fontSize: [1,2,3],
           color: 'text',
           lineHeight: 'body',
           fontFamily: 'special',
@@ -32,7 +32,7 @@ export default {
         },
         heading: {
           color: 'primary_a',
-          letterSpacing: '.1em',
+          letterSpacing: '.07em',
           fontFamily: 'special',
           fontWeight: 'bold',
       },

@@ -13,13 +13,18 @@ const StringSwitch = ({s, si, handle}) => {
 
     const [showDetails, setShowDetails] = useState(false)
     const [newValue, setNewValue] = useState(s.state)
+    const [useLargeInput, setUseLargeInput] = useState(false)
+    const [cursor, setCursor] = useState(0)
+    const [isFocused, setIsFocused] = useState(false)
 
     const handleChange = (si, e) => {
         const { selectionStart, selectionEnd, value } = e.target;
+        setCursor({start: selectionStart, end: selectionEnd})
         if(s.min <= value.length && value.length <= s.max){
 
             setNewValue(value)
             handle(si, value)
+            checkInputDims(value)
             
         }else{
             ALERT.minMaxAlert(s.min, s.max)
@@ -29,26 +34,51 @@ const StringSwitch = ({s, si, handle}) => {
  
 
 
+    const checkInputDims = (v) => {
+        if(v.length >= 20){
+            setUseLargeInput(true)
+        }else{
+            setUseLargeInput(false)             
+        }
+    }
+
+    // checkInputDims(s.state)
+
+
+   useEffect(()=>{
+        if(newValue.length >= 20){
+            setUseLargeInput(true)
+        }else{
+            setUseLargeInput(false)             
+        }
+
+        if(useLargeInput && isFocused){
+            REF_LARGE_INPUT.current.focus()
+            REF_LARGE_INPUT.current.selectionStart = cursor.start
+            REF_LARGE_INPUT.current.selectionEnd = cursor.end
+        }
+
+        if(!useLargeInput && isFocused){
+            REF_SMALL_INPUT.current.focus()
+            REF_SMALL_INPUT.current.selectionStart = cursor.start
+            REF_SMALL_INPUT.current.selectionEnd = cursor.end
+        }
+    }, [newValue])
    return(
 
         <Flex sx={{
             width: '100%', 
             flexDirection: 'column', 
+            border: '1px solid #444', 
             color: 'grey_15', 
             bg: 'grey_0',
             mb:2, 
             p:1, 
             py: 2,
             cursor: 'pointer',
-
-            border: '1px solid transparent', 
-            borderLeft: '3px solid transparent', 
-            borderLeftColor: showDetails ? 'primary_b' : 'transparent',
-            borderBottomColor: 'grey_2',
-            '&:hover':{
-                borderColor: 'grey_15'
-            }
             }}
+            onClick={()=>setIsFocused(true)}
+            onBlur={()=>setIsFocused(false)}
             >
 
             <Flex sx={{alignItems: 'center'}}>
@@ -87,9 +117,16 @@ const StringSwitch = ({s, si, handle}) => {
                         {s.desc}
                     </Flex>
                 </Box>
+                
+                {!useLargeInput && 
+                <Box sx={{width: '100%', mr: 2}}>
+                    <Input placeholder={s.default === '' ? 'none' : s.default} ref={REF_SMALL_INPUT} sx={{height: '1.6rem', fontSize: 1,}} value={newValue} onChange={(e)=>handleChange(si, e)}/>
+                </Box>
+                }
 
-
-                <Textarea ref={REF_LARGE_INPUT} sx={{ fontFamily: 'body', fontSize: 1, borderRadius: 1, m:2, width: 'auto', borderColor: 'grey_6', '&:focus':{borderColor:'grey_6'}}} value={newValue} onChange={(e)=>handleChange(si, e)}/>
+                {useLargeInput &&
+                    <Textarea ref={REF_LARGE_INPUT} sx={{ fontFamily: 'body', fontSize: 1, borderRadius: 1, m:2, width: 'auto', borderColor: 'grey_6', '&:focus':{borderColor:'grey_6'}}} value={newValue} onChange={(e)=>handleChange(si, e)}/>
+                }
             </>
             }
         </Flex>

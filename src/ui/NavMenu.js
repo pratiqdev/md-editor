@@ -17,7 +17,7 @@ import {
 } from "../lib/install";
 
 import Tipper from "./Tipper";
-import Logo from "./Logo";
+import MdeLogo from "./MdeLogo";
 import ThemeToggle from "./ThemeToggle";
 import InstallMenuItem from './InstallMenuItem'
 
@@ -58,7 +58,7 @@ const NavMenu = (props) => {
   return (
     <>
       <Button
-        sx={{ zIndex: 1 }}
+        sx={{ zIndex: 1, mr:3 }}
         variant="icon.plain"
         onClick={(e) => {
           toggleMenu();
@@ -72,12 +72,12 @@ const NavMenu = (props) => {
           top: "0",
           right: "0",
           // transform: !menuState ? "translateX(100vw)" : "translateX(0vw)",
-          opacity: !menuState ? "0" : ".5",
+          opacity: !menuState ? "0" : "1",
           pointerEvents: !menuState ? "none" : "auto",
           minHeight: "100%",
           height: "100%",
           width: "100%",
-          bg: "grey_0",
+          bg: "modal_t",
           transition: 1,
           overscrollBehavior: "contain",
         }}
@@ -111,12 +111,13 @@ const NavMenu = (props) => {
             justifyContent: "space-between",
             borderBottom: "1px solid",
             borderColor: "grey_7",
+            alignItems: 'center',
             p: 3,
             pr: 3,
           }}
         >
-          <Box sx={{ width: "1.6em", ml: 2 }}>
-            <Logo />
+          <Box sx={{ height: "1em", ml: 3 }}>
+            {/* <MdeLogo /> */}
           </Box>
           <Flex>
             <ThemeToggle />

@@ -8,10 +8,6 @@ import Link from 'next/link'
 //* THEME _________________________________________________________________________________________
 import { Button, Box, Flex, Text } from "theme-ui";
 
-//* EXTERNAL ______________________________________________________________________________________
-import Tippy from '@tippyjs/react'
-import { get, set } from 'idb-keyval';
-
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
 

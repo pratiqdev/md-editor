@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Tippy, {Arrow} from '@tippyjs/react'
-import 'tippy.js/dist/tippy.css'; // optional
+// import 'tippy.js/dist/tippy.css'; // optional
 import styled from '@emotion/styled'
 
 
