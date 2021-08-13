@@ -193,27 +193,6 @@ const Ace = props => {
                             }, 250);
                         })
 
-                        // ed.getSession().setAnnotations([
-                        //     {
-                        //     row: 1,
-                        //     column: 0,
-                        //     text: "Error Message?? dfj;lk asjdlkfjalskdf ja sdflk;a jskdjf alksdjfklja sl;dfjalk sdjfklasjdf klajs;ld kfjl;asdjf l;ajsdfl;ja lsdjfl asdjf lkasdjfl; kajsdflkjasd;fkj a;lksdjf;lkj a;lskdfj l;akjsdlkf ", // Or the Json reply from the parser 
-                        //     type: "error", // also "warning" and "information"
-                        //   },
-                        //   {
-                        //     row: 3,
-                        //     column: 0,
-                        //     text: "warning Message??", // Or the Json reply from the parser 
-                        //     type: "warning" // also "warning" and "information"
-                        //   },
-                        //   {
-                        //     row: 5,
-                        //     column: 0,
-                        //     text: "information Message??", // Or the Json reply from the parser 
-                        //     type: "info" // also "warning" and "information"
-                        //   }
-                        // ]);
-
 
            
                             
@@ -250,119 +229,18 @@ const Ace = props => {
                         })
 
                         
-                        // delete the entire current line VSCode style _________________________________________________________________
-                        // ed.commands.addCommand({
-                        //     name: "deleteSelection",
-                        //     bindKey: {win: "Ctrl-x", mac: "Command-x"},
-                        //     exec: function(ed) {
-                        //         if(ed.getSelectedText().length === 0){  // if no text is selected
-                        //             ed.removeLines()                    // remove the entire line
-                        //         }else{                                  // else
-                        //             ed.remove()                         // remove the selected content
-                        //         }
-                        //     }
-                        // })
-
-
-                        // copy the entire current line VSCode style _________________________________________________________________
-                        // ed.commands.addCommand({
-                        //     name: "copySelection",
-                        //     bindKey: {win: "Ctrl-c", mac: "Command-c"},
-                        //     exec: function(ed) {
-                        //         console.log('KYBD COPY')
-                        //         if(ed.getSelectedText().length === 0){ 
-                        //             // select line
-                        //             // ed.selection.selectLine() //! selects the first char from the next line also...
-                        //             currentRow = ed.getCursorPosition().row
-                        //             currentCol = ed.getCursorPosition().column
-                        //             // console.log(ed.selection.getSel().length)
-                        //             ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:999999}})
-                        //             // ed.addSelectionMarker(12, 20)
-
-                        //             currentlyCopyingText = ed.getSelectedText() // copy selection
-                        //             currentlyCopyingLine = true
-                        //             ed.selection.setRange({start:{row:currentRow, column:currentCol}, end:{row:currentRow, column:currentCol}})  
-                        //             ed.clearSelection()
-
-                                    
-                        //             console.log(`COPY | whole line: ${currentlyCopyingText}`)
-                        //         }else{                 
-                        //             currentlyCopyingText = ed.getSelectedText() // copy selection
-                        //             currentlyCopyingLine = false
-                        //             console.log(`COPY | selection only: ${currentlyCopyingText}`)
-                        //             currentlyCopyingLine = false
-
-                        //         }
-                        //     }
-                        // })
 
 
 
-
-                        // paste the entire current line VSCode style _________________________________________________________________
-                        // ed.commands.addCommand({
-                        //     name: "pasteSelection",
-                        //     bindKey: {win: "Ctrl-v", mac: "Command-v"},
-                        //     exec: function(ed) {
-                        //         console.log('KYBD PASTE')
-                        //         // ed.clearSelection() // always clear the selection when pasting?
-                        //         if(currentlyCopyingLine){ 
-                        //             currentRow = ed.getCursorPosition().row
-                        //             currentCol = ed.getCursorPosition().column
-                        //             console.log('PASTE | paste line down from line copy')
-                        //             let currentRow = ed.getCursorPosition().row                                                 
-                        //             ed.selection.setRange({start:{row:currentRow, column:0}, end:{row:currentRow, column:0}})  
-                        //             ed.insert(currentlyCopyingText + '\r\n')                  
-                        //             ed.selection.setRange({start:{row:currentRow + 1, column:currentCol}, end:{row:currentRow + 1, column:currentCol}})  
-
-                        //             // ed.selection.setRange({start:{row:currentRow + 1, column:999999}, end:{row:currentRow + 1, column:999999}})   
-
-                        //         }else{                 
-                        //             console.log('PASTE | paste selection only')
-                        //             ed.insert(currentlyCopyingText)
-
-
-                        //         }
-                        //     }
-                        // })
+        
                          
                         
                     })
 
 
-                    document.addEventListener("keydown", function(e) {
-                        if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-                          e.preventDefault();
-                          handleSave()
-                        }
+                  
 
-                     
-                    }, false);
 
-                    document.addEventListener("keydown", function(e) {
-                    if (e.key === '+' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
-                        e.preventDefault();
-                        e.stopPropagation()
-                        useFontSize+=2
-                        editor.setFontSize(useFontSize)
-                        console.log(`increase font size: ${useFontSize}`)
-
-                    }
-
-                    
-                    }, false);
-
-                    document.addEventListener("keydown", function(e) {
-                    if (e.key === '-' && (navigator.platform.match("Mac") ? e.metaKey : e.altKey)) {
-                        e.preventDefault();
-                        e.stopPropagation()
-                        useFontSize-=2
-                        editor.setFontSize(useFontSize)
-                        console.log(`decrease font size: ${useFontSize}`)
-                    }
-
-                    
-                    }, false);
                   
 
                     

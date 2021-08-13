@@ -191,6 +191,7 @@ const handleShortcuts = e => {
 
     if (e.key === 'Escape') {
       e.preventDefault();
+      console.log('Esc - close all')
       handleCloseAll()
     }
 }

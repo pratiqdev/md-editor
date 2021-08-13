@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, forwardRef, useImperativeHandle} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input} from 'theme-ui'
 
 import * as SD from '../../lib/saveData'
@@ -42,7 +42,14 @@ import { setSyntheticTrailingComments } from 'typescript';
 
 
 
-const SettingsModal = props => {
+const SettingsModal = forwardRef((props, ref) => {
+
+    useImperativeHandle(ref,() => ({
+        close: () => {
+            handleClose()
+            } 
+    }));  
+      
 
 
     //~ open and close handlers ______________________________________________________________________
@@ -296,5 +303,5 @@ const SettingsModal = props => {
             }
         </Flex>
     )
-}
+}) 
 export default SettingsModal

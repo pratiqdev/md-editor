@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import {
   Button,
   Box,
@@ -173,7 +173,30 @@ const LoadItem = ({
   );
 };
 
-const LoadModal = (props) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const LoadModal = forwardRef((props, ref) => {
+
+  useImperativeHandle(ref,() => ({
+    close: () => {
+      handleClose()
+    } 
+  }));  
+
   //~ open and close handlers ______________________________________________________________________
   const REF_CARD = useRef(null);
   const REF_BOX = useRef(null);
@@ -464,5 +487,6 @@ const LoadModal = (props) => {
       )}
     </Flex>
   );
-};
+});
+
 export default LoadModal;

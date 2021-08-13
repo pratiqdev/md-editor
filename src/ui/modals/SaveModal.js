@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, forwardRef, useImperativeHandle} from 'react'
 import {Button, Box, Flex, Grid, Text, Card, Switch, Label, Input, Textarea} from 'theme-ui'
 
 import * as SD from '../../lib/saveData'
@@ -17,8 +17,13 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 
 
 
-const SaveModal = props => {
+const SaveModal = forwardRef((props, ref) => {
 
+    useImperativeHandle(ref,() => ({
+        close: () => {
+            handleClose()
+        } 
+    }));  
 
     //~ open and close handlers ______________________________________________________________________
     const REF_CARD = useRef(null)
@@ -199,5 +204,6 @@ const SaveModal = props => {
             </Card>
         </Flex>
     )
-}
+})
+
 export default SaveModal
