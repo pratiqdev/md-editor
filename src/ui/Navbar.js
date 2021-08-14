@@ -167,7 +167,8 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
 // },1000,{ leading: true, trailing: false, maxWait: 2000});
 
 const handleSaveWithId = debounce((givenId) => {
-  setCurrentIdForSave(1)
+ setCurrentIdForSave(givenId ? givenId : 'current')
+
   // setCurrentIdForSave(givenId ? givenId : 'current')
   setShowSave(true)
 },1000,{ leading: true, trailing: false, maxWait: 2000});
@@ -207,7 +208,7 @@ useEffect(()=>{
 
   window.addEventListener("keydown", e => handleShortcuts(e) ,true);
   return () => window.removeEventListener("keydown", e => handleShortcuts(e) ,true);
-}, [])
+})
 
 
 

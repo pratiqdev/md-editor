@@ -215,10 +215,12 @@ export const createNew = () => {
     let num = NUM_FILES
 
     let newContent = ''
-    let usePrepend = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content-enabled')?.state
-    let useAppend = SETTINGS_ARRAY.find(x=> x.id === 'auto-append-content-enabled')?.state
-    let prependString = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content-string')?.state
-    let appendString = SETTINGS_ARRAY.find(x=> x.id === 'auto-append-content-string')?.state
+    let usePrepend = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content')?.state[0]
+    let useAppend = SETTINGS_ARRAY.find(x=> x.id === 'auto-append-content')?.state[0]
+    let prependString = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content')?.state[1]
+    let appendString = SETTINGS_ARRAY.find(x=> x.id === 'auto-append-content')?.state[1]
+
+    console.log(`SD | usePrepend: ${usePrepend} - useAppend: ${useAppend}`)
 
     if(usePrepend){
         newContent = prependString + '\r\n \r\n' + newContent
@@ -276,14 +278,17 @@ export const getAll = () => {
 //~ ___________________________________________________________________________________________________________________________________
 /** Get a single element of the SD_ARARY by id  */
 export const getById = (id) => {
+    return new Promise((resolve, reject) => {
+        
+        if(SD_ARRAY && SD_ARRAY.length !== 0){
+            resolve(SD_ARRAY[id])
+        }else{
+            createNew()
+            setActiveById(0)
+            resolve(SD_ARRAY[0])
 
-    if(SD_ARRAY && SD_ARRAY.length !== 0){
-        return SD_ARRAY[id]
-    }else{
-        createNew()
-        setActiveById(0)
-        return SD_ARRAY[0]
-    }
+        }
+    })
 }
 
 //~ ___________________________________________________________________________________________________________________________________

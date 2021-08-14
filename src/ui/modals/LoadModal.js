@@ -26,6 +26,7 @@ const LoadItem = ({
   handleEdit,
   handleDelete,
   loadModalTrigger,
+  causeSave,
   itemKey,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -53,7 +54,7 @@ const LoadItem = ({
 
   const handleSave = (e) => {
     e.stopPropagation();
-    SD.saveFileById(currentIndex);
+    causeSave(currentIndex)
   };
 
   useEffect(() => {
@@ -185,6 +186,124 @@ const LoadItem = ({
 
 
 
+const DeleteCard = props => {
+
+  const REF_DELETE_CARD = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null)
+
+  const openUpDeleteAnim = () => {
+    gsap.to([REF_DELETE_CARD.current], {
+      opacity: 1,
+      y: "0",
+      delay: 0.2,
+      duration: 0.3,
+    });
+  };
+
+  const closeDownDeleteAnim = () => {
+    gsap.to([REF_DELETE_CARD.current], {
+      opacity: 0,
+      y: "3rem",
+      duration: 0.3,
+    });
+  };
+
+  const handleCancelDelete = (e) => {
+    e.stopPropagation();
+    closeDownDeleteAnim();
+    setTimeout(() => {
+      props.handleRemoveSelf()
+
+      // handleClose() // dont close the parent modal when this action is complete
+    }, 300);
+  };
+
+  const handleConfirmDelete = (e) => {
+    e.stopPropagation();
+    // ALERT.fileDeleted(SD.getById(currentIdForDelete).name); // removed because of change to return a promise
+    SD.getById(props.currentIdForDelete).then(x=>ALERT.fileDeleted(x.name))
+
+    SD.deleteById(props.currentIdForDelete);
+    props.causeParentTrigger();
+    // setLocalTrigger(!localTrigger);
+
+    closeDownDeleteAnim();
+    setTimeout(() => {
+      props.handleRemoveSelf()
+
+      // handleClose() // dont close the parent modal when this action is complete
+    }, 300);
+  };
+
+  useEffect(()=>{
+    console.log('DELETE CARD | useeffect -> openUpAnim')
+    openUpDeleteAnim()
+    SD.getById(props.currentIdForDelete).then(x=> setSelectedFile(x))
+  }, [])
+
+  return(
+    <Card
+          variant="modal"
+          ref={REF_DELETE_CARD}
+          sx={{
+            position: "absolute",
+            // width: '20rem',
+            maxWidth: "90vw",
+            // height: '10rem',
+            bg: "grey_0",
+            border: "2px solid",
+            borderColor: "red",
+            color: "red",
+            transform: "translateY(3rem)",
+            opacity: "0",
+          }}
+        >
+          <Box sx={{ width: "100%", textAlign: "center", fontSize: [4, 6, 8] }}>
+            DELETE FILE
+          </Box>
+          <Box
+            sx={{
+              color: "grey_15",
+              fontWeight: "bold",
+              textAlign: "center",
+              m: 1,
+            }}
+          >
+            {selectedFile?.name}
+          </Box>
+          <Box sx={{ color: "grey_15", textAlign: "center", m: 3, my: 6 }}>
+            This will delete the selected file. This action is not reversible
+          </Box>
+          <Flex sx={{ justifyContent: "space-between", m: 3 }}>
+            <Button variant="outline.primary" onClick={handleCancelDelete}>
+              Cancel
+            </Button>
+            <Button sx={{ bg: "red" }} onClick={handleConfirmDelete}>
+              Delete
+            </Button>
+          </Flex>
+        </Card>
+  )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -201,7 +320,7 @@ const LoadModal = forwardRef((props, ref) => {
   const REF_CARD = useRef(null);
   const REF_BOX = useRef(null);
   const REF_TITLE = useRef(null);
-  const REF_DELETE_CARD = useRef(null);
+  // const REF_DELETE_CARD = useRef(null);
 
   const [localTrigger, setLocalTrigger] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -241,22 +360,22 @@ const LoadModal = forwardRef((props, ref) => {
     gsap.to([REF_BOX.current], { opacity: 0, duration: 0.3 });
   };
 
-  const openUpDeleteAnim = () => {
-    gsap.to([REF_DELETE_CARD.current], {
-      opacity: 1,
-      y: "0",
-      delay: 0.2,
-      duration: 0.3,
-    });
-  };
+  // const openUpDeleteAnim = () => {
+  //   gsap.to([REF_DELETE_CARD.current], {
+  //     opacity: 1,
+  //     y: "0",
+  //     delay: 0.2,
+  //     duration: 0.3,
+  //   });
+  // };
 
-  const closeDownDeleteAnim = () => {
-    gsap.to([REF_DELETE_CARD.current], {
-      opacity: 0,
-      y: "3rem",
-      duration: 0.3,
-    });
-  };
+  // const closeDownDeleteAnim = () => {
+  //   gsap.to([REF_DELETE_CARD.current], {
+  //     opacity: 0,
+  //     y: "3rem",
+  //     duration: 0.3,
+  //   });
+  // };
 
   //~ accept / deny handlers _______________________________________________________________________
   const handleAccept = () => {
@@ -279,41 +398,19 @@ const LoadModal = forwardRef((props, ref) => {
       handleClose();
     }, 500);
     console.log("LOADMODAL | handleActiveSwap");
-    ALERT.fileLoaded(SD.getById(givenId).name);
+    // ALERT.fileLoaded(SD.getById(givenId).name); // removed because getById was changed to return a promise
+    SD.getById(givenId).then(x=>ALERT.fileLoaded(x.name))
   };
 
   // brought these from the settings modal and they need to be refactored to work with this modal
   const handleShowConfirmDelete = (givenId) => {
+    console.log(`LOAD | show confirm delete for ${givenId}`)
     setCurrentIdForDelete(givenId);
-    // console.log('DELETE -> '+SD.getById(currentIdForDelete).name)
     setShowDeleteConfirm(true);
-    setTimeout(() => {
-      openUpDeleteAnim();
-    }, 100);
+
   };
 
-  const handleCancelDelete = (e) => {
-    e.stopPropagation();
-    closeDownDeleteAnim();
-    setTimeout(() => {
-      setShowDeleteConfirm(false);
-    }, 300);
-  };
 
-  const handleConfirmDelete = (e) => {
-    e.stopPropagation();
-    ALERT.fileDeleted(SD.getById(currentIdForDelete).name);
-
-    SD.deleteById(currentIdForDelete);
-    props.causeParentTrigger();
-    setLocalTrigger(!localTrigger);
-
-    closeDownDeleteAnim();
-    setTimeout(() => {
-      setShowDeleteConfirm(false);
-      // handleClose() // dont close the parent modal when this action is complete
-    }, 300);
-  };
 
   const handleNew = () => {
     console.log("LOADMODAL | handleNew ");
@@ -418,6 +515,7 @@ const LoadModal = forwardRef((props, ref) => {
                 handleActiveSwap={handleActiveSwap}
                 handleDelete={handleShowConfirmDelete}
                 loadModalTrigger={localTrigger}
+                causeSave={props.causeSave}
               />
             ))}
           </Box>
@@ -442,49 +540,14 @@ const LoadModal = forwardRef((props, ref) => {
         </>
       </Card>
 
-      {showDeleteConfirm && (
-        <Card
-          variant="modal"
-          ref={REF_DELETE_CARD}
-          sx={{
-            position: "absolute",
-            // width: '20rem',
-            maxWidth: "90vw",
-            // height: '10rem',
-            bg: "grey_0",
-            border: "2px solid",
-            borderColor: "red",
-            color: "red",
-            transform: "translateY(3rem)",
-            opacity: "0",
-          }}
-        >
-          <Box sx={{ width: "100%", textAlign: "center", fontSize: [4, 6, 8] }}>
-            DELETE FILE
-          </Box>
-          <Box
-            sx={{
-              color: "grey_15",
-              fontWeight: "bold",
-              textAlign: "center",
-              m: 1,
-            }}
-          >
-            {SD.getById(currentIdForDelete)?.name}
-          </Box>
-          <Box sx={{ color: "grey_15", textAlign: "center", m: 3, my: 6 }}>
-            This will delete the selected file. This action is not reversible
-          </Box>
-          <Flex sx={{ justifyContent: "space-between", m: 3 }}>
-            <Button variant="outline.primary" onClick={handleCancelDelete}>
-              Cancel
-            </Button>
-            <Button sx={{ bg: "red" }} onClick={handleConfirmDelete}>
-              Delete
-            </Button>
-          </Flex>
-        </Card>
-      )}
+      {showDeleteConfirm && 
+      <DeleteCard 
+        currentIdForDelete={currentIdForDelete}
+        handleRemoveSelf={()=>setShowDeleteConfirm(false)}
+        causeParentTrigger={props.causeParentTrigger}
+        />
+      }
+        
     </Flex>
   );
 });

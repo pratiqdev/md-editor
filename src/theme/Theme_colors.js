@@ -78,7 +78,7 @@ export default {
     grey_14: '#111',
     grey_15: '#000',
 
-    modal_t: '#fff8',
+    modal_t: '#ccc8',
 
     modes: {
       dark: {
@@ -145,7 +145,7 @@ export default {
         grey_1: '#111',
         grey_0: '#000',
 
-        modal_t: '#222a',
+        modal_t: '#444a',
 
       },
     },

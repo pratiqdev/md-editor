@@ -1,5 +1,4 @@
 import { Global } from "@emotion/react";
-// import theme from './Theme'
 import {useThemeUI} from 'theme-ui'
 
 
