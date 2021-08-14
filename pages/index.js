@@ -65,7 +65,10 @@ const Index = (props) => {
                 <li>VSCode style editor navigation</li>
               </ul>
               <Box sx={{mx: ['auto', 0, 0], width: ['auto', 'auto', '100%'], flex:0, mt: 4, p:4, }}>
-            Editor
+<Link href='/editor'>
+            <Button variant='accent' sx={{whiteSpace: 'no-wrap', mt:4, py: 2, width: '100%', fontSize: [3,4,4], }}>Editor</Button>
+          </Link> 
+            
           </Box>  
           </Flex>  
           <Box id='welcome-1' sx={{p:4, width: '100%', height: ['40vw','40vw','auto']}} />
@@ -78,20 +81,20 @@ const Index = (props) => {
 
         <Grid columns={[2,4,4]}>
 
-          <Link href='/docs'>
+          <Link href='/getting-started'>
             <Button variant='outline.primary' sx={{whiteSpace: 'no-wrap', mt:4, py: 2, width: '100%', fontSize: [3,4,4], }}>Getting Started</Button>
           </Link> 
 
-          <Link href='/docs'>
-            <Button variant='outline.primary' sx={{mt:4, py: 2, width: '100%', fontSize: [3,4,4],}}>Documentaion</Button>
+          <Link href='/walkthrough'>
+            <Button variant='outline.primary' sx={{mt:4, py: 2, width: '100%', fontSize: [3,4,4],}}>Walkthrough</Button>
           </Link> 
 
           <Link href='/docs'>
-            <Button variant='outline.primary' sx={{mt:4, py: 2, width: '100%',fontSize: [3,4,4], }}>Documentaion</Button>
+            <Button variant='outline.primary' sx={{mt:4, py: 2, width: '100%',fontSize: [3,4,4], }}>Documentation</Button>
           </Link> 
 
-          <Link href='/docs'>
-            <Button variant='outline.primary' sx={{mt:4, py: 2, width: '100%', fontSize: [3,4,4],}}>Documentaion</Button>
+          <Link href='/about'>
+            <Button variant='outline.primary' sx={{mt:4, py: 2, width: '100%', fontSize: [3,4,4],}}>About this App</Button>
           </Link> 
           
   
