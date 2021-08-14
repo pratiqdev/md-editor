@@ -1,14 +1,23 @@
 import { Global } from "@emotion/react";
-import theme from './Theme'
+// import theme from './Theme'
+import {useThemeUI} from 'theme-ui'
 
-const Globals = (props) => (
-  <Global
+
+import hljsStyle1 from './hljsStyle1'
+
+const Globals = (props) => {
+
+  const context = useThemeUI();
+  const { colorMode } = context;
+
+  const hls1 = hljsStyle1(colorMode)
+return  <Global
     styles={(theme) => {
       return ({
         "*": {
           boxSizing: 'border-box',
           scrollPadding: ['10rem', '4rem', '4rem'],
-          transition: 'background .3s, color .3s'
+          transition: 'background .3s, color .3s !important'
         },
         // text highlight color
         '::selection': {
@@ -177,8 +186,27 @@ const Globals = (props) => (
             background: theme.colors.primary_c
           }
         },
+
+
+
+        //~HIGHLIGHT THEMES____________________________________________________________________
+
+        
+        ...hls1,
+
+        'pre':{
+          background: colorMode === 'dark' ? '#222 !important' : '#eee !important',
+          overflowX: 'auto',
+          overflow: 'hidden',
+          padding: '10px !important',
+        },
+        'code':{
+          padding: '10px !important',
+        }
+
+       
       });
     }}
   />
-);
+};
 export default Globals

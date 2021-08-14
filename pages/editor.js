@@ -59,7 +59,7 @@ const MDPage = props => {
 
 
   const handleChange = (val, line, column) => {
-      console.log('EDITOR | handleChange - 034958')
+      // console.log('EDITOR | handleChange - 034958')
       setParentContent(val) 
       if(line && column && line !== 0 && column !== 0){
         SD.updateContent(val, line + 1, column + 1)
@@ -106,7 +106,7 @@ const MDPage = props => {
 
 
   useEffect(()=>{
-    console.log('EDITOR | useEffect | parentTrigger triggered')
+    // console.log('EDITOR | useEffect | parentTrigger triggered')
  
     loadContent() //!!!!!!!!!!!! STEP 1 
 

@@ -88,7 +88,7 @@ const SAVE_TO_DISK = debounce(() => {
 const INITIALIZE = () => {
 
 
-    console.log('SAVE | INIT ---------')
+    // console.log('SAVE | INIT ---------')
     get('MD_EDITOR_SD')
         .then(x=>{
             if(x && x.length !== 0){
@@ -517,7 +517,7 @@ export const saveFileById = (givenId) => {
 
 export const getAllSettings = () => {
     return new Promise((resolve, reject) => {
-        console.log('SD | getAllSettings() ')
+        // console.log('SD | getAllSettings() ')
         WAIT_FOR_INIT()
         .then(()=>{
             resolve(SETTINGS_ARRAY)
@@ -540,7 +540,7 @@ export const getSettingByName = (name) => {
 
 export const resetAllSettingsToDefault = () => {
     return new Promise((resolve, reject) => {
-        console.log('SD | reset all settings to defaults')
+        // console.log('SD | reset all settings to defaults')
         SETTINGS_ARRAY.forEach(x=>{
             x.state = x.default
 
@@ -575,21 +575,21 @@ export const toggleSetting= (index, newState) => {
                 if(typeof newState === 'null' || typeof newState === 'undefined'){
                     // if there is room to increment++, or set to 0
                     s.state < s.options.length ? s.state++ : s.state = 0
-                    console.log(`SETTING 1 | set '${s.name}' to ${s.state}`)
+                    // console.log(`SETTING 1 | set '${s.name}' to ${s.state}`)
                     return true
                 }else{
                     if(typeof newState === 'number'){
                         // check if within range
                         if(newState >= 0 && newState <= s.options.length){
                             s.state = newState
-                            console.log(`SETTING 2 | set '${s.name}' to ${s.state}`)
+                            // console.log(`SETTING 2 | set '${s.name}' to ${s.state}`)
                             return true
                         }else{
-                            console.log(`SETTING 3 | '${s.name}' : newState must be between 0 and ${s.options.length}`)
+                            // console.log(`SETTING 3 | '${s.name}' : newState must be between 0 and ${s.options.length}`)
                             return false
                         }
                     }else{
-                        console.log(`SETTING 4 | '${s.name}' : newState must be of type number`)
+                        // console.log(`SETTING 4 | '${s.name}' : newState must be of type number`)
                         return false
                     }
                 }
@@ -605,19 +605,19 @@ export const toggleSetting= (index, newState) => {
                     // check if max exists && not greater than max
                     if(s.max && newState > s.max){
                         outOfRange++
-                        console.log(`SETTING 5 | '${s.name}' : must be <= ${s.max}`)
+                        // console.log(`SETTING 5 | '${s.name}' : must be <= ${s.max}`)
                     }
                     // check if min exists && not less than min
                     if(s.min && newState < s.min){
                         outOfRange++
-                        console.log(`SETTING 6 | '${s.name}' : must be >= ${s.min}`)
+                        // console.log(`SETTING 6 | '${s.name}' : must be >= ${s.min}`)
                     }
                     if(outOfRange === 0){
                         s.state = newState
                     }
                     
                 }else{
-                    console.log(`SETTING 7 | '${s.name}' : newState must be number. got ${newState}`)
+                    // console.log(`SETTING 7 | '${s.name}' : newState must be number. got ${newState}`)
                 }
             }; break;
 
@@ -627,9 +627,9 @@ export const toggleSetting= (index, newState) => {
             {
                 if(typeof newState === 'string'){
                     s.state = newState
-                    console.log(`SETTING 8 | set '${s.name}' to ${s.state}`)
+                    // console.log(`SETTING 8 | set '${s.name}' to ${s.state}`)
                 }else{
-                    console.log(`SETTING 9 | '${s.name}' : newState must be of type string`)
+                    // console.log(`SETTING 9 | '${s.name}' : newState must be of type string`)
                 }
             }; break;
         //* handle string type settings
@@ -638,7 +638,7 @@ export const toggleSetting= (index, newState) => {
         case 'snippets':
             {
                 s.state = newState
-                console.log(`SETTING 11 | set '${s.name}' to ${s.state}`)
+                // console.log(`SETTING 11 | set '${s.name}' to ${s.state}`)
             }; break;
 
         //* handle boolean type settings
@@ -651,7 +651,7 @@ export const toggleSetting= (index, newState) => {
                     case false: { s.state = false };break;
                     default: {s.state = !s.state}
                 }
-                console.log(`SETTING  0 | set '${s.name}' to ${s.state}`)
+                // console.log(`SETTING  0 | set '${s.name}' to ${s.state}`)
 
             }
     }
@@ -666,7 +666,7 @@ export const toggleSetting= (index, newState) => {
 
 export const getAllSnippets = () => {
     return new Promise((resolve, reject) => {
-        console.log('SD | getAllSnippets() ')
+        // console.log('SD | getAllSnippets() ')
         WAIT_FOR_INIT()
         .then(()=>{
             let res = SETTINGS_ARRAY.find(x=>x.id==='custom-snippets').state

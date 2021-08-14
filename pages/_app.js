@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 
 
 //* theme-ui
+
 import '../src/theme/editor.css'
 import { useThemeUI, ThemeProvider, Flex, Box } from 'theme-ui' 
 
@@ -53,6 +54,7 @@ const App = ({ Component, pageProps }) => {
   
     return (
       <ThemeProvider theme={theme}>
+       
         <Globals />
           <Head>
             <title>MD Editor</title>

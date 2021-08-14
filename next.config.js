@@ -28,6 +28,7 @@ module.exports = withMDX(withPWA(withTM({
           child_process: "empty",
         };
       }
+
       return config;
     },
   })

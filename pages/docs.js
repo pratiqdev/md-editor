@@ -175,7 +175,7 @@ const DocMenu = (props) => {
   const [canCollapse, setCanCollapse] = useState(true);
 
   const collapseAll = () => {
-    console.log("collapseAll");
+    // console.log("collapseAll");
     setTrigger(!trigger);
   };
 
@@ -239,7 +239,7 @@ const DocMenu = (props) => {
 //~ generate groups ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const generateGroups = debounce(
   (sv) => {
-    console.log(`-------------------------------------------------`);
+    // console.log(`-------------------------------------------------`);
     docString = "";
     uniqueGroups.map((group, index) => generateSections(group, sv));
   },

@@ -11,6 +11,10 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 //* theme-ui
 import { InitializeColorMode } from 'theme-ui'
 
+
+
+
+
 class MyDocument extends Document {
   render() {
     return (
@@ -18,8 +22,6 @@ class MyDocument extends Document {
         <Head>
           {/* <meta name="theme-color" content={theme.palette.primary.main} />  this is leftover from material ui and can be removed*/}
            {/* ! ------------------------------------------------------------------------- */}
-
-
 
 
 
@@ -57,8 +59,11 @@ class MyDocument extends Document {
           <link rel="manifest" href="/manifest.json" />
 
           <link rel="icon" href="/pwa-icons/favicon.ico" />
+
           
-          
+        
+                  
+                  
 
 
           <link

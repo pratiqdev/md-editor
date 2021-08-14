@@ -2,12 +2,14 @@
 import React, { useRef, useEffect, useState } from 'react'
 
 
-import hljs from 'highlight.js';
-// import javascript from 'highlight.js/lib/languages/javascript';
-// import markdown from 'highlight.js/lib/languages/markdown';
-// hljs.registerLanguage('javascript', javascript);
-// hljs.registerLanguage('markdown', markdown);
-import 'highlight.js/styles/github.css';
+//* HLJS _________________________________________________________________________________________
+import hljs from 'highlight.js/lib/core'
+
+import xml from 'highlight.js/lib/languages/xml'
+hljs.registerLanguage('xml', xml);
+
+// import 'highlight.js/styles/base16/atelier-dune.css'
+
 
 
 //* THEME _________________________________________________________________________________________
@@ -15,20 +17,23 @@ import { Button, Box, Flex, Text } from "theme-ui";
 
 
 //* EXTERNAL ______________________________________________________________________________________
-
+import { debounce } from 'lodash'
 import marked from 'marked'
 
 
 
-
-
-
-
 const Render = (props) => {
-    
+
+
+
+
+
+
     const REF_RESULTBOX = useRef(null)
+    const [fakeState, setFakeState] = useState(false)
 
     const renderText = text => {
+        // console.log(text)
         let t = text || ''
         t = t.replace(/^---[\s\S]+?---$/m, '')
 
@@ -36,28 +41,39 @@ const Render = (props) => {
         return { __html }
     }
 
-    const highlightResult = () => {
+
+
+    const setNewThemes = () => {
         if (REF_RESULTBOX) {
-            const nodes = REF_RESULTBOX.current.querySelectorAll('pre');
+            const nodes = REF_RESULTBOX.current.querySelectorAll('pre code');
             nodes.forEach((node) => {
-                hljs.highlightBlock(node);
-                // console.log('found pre to highltight', node)
+                node.classList.add('style1')
             });
         }
     }
 
-
+    const debounceTheme = debounce(() => {
+        setNewThemes()
+    }, 1000, {leading: false, trailing: true})
     
+    const debounceHljs = debounce(() => {
+        hljs.highlightAll()
+    }, 1000, {leading: false, trailing: true})
+
     useEffect(()=>{
-        // highlightResult()
-        // hljs.highlightAll()
-        hljs.initHighlightingOnLoad()
-        // setPassedContent(props.parentContent || 'props.editorContent returned empty')
-    }, [ props.useTrigger])
+        debounceTheme()
+        debounceHljs()
+    }, [props.parentContent])
+
+
+
+
+
 
 
     return (
         <>
+            {/* <Button sx={{position: 'relative', zIndex: 1000000 }} onClick={()=>switchTheme()}>!!!</Button> */}
             <Box
             sx={{
                 position: props.layout.p,
@@ -130,4 +146,5 @@ const Render = (props) => {
         </>
     )
 }
+
 export default Render

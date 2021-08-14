@@ -103,7 +103,7 @@ const Ace = props => {
             gsap.to([editor.container], {background: '#191919', duration: .3})
         }else{
             editor.setTheme('ace/theme/dawn')
-            gsap.to([editor.container], {background: '#ccc', duration: .3})
+            gsap.to([editor.container], {background: '#ddd', duration: .3})
         }
     }, [colorMode, theme])
     
@@ -158,9 +158,9 @@ const Ace = props => {
             .then(x=>{
                 if(x){
 
-                        x.map((x, i)=>{
-                            console.log(`LOAD SETTINGS ${i} | ${x.name} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
-                        })
+                        // x.map((x, i)=>{
+                        //     console.log(`LOAD SETTINGS ${i} | ${x.name} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
+                        // })
                     // set keybinds
                     require.config({paths: { "ace" : "../lib/ace"}});
                     // require()
