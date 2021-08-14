@@ -64,11 +64,11 @@ const Index = (props) => {
                 <li>Advanced command pallette</li>
                 <li>VSCode style editor navigation</li>
               </ul>
-              <Box sx={{mx: ['auto', 0, 0], width: ['auto', 'auto', '100%'], flex:0, mt: 4, p:4, , }}>
+              <Box sx={{mx: ['auto', 0, 0], width: ['auto', 'auto', '100%'], flex:0, mt: 4, p:4, }}>
             Editor
           </Box>  
           </Flex>  
-          <Box id='welcome-1' sx={{p:4,, width: '100%', height: ['40vw','40vw','auto']}} />
+          <Box id='welcome-1' sx={{p:4, width: '100%', height: ['40vw','40vw','auto']}} />
         </Flex>
 
 
