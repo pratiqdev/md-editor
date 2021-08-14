@@ -28,6 +28,11 @@ return  <Global
           maxHeight: '100vh'
         },
 
+        '#welcome-1':{
+          backgroundImage: 'url("/screenshots/editor1.png")',
+          backgroundSize: '100% auto'
+        },
+
         // Ace gutter tooltip _______________________________________________________________
         '.ace_tooltip': {
           background: theme.colors.grey_0,
