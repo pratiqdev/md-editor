@@ -158,9 +158,9 @@ const Ace = props => {
             .then(x=>{
                 if(x){
 
-                        // x.map((x, i)=>{
-                        //     console.log(`LOAD SETTINGS ${i} | ${x.name} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
-                        // })
+                        x.map((x, i)=>{
+                            console.log(`LOAD SETTINGS ${i} | ${x.id} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
+                        })
                     // set keybinds
                     require.config({paths: { "ace" : "../lib/ace"}});
                     // require()
@@ -181,15 +181,59 @@ const Ace = props => {
                         ).then(()=>{
 
                             setTimeout(() => {
-                                
-                                ed.setOptions({
-                                    fontSize: 14,
-                                    enableBasicAutocompletion: x.find(x=>x.id === 'enable-basic-autocompletion').state,
-                                    enableLiveAutocompletion: x.find(x=>x.id === 'enable-live-autocompletion').state,
-                                    enableSnippets: x.find(x=>x.id === 'custom-snippets').state[0],
-                                    copyWithEmptySelection:x.find(x=>x.id === 'copy-with-empty-selection').state,
-                                    showPrintMargin:x.find(x=>x.id === 'show-print-margin').state,
+
+                                const wrapMethod = () => {
+                                    let state = x.find(x=>x.id === 'wrap-lines').state 
+                                    let wrap
+                                    if(state === 0){ wrap = false }
+                                    if(state === 1){ wrap = true }
+                                    if(state === 2){ wrap = -1}
+                                    return wrap
+                                }
+
+                                const foldMarkMethod = () => {
+                                    let state = x.find(x=>x.id === 'fold-marker').state 
+                                    let mark
+                                    if(state === 0){ mark = 'markbegin' }
+                                    if(state === 1){ mark = 'markend' }
+                                    if(state === 2){ mark = 'markbeginend'}
+                                    return mark
+                                }
+                                 editor.session.setOption('indentedSoftWrap', true);
+                                editor.session.setUseWrapMode(true);
+                                editor.setOptions({
+                                    autoScrollEditorIntoView: false, // prevent auto scrolling
+                                    fontSize: x.find(x=>x.id === 'font-size').state,                                    //done
+                                    enableBasicAutocompletion: x.find(x=>x.id === 'enable-basic-autocompletion').state, //done
+                                    enableLiveAutocompletion: x.find(x=>x.id === 'enable-live-autocompletion').state,   //done
+                                    enableSnippets: x.find(x=>x.id === 'custom-snippets').state[0],                     //done
+                                    copyWithEmptySelection: x.find(x=>x.id === 'copy-with-empty-selection').state,      //done
+                                    showPrintMargin: x.find(x=>x.id === 'show-print-margin').state,                     //done
+                                    printMarginColumn: x.find(x=>x.id === 'print-margin-location').state,               //done
+                                    wrap: wrapMethod(),                                                                 //done
+                                    useSoftTabs: x.find(x=>x.id === 'use-soft-tabs').state,                             //done
+                                    tabSize: x.find(x=>x.id === 'soft-tab-length').state,                               //done
+                                    indentedSoftWrap: x.find(x=>x.id === 'indent-wrapped-lines').state,                 //! not working
+                                    showInvisibles: x.find(x=>x.id === 'show-invisibles').state,                        //done
+                                    selectionStyle: x.find(x=>x.id === 'select-line').state ? 'line' : 'text',          //done
+                                    dragDelay: x.find(x=>x.id === 'drag-delay').state,                                  //done
+                                    dragEnabled: x.find(x=>x.id === 'drag-and-drop').state,                             //done
+                                    firstLineNumber: x.find(x=>x.id === 'first-line').state,                            //done
+                                    fadeFoldWidgets: x.find(x=>x.id === 'fade-fold').state,                             //done
+                                    showFoldWidgets: x.find(x=>x.id === 'fold-widgets').state,                          //done
+                                    showLineNumbers: x.find(x=>x.id === 'line-numbers').state,                          //done
+                                    foldStyle: foldMarkMethod(),                                                        //done
+                                    showGutter: x.find(x=>x.id === 'show-gutter').state,                                //done
+                                    // next
+                                    // - scroll speed
+                                    // - highlight gutter lines
+                                    // - set font family (must be monospace options)
+                                    // - cursor style
+                                    wrapBehavioursEnabled: true, // what is this???
+                                    // also what is behaviors enabled????? i think that means autocomplete brackets and parenthesis
                                 })
+
+                               
                             }, 250);
                         })
 

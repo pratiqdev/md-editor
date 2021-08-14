@@ -104,21 +104,15 @@ const SaveModal = forwardRef((props, ref) => {
   };
 
   const handleSave = () => {    
-    console.log("SAVE | handleSave ");
-    props.currentIdForSave === 'current' 
-        ? SD.saveActiveFile() 
-        : SD.saveFileById(currentIdForSave)
-
-
-    setLocalTrigger(!localTrigger);
-  };
-
-
-  const handleShowSaveAsTemplate = () => {    
-    console.log("SAVE | handleSaveAsTemplate ");
-    props.handleShowSaveAsTemplate()
+    // console.log("SAVE | handleSave - as template ");
+    props.handleSaveAsTemplate()
     handleClose()
+
+
   };
+
+
+
 
   //~ useEffect ____________________________________________________________________________________
   useEffect(() => {
@@ -186,12 +180,12 @@ const SaveModal = forwardRef((props, ref) => {
               fontFamily: "special",
             }}
           >
-            Save File
+            Save As Template
           </Box>
 
           {/* SUBTITLE ------------------------------------------*/}
           <Box sx={{ color: "grey_10", mt: 3, mb: 6, fontSize: 2 }}>
-            Save the current document to your machine
+            Save the current document as a template to use again later
           </Box>
 
           {currentSD &&
@@ -292,10 +286,9 @@ const SaveModal = forwardRef((props, ref) => {
               sx={{ p: 2, minWidth: "6rem", mb:3, }}
               onClick={handleSave}
             >
-              Save File
+              Save As Template
             </Button>
 
-            <Flex sx={{alignItems: 'center', }}>
                 <Button
                 variant="outline.secondary"
                 sx={{ p: 2, minWidth: "6rem", width: '100%', mr: 3}}
@@ -304,15 +297,8 @@ const SaveModal = forwardRef((props, ref) => {
                 Cancel
                 </Button>
 
-                <Button
-                variant="outline.secondary"
-                sx={{ p: 2, minWidth: "6rem",  width: '100%'}}
-                onClick={handleShowSaveAsTemplate}
-                >
-                Save as Template
-                </Button>
+                
 
-            </Flex>
           </Flex>
         </>
       </Card>

@@ -24,6 +24,8 @@ import useLongPress from '../lib/longPress'
 import LoadModal from './modals/LoadModal'
 import SettingsModal from './modals/SettingsModal'
 import SaveModal from './modals/SaveModal'
+import TemplateModal from './modals/TemplateModal'
+
 import Tipper from './Tipper'
 
 
@@ -55,6 +57,7 @@ const Navbar = forwardRef((props, ref) => {
   const REF_LOAD_MODAL = useRef()
   const REF_SAVE_MODAL = useRef()
   const REF_SETTINGS_MODAL = useRef()
+  const REF_TEMPLATE_MODAL = useRef()
 
 
 
@@ -68,6 +71,7 @@ const Navbar = forwardRef((props, ref) => {
   const [showLoad, setShowLoad] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [showSave, setShowSave] = useState(false)
+  const [showSaveTemplate, setShowSaveTemplate] = useState(false)
   const [currentIdForSave, setCurrentIdForSave] = useState('')
 
   const [activeFileData, setActiveFileData] = useState()
@@ -173,6 +177,14 @@ const handleSaveWithId = debounce((givenId) => {
   setShowSave(true)
 },1000,{ leading: true, trailing: false, maxWait: 2000});
 
+
+const handleShowSaveAsTemplate = () => {
+   setShowSaveTemplate(true)
+ }
+
+ const handleSaveAsTemplate = () => {
+  console.log(`save file as template: ${currentIdForSave}`)
+}
 
 
 const handleCloseAll = debounce(() => {
@@ -360,7 +372,19 @@ useEffect(()=>{
             causeParentTrigger={props.causeParentTrigger}
             currentIdForSave={currentIdForSave}
             handleDeny={()=>setShowSave(false)} 
-            handleAccept={()=>setShowSave(false)}/>}
+            handleAccept={()=>setShowSave(false)}
+            handleShowSaveAsTemplate={handleShowSaveAsTemplate}
+            />}
+
+          {showSaveTemplate && 
+            <TemplateModal 
+            ref={REF_TEMPLATE_MODAL}
+            causeParentTrigger={props.causeParentTrigger}
+            currentIdForSave={currentIdForSave}
+            handleDeny={()=>setShowSaveTemplate(false)} 
+            handleAccept={()=>setShowSaveTemplate(false)}
+            handleSaveAsTemplate={handleSaveAsTemplate}
+            />}
       
     </>
   );
