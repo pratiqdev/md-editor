@@ -25,6 +25,8 @@ import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
 import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 import { AssistantDirection } from "@emotion-icons/material";
 
+import * as FORMAT from '../../lib/format'
+
 
 
 
@@ -50,15 +52,10 @@ const SaveModal = forwardRef((props, ref) => {
   const REF_TITLE = useRef(null);
 
   const [localTrigger, setLocalTrigger] = useState(false);
-  const [currentSD, setCurrentSD] = useState({
-    name: "Loading current file...",
-  });
-  const [saveFileAs, setSaveFileAs] = useState("File Name");
+  const [currentSD, setCurrentSD] = useState(false);
 
-  const handleFileName = (e) => {
-    setSaveFileAs(e.target.value);
-    console.log("check if this file exists on the machine already");
-  };
+
+
 
   const handleOpen = () => {
     openUpAnim();
@@ -107,10 +104,24 @@ const SaveModal = forwardRef((props, ref) => {
   };
 
   const handleSave = () => {    
-    console.log("SAVE | handleSave ");AssistantDirection
+    console.log("SAVE | handleSave ");
+    props.currentIdForSave === 'current' 
+        ? SD.saveActiveFile() 
+        : SD.saveFileById(currentIdForSave)
 
-    // SD.createNew()
+
     setLocalTrigger(!localTrigger);
+  };
+
+
+  const handleSaveAsTemplate = () => {    
+    console.log("SAVE | handleSaveAsTemplate ");
+    // props.currentIdForSave === 'current' 
+    //     ? SD.saveActiveFile() 
+    //     : SD.saveFileById(currentIdForSave)
+
+
+    // setLocalTrigger(!localTrigger);
   };
 
   //~ useEffect ____________________________________________________________________________________
@@ -183,65 +194,125 @@ const SaveModal = forwardRef((props, ref) => {
           </Box>
 
           {/* SUBTITLE ------------------------------------------*/}
-          <Box sx={{ color: "grey_6", mt: 3, mb: 4, fontSize: 2 }}>
+          <Box sx={{ color: "grey_10", mt: 3, mb: 6, fontSize: 2 }}>
             Save the current document to your machine
           </Box>
 
-          <Box
-            sx={{
-              width: "100%",
-              textAlign: "center",
-              fontSize: 6,
-              color: "grey_15",
-              mb: 6,
-            }}
-          >
-            File: {currentSD.name}
-          </Box>
+          {currentSD &&
+          <>
 
-          <Box
+          <Flex
             sx={{
-              width: "100%",
-              textAlign: "center",
-              fontSize: 3,
+              width: "80%",
+              fontSize: 2,
               color: "grey_15",
-              mb: 2,
+              mb: 3,
+              justifyContent: 'space-between',
+              borderBottom: '1px solid',
+              borderColor: 'grey_4',
             }}
           >
-            Save file as
-          </Box>
+              <Box>
+                Filename
+              </Box>
+              <Box>
+                {currentSD.name}
+              </Box>
+          </Flex>
 
-          <Box
+
+          <Flex
             sx={{
-              // height: '40rem',
-              flex: 1,
-              // maxHeight: '70vh',
-              overflowY: "auto",
-              width: "100%",
-              mb: 6,
+              width: "80%",
+              fontSize: 2,
               color: "grey_15",
-              p: 2,
-              textAlign: "center",
+              mb: 3,
+              justifyContent: 'space-between',
+              borderBottom: '1px solid',
+              borderColor: 'grey_4',
             }}
           >
-            <Input value={saveFileAs} onChange={handleFileName} />
-          </Box>
+              <Box>
+                Created
+              </Box>
+              <Box>
+                {currentSD.date}
+              </Box>
+          </Flex>
+
+
+          <Flex
+            sx={{
+              width: "80%",
+              fontSize: 2,
+              color: "grey_15",
+              mb: 3,
+              justifyContent: 'space-between',
+              borderBottom: '1px solid',
+              borderColor: 'grey_4',
+            }}
+          >
+              <Box>
+                Last Edited
+              </Box>
+              <Box>
+                {currentSD.edit}
+              </Box>
+          </Flex>
+
+
+
+          <Flex
+            sx={{
+              width: "80%",
+              fontSize: 2,
+              color: "grey_15",
+              mb: 3,
+              justifyContent: 'space-between',
+              borderBottom: '1px solid',
+              borderColor: 'grey_4',
+            }}
+          >
+              <Box>
+                Lines / Words / Chars
+              </Box>
+              <Box>
+              {FORMAT.numberWithCommas(currentSD.content.split(/\r|\n|\r\n/).length)}{' / '}
+              {FORMAT.numberWithCommas(currentSD.content.trim().split(/\s+/).length)}{' / '} 
+              {FORMAT.numberWithCommas(currentSD.content.length)}
+              </Box>
+          </Flex>
+          </>
+        }
+
+    
+
+    
 
           {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
-          <Flex sx={{ width: "100%", justifyContent: "space-between" }}>
+          <Flex sx={{ mt: 6, width: "100%", flexDirection: 'column' }}>
+            <Button
+              variant="outline.primary"
+              sx={{ p: 2, minWidth: "6rem", mb:3 }}
+              onClick={handleSave}
+            >
+              Save File
+            </Button>
+
+            <Button
+              variant="outline.primary"
+              sx={{ p: 2, minWidth: "6rem", mb:3 }}
+              onClick={handleSaveAsTemplate}
+            >
+              Save as Template
+            </Button>
+
             <Button
               variant="outline.secondary"
               sx={{ p: 2, minWidth: "6rem" }}
               onClick={handleDeny}
             >
               Cancel
-            </Button>
-            <Button
-              variant="outline.primary"
-              sx={{ p: 2, minWidth: "6rem" }}
-              onClick={handleSave}
-            >
-              Save
             </Button>
           </Flex>
         </>

@@ -1,7 +1,7 @@
 const intro = 
 
 `---
-title: {{title}}
+title: {{filename}}
 created: {{date}}
 edited: {{edit}}
 author: {{author}}
