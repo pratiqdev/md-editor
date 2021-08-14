@@ -8,7 +8,47 @@ import hljs from 'highlight.js/lib/core'
 import xml from 'highlight.js/lib/languages/xml'
 hljs.registerLanguage('xml', xml);
 
-// import 'highlight.js/styles/base16/atelier-dune.css'
+import javascript from 'highlight.js/lib/languages/javascript'
+hljs.registerLanguage('javascript', javascript);
+
+import css from 'highlight.js/lib/languages/javascript'
+hljs.registerLanguage('css', css);
+
+import python from 'highlight.js/lib/languages/python'
+hljs.registerLanguage('python', python);
+
+import sql from 'highlight.js/lib/languages/sql'
+hljs.registerLanguage('sql', sql);
+
+import json from 'highlight.js/lib/languages/json'
+hljs.registerLanguage('json', json);
+
+import bash from 'highlight.js/lib/languages/bash'
+hljs.registerLanguage('bash', bash);
+
+import shell from 'highlight.js/lib/languages/shell'
+hljs.registerLanguage('shell', shell);
+
+import diff from 'highlight.js/lib/languages/diff'
+hljs.registerLanguage('diff', diff);
+
+import markdown from 'highlight.js/lib/languages/markdown'
+hljs.registerLanguage('markdown', markdown);
+
+import java from 'highlight.js/lib/languages/java'
+hljs.registerLanguage('java', java);
+
+import lua from 'highlight.js/lib/languages/lua'
+hljs.registerLanguage('lua', lua);
+
+import makefile from 'highlight.js/lib/languages/makefile'
+hljs.registerLanguage('makefile', makefile);
+
+import perl from 'highlight.js/lib/languages/perl'
+hljs.registerLanguage('perl', perl);
+
+
+
 
 
 
@@ -127,10 +167,14 @@ const Render = (props) => {
                     border: '1px solid',
                     borderColor: 'grey_3',
                     borderRadius: 2,
-                    color: 'grey_12'
+                    color: 'grey_12',
+                    fontSize: [1,2,2],
                 },
                 '& pre *':{
                     bg: 'transparent'
+                },
+                '& .hljs, code':{
+                    fontSize: [1,2,2],
                 },
                 '& ::marker':{
                     color: 'grey_8'

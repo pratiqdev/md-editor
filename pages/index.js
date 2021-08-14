@@ -34,23 +34,59 @@ const Index = (props) => {
         justifyContent: 'center',
       }}>
       <Navbar fixed  />
+
+
+      <Flex sx={{p:6,  width: '100%', height: '90vh', alignItems: 'center'}}>
+
+        <Flex sx={{ width: '100%', border: '1px solid yellow',justifyContent: 'space-between', alignItems: 'center'}}>
+          <Box>
+            <Box sx={{ fontSize: [8,9,10], textAlign: 'left', mb: 8}}>
+              Welcome to MD Editor! 
+              
+            </Box>
+            <Box sx={{  fontSize: [3,4,4]}}>
+              <Box sx={{ fontSize: [6,7,7], mb:4}}>
+                An advanced markdown editor with awesome features
+              </Box>
+              <ul>
+                <li>Custom and built-in snippets</li>
+                <li>Custom and built-in templates</li>
+                <li>Automatic keyword replacement on save</li>
+                <li>Tons of keyboard shortcuts</li>
+                <li>Advanced command pallette</li>
+                <li>VSCode style editor navigation</li>
+              </ul>
+
+              <Flex sx={{flexDirection: 'column'}}>
+              <Link href='/editor'>
+                <Button variant='accent' sx={{mb:6, py: 4, px:8, fontSize: [4,5,7], m:4, mt:6}}>Get Started</Button>
+              </Link>
+              <Link href='/editor'>
+                <Button variant='outline.primary' sx={{mb:6, py: 2, px:8, fontSize: [3,4,4], m:4, mt:2}}>View Guides</Button>
+              </Link>
+              <Link href='/editor'>
+                <Button variant='outline.primary' sx={{mb:6, py: 2, px:8, fontSize: [3,4,4], m:4, mt:2}}>Documentation</Button>
+              </Link>
+              <Link href='/editor'>
+                <Button variant='outline.primary' sx={{mb:6, py: 2, px:8, fontSize: [3,4,4], m:4, mt:2}}>About this App</Button>
+              </Link>
+              </Flex>
+
+            </Box>
+          </Box>
+          <Box sx={{width: '50vw', display: ['none', 'none', 'block']}}>
+            <img src='screenshots/editor1.png' style={{width: '100%',}} />
+          </Box>
+        </Flex>
+
+
+      </Flex>
         
 
-      <Box sx={{px: [4,5,5], fontSize: [6,7,8], maxWidth: '80vw', textAlign: 'center', mb: '6vh'}}>
-        View the docs to see what elements can be used here or jump in!
-      </Box>
 
 
 
-        <Link href='/editor'>
-          <Button variant='outline.accent' sx={{width: '25rem', maxWidth: '80vw',mb:6, py: 4, fontSize: [4,6,9]}}>MD Editor</Button>
-        </Link>
-        <Link href='/docs'>
-          <Button variant='outline.secondary' sx={{width: '12rem', mb:4, fontSize: [3,5,6]}}>Documentation</Button>
-        </Link>
-        <Link href='/about'>
-          <Button variant='outline.secondary' sx={{width: '12rem', mb:4, fontSize: [3,5,6]}}>About this App</Button>
-        </Link>
+
 
       </Flex>
   );

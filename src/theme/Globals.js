@@ -39,6 +39,18 @@ return  <Global
           whiteSpace: 'normal',
         },
 
+        // Ace gutter tooltip _______________________________________________________________
+        '.ace_hidpi ~ .ace-tm': {
+          // background: theme.colors.grey_4,
+          // color: theme.colors.grey_15,
+          // border: '1px solid',
+          // borderColor: theme.colors.grey_15,
+        },
+        '.ace_hidpi ': {
+          // background: 'red',
+          minHeight: '1.6rem'
+        },
+
         // Keyboard shortcut list ___________________________________________________________
         '#kbshortcutmenu': {
           background: theme.colors.grey_2,
@@ -198,9 +210,12 @@ return  <Global
           overflowX: 'auto',
           overflow: 'hidden',
           padding: '10px !important',
+          fontSize: 'inherit !important',
         },
         'code':{
           padding: '10px !important',
+          fontSize: 'inherit !important',
+
         }
 
        
