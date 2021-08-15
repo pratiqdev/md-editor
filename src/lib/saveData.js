@@ -6,10 +6,12 @@ import {debounce, replace} from 'lodash'
 import * as ALERT from './alert'
 
 import intro from './intro'
-import SETTINGS_ARRAY from './SETTINGS_ARRAY'
+import SETTINGS_ARRAY_IMPORT from './SETTINGS_ARRAY'
 
 
 //= Variables /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+let SETTINGS_ARRAY = SETTINGS_ARRAY_IMPORT
 
 export let IS_AVAIL = false
 let INIT_ALERT_NUM = 0
@@ -51,8 +53,12 @@ const CHECK_AVAIL = () => {
             set('IDBKV_TEST', 'test_value')
                 .then(()=>{
                     resolve()
+                    console.log(`SD | CHECK_AVAIL | SD is available!`)
+                    IS_AVAIL = true
                 })
                 .catch((err)=>{
+                    console.log(`SD | CHECK_AVAIL | SD is NOT available... ${err}`)
+                    IS_AVAIL = false
                     ALERT_STATUS()
                     return reject()
                 })
@@ -117,9 +123,9 @@ const INITIALIZE = () => {
             SD_INITIALIZED = true
         })
         .catch(err=>{
-            // console.log(`SAVE | INIT | settings not available...${err}`)
+            console.log(`SAVE | INITIALIZE | settings not available...${err}`)
             SD_INITIALIZED = true
-            ALERT_STATUS()
+            // ALERT_STATUS()
 
         })
                     
@@ -198,7 +204,7 @@ export const init = () => {
             IS_AVAIL = false 
             
             // only alert the user occasionaly about failed storage
-            ALERT_STATUS()
+            // ALERT_STATUS()
         })
 }
 

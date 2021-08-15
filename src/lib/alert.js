@@ -1,5 +1,7 @@
 import {debounce} from 'lodash'
 import toasty from './toasty'
+import { version } from '../../package.json';
+
 
 
 //! welcome to site alerts ==============================================================================

@@ -39,9 +39,6 @@ import { setSyntheticTrailingComments } from 'typescript';
 
 
 
-
-
-
 const SettingsModal = forwardRef((props, ref) => {
 
     useImperativeHandle(ref,() => ({
@@ -72,7 +69,7 @@ const SettingsModal = forwardRef((props, ref) => {
     }
 
     const handleClose = () => {
-        props.causeParentTrigger()
+        props?.causeParentTrigger && props.causeParentTrigger()
         closeDownAnim()
         setTimeout(() => {
             props.handleDeny ? props.handleDeny() : null
@@ -197,15 +194,7 @@ const SettingsModal = forwardRef((props, ref) => {
 
 
             {/* LOAD CONTENT SECTION /////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-         <>
-                {/* <Flex sx={{
-                    p: [3,4,6],
-                    py: [4,4,6],
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    minWidth: ['90vw', 'auto', 'auto']
-                }}> */}
+  
 
                     {/* TITLE ------------------------------------------*/}
                     <Box
@@ -219,21 +208,17 @@ const SettingsModal = forwardRef((props, ref) => {
                     </Box>
 
                     <Box sx={{
-                        // height: '40rem',
-                        flex: 1,
-                        // maxHeight: '70vh',
+                        position: 'relative', // added to prevent list from moving out of bounds of the parent on re-render
                         overflowY: 'auto',
-                        // borderTop: '1px solid',
-                        // borderBottom: '1px solid',
                         borderColor: 'grey_4',
                         borderRadius: 0,
-                        // bg: 'grey_2',
                         width: '100%',
                         mb: 6,
                         color: 'grey_4',
-                        // p:2,
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        border: '1px solid yellow'
                     }}>
+
 
 
                         {settingsList.map((s, si) => {
@@ -248,13 +233,7 @@ const SettingsModal = forwardRef((props, ref) => {
                             }
 
                         }
-                            // <LoadItem 
-                            //     currentSETTING={x} 
-                            //     currentIndex={i} 
-                            //     handleActiveSwap={handleActiveSwap}
-           
-                                
-                            //     />
+               
                         )}
                       
                     </Box>
@@ -266,7 +245,6 @@ const SettingsModal = forwardRef((props, ref) => {
                         <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleShowConfirmReset}>Reset</Button>
                         <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleClose}>Done</Button>
                     </Flex>
-            </>
             
 
 
