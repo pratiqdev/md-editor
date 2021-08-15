@@ -113,12 +113,9 @@ const MDPage = props => {
   }, [parentTrigger]) //!!!!!! ORIGIN
 
   useEffect(()=>{
-    if(!DONE_LOADING){
-      setParentTrigger(!parentTrigger)
-      DONE_LOADING = true
+      // setParentTrigger(!parentTrigger)
       hideSpinner()
       ALERT.welcomeAlerts()
-    }
   })
 
   //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
