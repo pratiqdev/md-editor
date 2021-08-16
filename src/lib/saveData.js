@@ -4,7 +4,7 @@ import moment from 'moment'
 import toasty from './toasty'
 import {debounce, replace} from 'lodash'
 import * as ALERT from './alert'
-
+import { version } from '../../package.json'
 import intro from './intro'
 import SETTINGS_ARRAY_IMPORT from './SETTINGS_ARRAY'
 
@@ -17,6 +17,7 @@ export let IS_AVAIL = false
 let INIT_ALERT_NUM = 0
 
 let SD_INITIALIZED = false
+let V_TEST_FINISHED = false
 
 let MOMENT_FORMAT = "ddd, MMM D, h:mm:ss a"
 let getNow = () => moment().format(MOMENT_FORMAT)
@@ -51,6 +52,35 @@ const CHECK_AVAIL = () => {
             reject()
         }else{
             set('IDBKV_TEST', 'test_value')
+                .then(()=>{
+                    resolve()
+                    console.log(`SD | CHECK_AVAIL | SD is available!`)
+                    IS_AVAIL = true
+                })
+                .catch((err)=>{
+                    console.log(`SD | CHECK_AVAIL | SD is NOT available... ${err}`)
+                    IS_AVAIL = false
+                    ALERT_STATUS()
+                    return reject()
+                })
+        }
+    })
+  
+}
+
+
+const VERSION_CHECK = () => {
+    return new Promise((resolve, reject) => {
+
+        if(typeof window === 'undefined' || !window.indexedDB || typeof window.indexedDB === 'undefined'){ 
+            // cant check for version yet
+            if(!V_TEST_FINISHED){
+                setTimeout(() => {
+                    VERSION_CHECK()
+                }, 3000);
+            }
+        }else{
+            set('MDE_VERSION', 'test_value')
                 .then(()=>{
                     resolve()
                     console.log(`SD | CHECK_AVAIL | SD is available!`)
