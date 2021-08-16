@@ -1,6 +1,6 @@
 import { Global } from "@emotion/react";
 import {useThemeUI} from 'theme-ui'
-
+import { useAnims } from '../lib/motion'
 
 import hljsStyle1 from './hljsStyle1'
 
@@ -16,7 +16,7 @@ return  <Global
         "*": {
           boxSizing: 'border-box',
           scrollPadding: ['10rem', '4rem', '4rem'],
-          transition: 'background .3s, color .3s !important'
+          // transition: useAnims ? 'background .3s, color .3s !important' : 'background 0.0s, color 0.0s !important'
         },
         // text highlight color
         '::selection': {

@@ -11,6 +11,7 @@ import { Button, Box, Flex, Text, Grid } from "theme-ui";
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
 
+/** the home page */
 const Index = (props) => {
   const router = useRouter();
 
