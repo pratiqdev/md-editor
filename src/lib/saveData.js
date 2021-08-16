@@ -68,8 +68,8 @@ const CHECK_AVAIL = () => {
   
 }
 
-
-const VERSION_CHECK = () => {
+/** Test if the current version in the browser is the latest and show a message about updating to the latest version with a built in cache clean and refresh function */
+const V_CHECK = () => {
     return new Promise((resolve, reject) => {
 
         if(typeof window === 'undefined' || !window.indexedDB || typeof window.indexedDB === 'undefined'){ 
@@ -80,10 +80,10 @@ const VERSION_CHECK = () => {
                 }, 3000);
             }
         }else{
-            set('MDE_VERSION', 'test_value')
+            get('MDE_VERSION', version)
                 .then(()=>{
                     resolve()
-                    console.log(`SD | CHECK_AVAIL | SD is available!`)
+                    console.log(`SD | V_CHECK | `)
                     IS_AVAIL = true
                 })
                 .catch((err)=>{
