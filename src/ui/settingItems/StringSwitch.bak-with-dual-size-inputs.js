@@ -27,7 +27,7 @@ const StringSwitch = ({s, si, handle}) => {
             checkInputDims(value)
             
         }else{
-            ALERT.minMaxAlert(s.min, s.max)
+            ALERT.minMax(s.min, s.max)
         }
     }
 

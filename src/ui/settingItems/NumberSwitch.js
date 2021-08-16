@@ -15,7 +15,7 @@ const NumberSwitch = ({s, si, handle}) => {
             setNewValue(val)
             handle(si, parseInt(val))
         }else{
-            ALERT.nanAlert(val)
+            ALERT.nan(val)
         }
     }
    return(

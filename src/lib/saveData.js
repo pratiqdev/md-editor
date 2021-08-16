@@ -611,23 +611,25 @@ export const toggleSetting= (index, newState) => {
         case 'number':
             {
                 // handle setting the new state directly to given number
+                if(newState === ''){ALERT.blank(s.name)}
                 if(typeof newState === 'number'){
                     let outOfRange = 0
                     // check if max exists && not greater than max
                     if(s.max && newState > s.max){
                         outOfRange++
-                        // console.log(`SETTING 5 | '${s.name}' : must be <= ${s.max}`)
+                        ALERT.minMax(s.min, s.max, s.name)
                     }
                     // check if min exists && not less than min
                     if(s.min && newState < s.min){
                         outOfRange++
-                        // console.log(`SETTING 6 | '${s.name}' : must be >= ${s.min}`)
+                        ALERT.minMax(s.min, s.max, s.name)
                     }
                     if(outOfRange === 0){
                         s.state = newState
                     }
                     
                 }else{
+                    ALERT.nan(newState)
                     // console.log(`SETTING 7 | '${s.name}' : newState must be number. got ${newState}`)
                 }
             }; break;

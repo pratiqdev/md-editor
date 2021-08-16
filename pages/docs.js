@@ -407,7 +407,7 @@ const Docs = (props) => {
 
   return (
     <Box sx={{ bg: "grey_4", height: "100vh", }}>
-      <Navbar />
+      <Navbar fixed/>
       <Box sx={{ overflowX: "hidden" }}>
         <Box
           sx={{

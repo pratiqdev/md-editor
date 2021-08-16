@@ -216,7 +216,7 @@ const SettingsModal = forwardRef((props, ref) => {
                         mb: 6,
                         color: 'grey_4',
                         textAlign: 'center',
-                        border: '1px solid yellow'
+                        // border: '1px solid yellow'
                     }}>
 
 

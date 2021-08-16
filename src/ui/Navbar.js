@@ -263,8 +263,8 @@ useEffect(()=>{
             bg: props.bg
               ? props.bg
               : "grey_4",
-            borderBottom: '1px solid',
-            borderColor: 'grey_0'
+            // borderBottom: '1px solid',
+            // borderColor: 'grey_0'
           }}
         />
         <Flex sx={{ alignItems: "center", zIndex: 1, justifyContent: 'space-between', flex:1 }}>
@@ -343,7 +343,7 @@ useEffect(()=>{
       {/* empty box used for extra margin for fixed nav */}
       <Box
         sx={{
-          mt: props.fixed ? 8 : 0,
+          mt: props.fixed ? 6 : 0,
         }}
       ></Box>
 

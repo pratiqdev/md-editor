@@ -36,13 +36,15 @@ const Index = (props) => {
           // alignItems: 'center',
           maxWidth: '90rem',
           p: 6,
+          pt:8,
           width: "100%",
         }}
-      >
+      ><Box sx={{ whiteSpace: 'nowrap',fontSize: [8,9,10], textAlign: 'center', mb: 4, color: 'primary_b'}}>
+                  Welcome to MD Editor! 
+              </Box>
         <Flex sx={{ 
           flex:1,
           flexDirection: ['column', 'column', 'row'],
-          p:'5px',
           }}>
           <Flex sx={{
             p:4, 
@@ -50,9 +52,7 @@ const Index = (props) => {
             alignItems: ['center', 'center','flex-start',],
             minWidth: 'min-content',
             }}>
-              <Box sx={{ whiteSpace: 'nowrap',fontSize: [8,9,10], textAlign: 'left', mb: 4}}>
-                  Welcome to MD Editor! 
-              </Box>
+              
               <Box sx={{ fontSize: [3,4,4], mb:4, textAlign: ['center', 'left', 'left']}}>
                 An advanced markdown editor with awesome features
               </Box>
