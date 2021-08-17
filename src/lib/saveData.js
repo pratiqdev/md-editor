@@ -2,7 +2,7 @@ import { Sd } from '@emotion-icons/material'
 import {get, set} from 'idb-keyval'
 import moment from 'moment'
 import toasty from './toasty'
-import {debounce, replace} from 'lodash'
+import {debounce, replace, cloneDeep} from 'lodash'
 import * as ALERT from './alert'
 import { version } from '../../package.json'
 import intro from './intro'
@@ -462,8 +462,9 @@ export const deleteById = (givenId) => {
 
 
 /** Use the find - replace fields from settings before saving the file  */
-const REPLACE_CONTENT = x => {
+const REPLACE_CONTENT = givenX => {
     return new Promise((resolve, reject) => {
+        let x = cloneDeep(givenX)
         let replacerObjects = SETTINGS_ARRAY.find(x=> x.id === 'find-and-replace-values')?.state
 
         if(replacerObjects[0]){ // check if the globalActive state is true
