@@ -40,9 +40,6 @@ Use multiple cursors to edit content
 
 *Type: switch*  
 *Default: Enabled*
-
-![alt-text](https://placekitten.com/800/800)
-
 `},
 { name: 'Show Print Margin',
 group: 'editor functions',
