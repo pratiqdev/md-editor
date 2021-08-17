@@ -110,6 +110,48 @@ Set a custom delay (in milliseconds) for activating drag functionality
 
 `,
 },
+{ name: 'Find and Replace on Save',
+group: 'editor functions',
+content: `
+Define custom values that will be automatically replaced with the defined string when saving the file to your machine.
+
+*Type: switch + strings / regexp*  
+*Default: 150 | Min: 0 | Max: 1000*
+
+
+`,
+},
+{ name: 'Live Replacement',
+group: 'editor functions',
+content: `
+Enable automatic replacement of values in the rendered result during editing. This uses the same set of values when saving, as defined with the setting 'Find and Replace Values'
+
+*Type: switch*  
+*Default: True*
+
+
+`,
+},
+{ name: 'Custom Snippets',
+group: 'editor functions',
+content: `
+Define a list of custom snippets to be inserted into the document on user selection.
+These snippets will be shown in a scrollable menu that appears when typing any matching text, corresponding to a snippets 'name'.
+Snippets can be a string of any values, but can be constructed like the example below for easy modification.  
+Consider the following examples of a markdown image:  
+${'`'}![ ]( )${'`'}  
+${'`'}![ \${1} ]( \${2} )${'`'}  
+${'`'}![ \${1:alt-text} ]( \${2:url} )${'`'}  
+The numbers are used to navigate to (with the tab key) and highlight the text field.  
+The text ('alt-text' and 'url') are names of the fields and will be shown when the snippet is inserted into the document.  
+Numbers are required for tab navigation but, names can be omitted
+
+*Type: switch*  
+*Default: True*
+
+
+`,
+},
 
 
 

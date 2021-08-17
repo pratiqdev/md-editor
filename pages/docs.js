@@ -201,6 +201,7 @@ const DocMenu = (props) => {
         top: ["", "10rem", "10rem"],
         bottom: "0",
         overflow: "hidden",
+        overflowY: 'auto',
         maxHeight: "93vh",
         flexDirection: "column",
         p: 2,
