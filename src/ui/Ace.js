@@ -338,7 +338,9 @@ const Ace = props => {
 
     return(
         <div class='transitioned'>
-        <Box sx={{
+        <Box 
+            id='halo-0'
+            sx={{
             // position: 'relative',
             // height: '10vh',
             position: props.layout.p,

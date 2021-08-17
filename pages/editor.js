@@ -270,7 +270,7 @@ const MDPage = props => {
           </Box>
 
 
-          <Box class='transitioned' sx={{height: '3vh', overflow: 'hidden', overflowY: 'auto'}} >
+          <Box sx={{height: '3vh', overflow: 'hidden', overflowY: 'auto'}} >
             <Render 
               useTrigger={parentTrigger}
               parentContent={parentContent} 

@@ -27,7 +27,7 @@ import SaveModal from './modals/SaveModal'
 import TemplateModal from './modals/TemplateModal'
 
 import Tipper from './Tipper'
-
+import HaloGuide from './HaloGuide'
 
 import { showInstallPrompt, libInstallStatus, triggerInstallFlow, deferredPrompt } from '../lib/install'
 
@@ -283,7 +283,9 @@ useEffect(()=>{
           </Link>
 
             {props.editor &&
-              <Flex sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
+              <Flex 
+              id='halo-2'
+              sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
               onClick={(e)=>setShowLoad(true)}
               >
                 <Box sx={{fontSize: 1, p:0, m:0}}>
@@ -391,19 +393,7 @@ useEffect(()=>{
             />}
 
             {showGuideHalo && 
-            <Box sx={{
-                position: 'absolute', 
-                zIndex: 10000, 
-                borderRadius: '50%', 
-                border: '5px solid',
-                borderColor: 'primary_b', 
-                width: '15rem', 
-                height: '15rem',
-                top: '10vw',
-                left: '10vw', 
-                boxShadow: '0 0 10000px 10000px rgba(100,100,100,.8)'
-                  }} 
-            />
+            <HaloGuide />
             }
       
     </>
