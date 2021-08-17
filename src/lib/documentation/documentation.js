@@ -1,4 +1,5 @@
-import settings from './settings'
+import editorFunctionSettings from './editorFunctionSettings'
+import editorDisplaySettings from './editorDisplaySettings'
 import changelog from './changelog'
 import issues from './issues'
 
@@ -150,7 +151,8 @@ This is Some text right here boii
 
 
 
-...settings,
+...editorFunctionSettings,
+...editorDisplaySettings,
 ...changelog,
 ...issues,
 

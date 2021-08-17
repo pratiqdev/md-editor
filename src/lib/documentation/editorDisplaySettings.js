@@ -1,157 +1,69 @@
-const settings = [
+const editorDisplaySettings = [
 {
     name: '',
-    group: 'editor functions',
-    content: `These settings control how the editor functions`
-},
-{ name: "Cut / Copy Full Line",
-group: "editor functions",
-content: 
-`
-Select and modify the entire line if nothing is selected  
-
-*Type: switch*  
-*Default: Enabled*
-`
-},
-{ name: "Use Soft Tabs",
-group: "editor functions",
-content: 
-`
-Use multiple spaces instead of the tab character  
-
-*Type: switch*  
-*Default: Enabled*
-`
-},
-{ name: "Soft Tab Size",
-group: "editor functions",
-content: 
-`
-Number of spaces to use for soft tabs  
-
-*Type: number*  
-*Default: 4 | Min: 2 | Max: 10*
-`},
-{ name: 'Multi-cursor Select',
-group: 'editor functions',
-content: `
-Use multiple cursors to edit content
-
-*Type: switch*  
-*Default: Enabled*
-`},
-{ name: 'Show Print Margin',
-group: 'editor functions',
-content: `
-Display a vertical line at a provided location for print margins
-
-*Type: switch*  
-*Default: Enabled*
-
-`},
-{ name: 'Print Margin Location',
-group: 'editor functions',
-content: `
-Define a custom location for the print margin and line wrapping
-
-*Type: number*  
-*Default: 80*
-
-`},
-{ name: 'Wrap Lines',
-group: 'editor functions',
-content: `
-Select the behavior of line wrapping 
-
-- Disabled: Use horizontal scroll instead of wrapping text
-- Enabled: Wrap text at the edge of the editor
-- Margin: Wrap at the print margin line 
-
-*Type: options*  
-*Default Enabled*
-
-`},
-{ name: 'Indent Wrapped Lines',
-group: 'editor functions',
-content: `
-Automatically indent wrapped lines on the next row
-
-*Type: switch*  
-*Default: Enabled*
-
-`},
-{ name: 'Use Fold Widgets',
-group: 'editor functions',
-content: `
-Allow folding (collapsing) of sections using a gutter widget
-
-*Type: switch*  
-*Default: Enabled*
-
-`},
-{ name: 'Drag and Drop',
-group: 'editor functions',
-content: `
-Enable drag and drop of selected content within the editor
-
-*Type: switch*  
-*Default: Enabled*
-
-`},
-{ name: 'Drag and Drop Delay',
-group: 'editor functions',
-content: `
-Set a custom delay (in milliseconds) for activating drag functionality
-
-*Type: number*  
-*Default: 150 | Min: 0 | Max: 1000*
-
-
-`,
+    group: 'editor display',
+    content: `These settings control how the editor and its components are displayed`
 },
 
 
-{
-name: "Editor Display Settings",
-group: "settings",
+{ name: "Editor Font Size",
+group: "editor display",
 content: 
-`###### Editor Font Size (number)
+`
 Set the default font-size within the editor
 
+*Type: number*  
 *Default: 12 | Min: 6 | Max: 24*
 
-
-##### Editor Font Family (options)
+`},
+{ name: 'Editor Font Family',
+group:'editor display',
+content:
+`
+(Not functional yet)
 Select the font family for the editor, all included fonts are monospace
 
-- 
-
+*Type: options*  
 *Default: *
 
-
-###### Selection Style (options)
+`},
+{ name: 'Selection Style',
+group:'editor display',
+content:
+`
 Select the method of highlighting when selecting text
 
 - Line: Highlight the entire line
 - Text: Only highlight the selected text  
 
+*Type: options*
 *Default: Text*  
 
-
-###### Highlight Active Line (switch)
+`},
+{ name: 'Highlight Active Line',
+group:'editor display',
+content:
+`
 Highlight the currently active line with a secondary color  
 
+*Type: switch*  
 *Default: Enabled*  
 
-
-###### Highlight Selected Word (switch)
+`},
+{ name: 'Highlight Selected Word',
+group:'editor display',
+content:
+`
 Highlight all occurences of the selected word  
 
+*Type: switch*  
 *Default: Enabled*
 
-
-###### Cursor Style (options)
+`},
+{ name: 'Cursor Style',
+group:'editor display',
+content:
+`
 Select the style of the cursor within the editor
 
 - Ace: The default cursor
@@ -159,53 +71,80 @@ Select the style of the cursor within the editor
 - Smooth: The default cursor with a smooth transition when blinking
 - Wide: A wide variant of the default cursor  
 
+*Type: options*  
 *Default: Ace*
 
-
-###### Show Invisible Characters (switch)
+`},
+{ name: 'Show Invisible Characters',
+group:'editor display',
+content:
+`
 Show markers for invisible characters like spaces and line-breaks
 
+*Type: switch*  
 *Default: Disabled*
 
+`},
+{ name: 'Show Gutter',
+group:'editor display',
+content:
+`
+Display the gutter with line numbers on the left-side of the editor
 
-###### Show Line Gutter (switch)
-Display the gitter with line numbers on the left-side of the editor
-
+*Type: switch*  
 *Default: Enabled*
-
-
-###### Show Line Numbers (switch)
+`},
+{ name: 'Show Line Numbers',
+group:'editor display',
+content:
+`
 Display the line numbers in the editors gutter
 
+*Type: switch*  
 *Default: Enabled*
 
-
-###### First Line Number (number)
+`},
+{ name: 'First Line Number',
+group:'editor display',
+content:
+`
 Set a custom number for the first line number
 
+*Type: number*  
 *Default: 1*
-
-###### Highlight Line Number (switch)
+`},
+{ name: 'Highlight Line Number',
+group:'editor display',
+content:
+`
 Highlight the line number for the currently active line
 
+*Type: switch*  
 *Default: Enabled*
 
-
+`},
+{ name: 'Fade Fold Widgets',
+group:'editor display',
+content:
+`
 ###### Fade Fold Widgets (switch)
 Only show fold widgets when hovering the editors gutter
 
+*Type: switch*  
 *Default: Disabled*
-
-
-###### Scroll Past End (options)
+`},
+{ name: 'Scroll Past End',
+group:'editor display',
+content:
+`
 Allow the editor to scroll past the last line of content
 
 - Full: Scroll full height
 - Half: Scroll half height
 - Disabled: Do not scroll past last line
 
+*Type: options*  
 *Default: Full*
-
 `,
 },
 
@@ -221,7 +160,7 @@ Allow the editor to scroll past the last line of content
 
 
 ];
-export default settings
+export default editorDisplaySettings
     
 
 
