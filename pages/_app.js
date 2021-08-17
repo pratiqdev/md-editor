@@ -49,9 +49,8 @@ const App = ({ Component, pageProps }) => {
   useEffect(() => {
     SD.init()
     toast.remove()
-
   }), [];
-  
+   
     return (
       <ThemeProvider theme={theme}>
        

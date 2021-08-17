@@ -18,7 +18,7 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 
 // LOCAL ____________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-import dataList from "../src/lib/documentation";
+import dataList from "../src/lib/documentation/documentation";
 import MDX from "@mdx-js/runtime";
 
 // EXTERNAL ____________________________________________________________________________________
@@ -359,16 +359,22 @@ const append = (val) => {
 };
 
 const h1 = (val) => {
-  val = val.toUpperCase();
-  docString += `\r\n # ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  if(val){
+    val = val.toUpperCase()
+    docString += `\r\n # ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  }
 };
 
 const h2 = (val) => {
-  docString += `\r\n ## ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  if(val){
+    docString += `\r\n ## ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  }
 };
 
 const h3 = (val) => {
-  docString += `\r\n#### ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  if(val){
+    docString += `\r\n#### ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  }
 };
 
 
@@ -407,7 +413,7 @@ const Docs = (props) => {
 
   return (
     <Box sx={{ bg: "grey_4", height: "100vh", }}>
-      <Navbar fixed/>
+      <Navbar/>
       <Box sx={{ overflowX: "hidden" }}>
         <Box
           sx={{

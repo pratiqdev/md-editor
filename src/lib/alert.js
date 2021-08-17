@@ -1,6 +1,5 @@
 import {debounce} from 'lodash'
 import toasty from './toasty'
-import { version } from '../../package.json';
 
 
 
@@ -9,22 +8,6 @@ let WELCOME_LIMIT = 0
 export const welcomeAlerts = () => {
     WELCOME_LIMIT++
     if(WELCOME_LIMIT === 0){
-    setTimeout(() => {
-        toasty({
-          text: `Using version ${version}`,
-          type: 'special',
-          time: 3000,
-          agree: {
-            text: 'Got it',
-          },
-          closeAnyway: true
-        })
-
-
-        
-        
-      }, 1000);
-
       setTimeout(() => {
         toasty({
           text: `View the documentation for more info or guides on how to use this application`,
@@ -66,6 +49,7 @@ export const welcomeAlerts = () => {
       }, 10000);
     }
 }
+
 
 
 //! FILES

@@ -6,6 +6,7 @@ const inlineCode = {
   lineHeight: 1.6,
   px: 1,
   py: 0,
+  p: '.2rem !important',
   borderRadius: 1
 }
 
@@ -21,6 +22,7 @@ export default {
       code: {
         ...inlineCode,
       },
+
     },
     br:{
       my: 7
@@ -40,16 +42,17 @@ export default {
     h2: {
       variant: "text.heading",
       fontSize: [5,6,7],
-      mt: 6,
-      mb: 4,
+      mt: 8,
+      pt: 2,
+      mb: 0,
+      pb:0,
       fontFamily: "body",
       borderTop: '1px solid',
       borderColor: 'grey_6',
-      mt: 4,
-    'h1 h2:first-of-type':{
-      mt: 0,
-      borderTop: '0px solid',
-    },
+      'h2:first-of-type':{
+        mt: 0,
+        borderTop: '0px solid',
+      },
     },
     h3: {
       variant: "text.heading",
@@ -96,12 +99,11 @@ export default {
     pre: {
       fontFamily: "monospace",
       backgroundColor: "grey_1",
-      padding: "1em",
       marginTop: "10px",
       lineHeight: "code",
       overflowX: 'auto',
       whiteSpace: 'nowrap',
-      fontSize: 6,
+      fontSize: 'inherit',
       code: {
         color: "inherit",
         lineHeight: "inherit",
@@ -110,10 +112,9 @@ export default {
     },
     code: {
       fontFamily: "monospace",
-      fontSize: "1",
+      fontSize: 'inherit',
       lineHeight: "code",
-      padding: ".5em",
-      backgroundColor: "grey_3",
+      backgroundColor: "yellow",
     },
     blockquote: {
       bg: "grey_1",
@@ -151,8 +152,8 @@ export default {
       }
     },
     li:{
-      ml: 0,
-      pl: 0
+      ml:5,
+      lineHeight: '1.2em'
     },
     ul:{
       fontWeight: 'body',

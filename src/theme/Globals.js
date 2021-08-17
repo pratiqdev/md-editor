@@ -210,17 +210,16 @@ return  <Global
         
         ...hls1,
 
-        'pre':{
+        '.hljs pre':{
           background: colorMode === 'dark' ? '#222 !important' : '#eee !important',
           overflowX: 'auto',
           overflow: 'hidden',
-          padding: '10px !important',
+          // padding: '10px !important',
           fontSize: 'inherit !important',
         },
-        'code':{
-          padding: '10px !important',
+        '.hljs code':{
+          // padding: '10px !important',
           fontSize: 'inherit !important',
-
         }
 
        

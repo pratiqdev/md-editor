@@ -1,15 +1,17 @@
 {
   "name": "portfolio",
-  "version": "0.0.353",
+  "version": "0.0.1",
   "description": "personal web dev portfolio using next.js",
   "main": "index.js",
   "scripts": {
-    "dev": "clear && npm --no-git-tag-version version patch && next",
+    "dev": "clear && next",
     "git": "git add . && git commit -m",
-    "build": "npm --no-git-tag-version version patch && next build",
+    "build": "next build",
     "start": "next start",
     "deploy": "next build && next export",
-    "bust": "clear && npm --no-git-tag-version version patch && next build && next start"
+    "bust": "clear && next build && next start",
+    "bump": "npm --no-git-tag-version version patch"
+    
   },
   "keywords": [],
   "author": "",
@@ -54,6 +56,7 @@
     "react-redux": "^7.2.4",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
+    "semver": "^7.3.5",
     "theme-ui": "^0.9.1",
     "tippy.js": "^6.3.1",
     "uuid": "^8.3.2"
