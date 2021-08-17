@@ -171,7 +171,8 @@ const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
 // },1000,{ leading: true, trailing: false, maxWait: 2000});
 
 const handleSaveWithId = debounce((givenId) => {
- setCurrentIdForSave(givenId ? givenId : 'current')
+ setCurrentIdForSave(typeof givenId === 'number' ? givenId : 'current')
+ console.log(`NAVBAR | handleSaveWithId: ${givenId}`)
 
   // setCurrentIdForSave(givenId ? givenId : 'current')
   setShowSave(true)

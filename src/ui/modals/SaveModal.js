@@ -103,11 +103,11 @@ const SaveModal = forwardRef((props, ref) => {
     handleClose();
   };
 
-  const handleSave = () => {    
-    console.log("SAVE | handleSave ");
+  const handleSave = (i) => {    
+    console.log(`SAVE | handleSave - currentIdForSave ${props.currentIdForSave}`);
     props.currentIdForSave === 'current' 
         ? SD.saveActiveFile() 
-        : SD.saveFileById(currentIdForSave)
+        : SD.saveFileById(props.currentIdForSave)
 
 
     setLocalTrigger(!localTrigger);

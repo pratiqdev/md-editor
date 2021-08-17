@@ -521,13 +521,15 @@ export const saveActiveFile = () => {
 
 /** Save the current file to the users machine */
 export const saveFileById = (givenId) => {
-    let x = getById(givenId)
-
+    getById(givenId).then(xById=>{
+        let x = xById
+        console.log(`SD | saveFileById: ${givenId} - ${x.name}`)
+        
         let filename = `${x.name}.md`
         var pom = document.createElement('a');
         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(x.content));
         pom.setAttribute('download', filename);
-    
+        
         if (document.createEvent) {
             var event = document.createEvent('MouseEvents');
             event.initEvent('click', true, true);
@@ -537,7 +539,8 @@ export const saveFileById = (givenId) => {
             pom.click();
         }
         ALERT.fileSaved()
-    
+    })
+        
 }
 
 
