@@ -1,4 +1,5 @@
 import files from './files'
+import templates from './templates'
 import editorFunctionSettings from './editorFunctionSettings'
 import editorDisplaySettings from './editorDisplaySettings'
 import changelog from './changelog'
@@ -44,6 +45,7 @@ Visit [the Ace website](https://ace.c9.io/) to use it in your project!
 
 
 ...files,
+...templates,
 
 ...editorFunctionSettings,
 ...editorDisplaySettings,
