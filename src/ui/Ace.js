@@ -202,7 +202,7 @@ const Ace = props => {
                                  editor.session.setOption('indentedSoftWrap', true);
                                 editor.session.setUseWrapMode(true);
                                 editor.setOptions({
-                                    autoScrollEditorIntoView: false, // prevent auto scrolling
+                                    autoScrollEditorIntoView: true, // prevent auto scrolling
                                     fontSize: x.find(x=>x.id === 'font-size').state,                                    //done
                                     enableBasicAutocompletion: x.find(x=>x.id === 'enable-basic-autocompletion').state, //done
                                     enableLiveAutocompletion: x.find(x=>x.id === 'enable-live-autocompletion').state,   //done
@@ -337,7 +337,7 @@ const Ace = props => {
 
 
     return(
-        <>
+        <div class='transitioned'>
         <Box sx={{
             // position: 'relative',
             // height: '10vh',
@@ -348,6 +348,7 @@ const Ace = props => {
             bottom: props.layout.b,
             width: props.layout.w,
             height: props.layout.h,
+            overflow: 'hidden',
         }}
         // onFocus={()=>breakIndex <= 0 && props.setLayout('editor')} // used to hide render window on mobile devices because virtual keyboard takes up so much space.
         // onFocusOut={()=>breakIndex <= 0 && props.setLayout('split')}
@@ -366,7 +367,7 @@ const Ace = props => {
                 />
             </Box>
             {/* {showSaveModal && <SaveModal handleDeny={()=>setShowSaveModal(false)} contentForSave={contentForSave}/>} */}
-        </>
+        </div>
     )
 }
 export default Ace

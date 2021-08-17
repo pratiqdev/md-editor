@@ -127,17 +127,19 @@ const MDPage = props => {
   
   //* useEffect for layout changes
   useEffect(()=>{
-    console.log(`new layout type: ${layoutType}`)
+    // console.log(`new layout type: ${layoutType}`)
+    setParentTrigger(!parentTrigger)
 
     if(layoutType === 'editor'){
+      console.log('EDITOR | layout editor')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
-        l: '0',
-        r: '0',
-        w: '',
-        h: '',
+        l: '-100vw',
+        r: '',
+        w: '100vw',
+        h: '100%',
       })
       setRenderLayout({
         p: 'absolute',
@@ -145,22 +147,23 @@ const MDPage = props => {
         b: '0',
         l: '0',
         r: '0',
-        w: '',
-        h: '',
+        w: '100vw',
+        h: '100%',
       })
     }
 
 
 
     if(layoutType === 'render' ){
+      console.log('EDITOR | layout render')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
-        l: '100vw',
+        l: '0',
         r: '0',
-        w: '',
-        h: '',
+        w: '100vw',
+        h: '100%',
       })
       setRenderLayout({
         p: 'absolute',
@@ -168,21 +171,22 @@ const MDPage = props => {
         b: '0',
         l: '0',
         r: '0',
-        w: '',
-        h: '',
+        w: '100vw',
+        h: '100%',
       })
     }
 
 
 
     if(layoutType === 'split' && breakIndex <= 1){
+      console.log('EDITOR | split vertical')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '50vh',
         l: '0',
         r: '0',
-        w: '',
+        w: '100vw',
         h: '',
       })
       setRenderLayout({
@@ -191,18 +195,19 @@ const MDPage = props => {
         b: '0',
         l: '0',
         r: '0',
-        w: '',
+        w: '100vw',
         h: '',
       })
     }
     if(layoutType === 'split' && breakIndex > 0){
+      console.log('EDITOR | split horizontal')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
         l: '0',
         r: '50vw',
-        w: '',
+        w: '50vw',
         h: '',
       })
       setRenderLayout({
@@ -211,7 +216,7 @@ const MDPage = props => {
         b: '0',
         l: '50vw',
         r: '0',
-        w: '',
+        w: '50vw',
         h: '',
       })
     }
@@ -251,8 +256,8 @@ const MDPage = props => {
 
         <Flex sx={{flexDirection: ['column', 'row', 'row']}}>
           <Box sx={{
-            height: editorLayout.h,
-            width: editorLayout.w
+            // height: editorLayout.h,
+            // width: editorLayout.w
             }} >
             <Ace 
               setLayout={setLayoutType}
@@ -265,7 +270,7 @@ const MDPage = props => {
           </Box>
 
 
-          <Box sx={{height: '3vh', overflow: 'hidden', overflowY: 'auto'}} >
+          <Box class='transitioned' sx={{height: '3vh', overflow: 'hidden', overflowY: 'auto'}} >
             <Render 
               useTrigger={parentTrigger}
               parentContent={parentContent} 

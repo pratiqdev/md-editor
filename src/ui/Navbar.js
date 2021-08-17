@@ -74,6 +74,8 @@ const Navbar = forwardRef((props, ref) => {
   const [showSaveTemplate, setShowSaveTemplate] = useState(false)
   const [currentIdForSave, setCurrentIdForSave] = useState('')
 
+  const [showGuideHalo, setShowGuideHalo] = useState(true)
+
   const [activeFileData, setActiveFileData] = useState()
 
 
@@ -146,7 +148,7 @@ const Navbar = forwardRef((props, ref) => {
 const [toggle, setToggle] = useState(true)
 
 const toggleLayout = () => {
-  console.log('toggle layout????')
+  // console.log('toggle layout????')
   if(props.setLayout){
     if(toggle){
       setToggle(false)
@@ -156,6 +158,7 @@ const toggleLayout = () => {
       props.setLayout('render')
     }
   }
+  props.causeParentTrigger()
 }
 
 const splitWindow = () => {
@@ -386,6 +389,22 @@ useEffect(()=>{
             handleAccept={()=>setShowSaveTemplate(false)}
             handleSaveAsTemplate={handleSaveAsTemplate}
             />}
+
+            {showGuideHalo && 
+            <Box sx={{
+                position: 'absolute', 
+                zIndex: 10000, 
+                borderRadius: '50%', 
+                border: '5px solid',
+                borderColor: 'primary_b', 
+                width: '15rem', 
+                height: '15rem',
+                top: '10vw',
+                left: '10vw', 
+                boxShadow: '0 0 10000px 10000px rgba(100,100,100,.8)'
+                  }} 
+            />
+            }
       
     </>
   );

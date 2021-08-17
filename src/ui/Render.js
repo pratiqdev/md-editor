@@ -112,7 +112,7 @@ const Render = (props) => {
 
 
     return (
-        <>
+        <div>
             {/* <Button sx={{position: 'relative', zIndex: 1000000 }} onClick={()=>switchTheme()}>!!!</Button> */}
             <Box
             sx={{
@@ -187,7 +187,7 @@ const Render = (props) => {
             }} 
             ref={REF_RESULTBOX}
             dangerouslySetInnerHTML={renderText(props.parentContent)} />
-        </>
+        </div>
     )
 }
 

@@ -17,7 +17,11 @@ return  <Global
           boxSizing: 'border-box',
           scrollPadding: ['10rem', '4rem', '4rem'],
           // transition: useAnims ? 'background .3s, color .3s !important' : 'background 0.0s, color 0.0s !important'
+          // transition: 'left 1s, right 1s, top 1s, bottom 1s',
         },
+        // '.transitioned, .transitioned *':{
+        //   // transition: '1s'
+        // },
         // text highlight color
         '::selection': {
           background: theme.colors.grey_6,
