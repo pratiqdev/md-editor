@@ -199,6 +199,7 @@ const LoadItem = ({
               cursor: "auto",
               maxHeight: "6rem",
               border: "0px solid",
+              resize: 'false'
             }}
           />
 
@@ -225,6 +226,11 @@ const LoadItem = ({
     </Box>
   );
 };
+
+
+
+
+
 
 
 
@@ -360,6 +366,59 @@ const DeleteCard = props => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const LoadModal = forwardRef((props, ref) => {
 
   useImperativeHandle(ref,() => ({
@@ -377,6 +436,7 @@ const LoadModal = forwardRef((props, ref) => {
   const [localTrigger, setLocalTrigger] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [currentIdForDelete, setCurrentIdForDelete] = useState();
+  const [showNewSelection, setShowNewSelection] = useState(false)
 
   const handleOpen = () => {
     openUpAnim();
@@ -471,6 +531,12 @@ const LoadModal = forwardRef((props, ref) => {
     setLocalTrigger(!localTrigger);
     ALERT.fileCreated();
   };
+
+
+  const handleNewFromTemplate = () => {
+    props.showLoadTemplate()
+    handleClose()
+  }
 
   //~ useEffect ____________________________________________________________________________________
   useEffect(() => {
@@ -585,9 +651,16 @@ const LoadModal = forwardRef((props, ref) => {
             <Button
               variant="outline.primary"
               sx={{ p: 2, minWidth: "6rem" }}
+              onClick={handleNewFromTemplate}
+            >
+              New from Template
+            </Button>
+            <Button
+              variant="outline.primary"
+              sx={{ p: 2, minWidth: "6rem" }}
               onClick={handleNew}
             >
-              New
+              New Blank File
             </Button>
           </Flex>
         </>
@@ -600,6 +673,7 @@ const LoadModal = forwardRef((props, ref) => {
         causeParentTrigger={props.causeParentTrigger}
         />
       }
+
         
     </Flex>
   );

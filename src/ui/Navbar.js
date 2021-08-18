@@ -24,7 +24,8 @@ import useLongPress from '../lib/longPress'
 import LoadModal from './modals/LoadModal'
 import SettingsModal from './modals/SettingsModal'
 import SaveModal from './modals/SaveModal'
-import TemplateModal from './modals/TemplateModal'
+import SaveTemplateModal from './modals/SaveTemplateModal'
+import LoadTemplateModal from './modals/LoadTemplateModal'
 
 import Tipper from './Tipper'
 import HaloGuide from './HaloGuide'
@@ -73,6 +74,7 @@ const Navbar = forwardRef((props, ref) => {
   const [showSettings, setShowSettings] = useState(false)
   const [showSave, setShowSave] = useState(false)
   const [showSaveTemplate, setShowSaveTemplate] = useState(false)
+  const [showLoadTemplate, setShowLoadTemplate] = useState(false)
   const [currentIdForSave, setCurrentIdForSave] = useState('')
   const [showGuideHalo, setShowGuideHalo] = useState(false)
   const [activeFileData, setActiveFileData] = useState()
@@ -388,9 +390,19 @@ const Navbar = forwardRef((props, ref) => {
         {showLoad && 
             <LoadModal 
               ref={REF_LOAD_MODAL}
+              showLoadTemplate={() => setShowLoadTemplate(true)}
               causeParentTrigger={props.causeParentTrigger}
               causeSave={handleSaveWithId}
               handleDeny={hideLoadModal} 
+              handleAccept={()=>LoadContent()}/>
+          }
+
+          {showLoadTemplate && 
+            <LoadTemplateModal 
+              ref={REF_LOAD_MODAL}
+              causeParentTrigger={props.causeParentTrigger}
+              causeSave={handleSaveWithId}
+              handleRemoveSelf={()=>setShowLoadTemplate(false)} 
               handleAccept={()=>LoadContent()}/>
           }
 
@@ -414,7 +426,7 @@ const Navbar = forwardRef((props, ref) => {
             />}
 
           {showSaveTemplate && 
-            <TemplateModal 
+            <SaveTemplateModal 
             ref={REF_TEMPLATE_MODAL}
             causeParentTrigger={props.causeParentTrigger}
             currentIdForSave={currentIdForSave}

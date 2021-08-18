@@ -9,6 +9,7 @@ import intro from './intro'
 import SETTINGS_ARRAY_IMPORT from './SETTINGS_ARRAY'
 
 
+
 //= Variables //////////////////////////////////////////////////////////////////////////////////////////////////
 
 let SETTINGS_ARRAY = SETTINGS_ARRAY_IMPORT
@@ -34,6 +35,23 @@ let SD_ARRAY = [
             line: 0, // the vertical line position of the cursor
             column: 0 // the horizontal position of the cursor
         }
+    }
+]
+
+let TEMPLATE_ARRAY = [
+    {
+        name: `Basic Template`, // the short name used as the title
+        sum: 'A template for something', // a short summary used in the load document selection window
+        date: `${getNow()}`, // the date of creation
+        edit: `${getNow()}`, // the date of the last edit
+        content: 
+`---
+I am a template!
+---
+
+# Template
+`, // the content of the document
+        
     }
 ]
 
@@ -744,5 +762,78 @@ export const removeSnippetById = (givenId) => {
     SETTINGS_ARRAY
     .find(x=> x.id === 'custom-snippets').state
     .splice(givenId, 1);
+    SAVE_TO_DISK()
+}
+
+
+
+
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//= TEMPLATES
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const getAllTemplates = () => {
+    return new Promise((resolve, reject) => {
+        // console.log('SD | getAllSnippets() ')
+        WAIT_FOR_INIT()
+        .then(()=>{
+            resolve(TEMPLATE_ARRAY)
+        })
+        .catch(err=>{
+            console.log(err)
+            reject(err)
+        })
+    })
+}
+
+//~ ________________________________________________________________________________________________________________
+/** Get a single element of the SD_ARARY by id  */
+export const getTemplateById = (id) => {
+    return new Promise((resolve, reject) => {
+        
+        if(TEMPLATE_ARRAY && TEMPLATE_ARRAY.length !== 0){
+            resolve(TEMPLATE_ARRAY[id])
+        }else{
+            addNewTemplate()
+            resolve(TEMPLATE_ARRAY[0])
+        }
+    })
+}
+
+
+export const addNewTemplate= () => {
+    TEMPLATE_ARRAY
+    .push(    {
+        name: `New Template`, 
+        sum: 'Another template for something', 
+        date: `${getNow()}`,
+        edit: `${getNow()}`, 
+        content: 
+`---
+I am a new template!
+---
+
+# New Template
+`, 
+        
+    })
+    SAVE_TO_DISK()
+}
+
+export const deleteTemplateById = (givenId) => {
+    TEMPLATE_ARRAY
+    .splice(givenId, 1);
+    SAVE_TO_DISK()
+}
+
+
+export const updateTemplateNameByIndex = (val, i) => {
+    TEMPLATE_ARRAY[i].name = val
+    SAVE_TO_DISK()
+}
+
+
+export const updateTemplateSummaryByIndex = (val, i) => {
+    TEMPLATE_ARRAY[i].sum = val
     SAVE_TO_DISK()
 }
