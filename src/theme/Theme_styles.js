@@ -26,7 +26,7 @@ export default {
     },
     progress: {
       color: 'primary_b',
-      bg: 'grey_4'
+      bg: 'grey_2'
     },
     br:{
       my: 7
@@ -90,7 +90,6 @@ export default {
     p: {
       // fontSize: [1,2,2],
       fontFamily: "body",
-      lineHeight: [1.75, 1.75, 2],
       color: 'text',
       my: 2,
       code: {

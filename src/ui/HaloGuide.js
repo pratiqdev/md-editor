@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import {useRouter} from 'next/router'
 import MDX from "@mdx-js/runtime";
+import Link from 'next/link'
 
 import {CaretLeft} from '@emotion-icons/boxicons-regular/CaretLeft'
 import {CaretRight} from '@emotion-icons/boxicons-regular/CaretRight'
-import { Flex, Box, Button, Progress } from "theme-ui";
+import { Flex, Box, Button, Progress, Link as LinkUI } from "theme-ui";
 import gsap from 'gsap'
 
 import getHaloLocation from "../lib/haloLocation";
@@ -39,14 +40,14 @@ const Halo = ({ loc }) => {
         display: 'block',
         zIndex: 10000,
         borderRadius: ".5rem",
-        opacity: loc.exist ? "1" : ".2",
+        opacity: loc.exist ? "1" : "0",
         border: "3px solid",
-        borderColor: "red",
+        borderColor: "grey_15",
         width: `${loc.w}px`,
         height: `${loc.h}px`,
         top: `${loc.t}px`,
         left: `${loc.l}px`,
-        boxShadow: "0 0 10000px 10000px rgba(130,130,130,.8)",
+        boxShadow: theme => `0 0 10000px 10000px ${theme.colors.modal_t}`,
         transition: "all .5s, opacity .2s",
         // outline: '3px solid',
         // outlineOffset: '100px',
@@ -65,129 +66,175 @@ const haloList = [
 { // step 0
 id: "",
 marg: 0,
-name: "Walkthrough Guide",
+name: "Welcome!",
+move: '0, -39vh',
 content: 
-`#### Welcome to MD Editor!
-
-Use the next and back buttons to navigate through the steps and learn more about the editor and its features!`,
+`Use the next and back buttons, or your arrow keys, to navigate through the steps and learn more about the editor and its features!`,
 },
 { // step 1
 id: "halo-0",
 marg: 0,
-name: "Editor",
-content: `
-Use the text editor to modify content of the md file
-`,
+move: '0, -39vh',
+name: "Text Editor",
+content: `Use the text editor to modify content of the md file`,
 },
 { // step 2
 id: "halo-1",
 marg: 0,
-name: "Renderer",
+move: '0, -39vh',
+name: "Rendered Result",
 content: `The renderer will display the final result of the editors content, in `,
 },
 { // step 3
 id: "halo-2",
-marg: 15,
+marg: 10,
 name: "File Info",
+move: '0, -39vh',
 content: `When using the editor, the navbar will display info about the currently active file. You can click on this to expand the file selection window.`,
 },
 { // step 4
 id: "halo-3",
-marg: 20,
+marg: 10,
 name: "File Selection",
-move: '0, -40vh',
-content: `When using the editor, the navbar will display info about the currently active file. You can click on this to expand the file selection window.`,
+move: '0, -39vh',
+content: `The list of current files will appear here. You can save and edit an unlimited number of files with MDE`,
 },
 { // step 5
 id: "halo-4",
 marg: 10,
 name: "Files",
-move: '0, -40vh',
-content: `When using the editor, the navbar will display info about the currently active file. You can click on this to expand the file selection window.`,
+move: '0, -39vh',
+content: `This is a single file, the currently active file will be highlighted.`,
 },
 { // step 6
 id: "halo-4",
 marg: 10,
 name: "File Details (halo-4)",
-move: '0, -40vh',
-content: ``,
+move: '0, -39vh',
+content: `Each file will have details that can be seen by expanding the file. Details include:
+- Edited: the date and time of the most recent change
+- Lines / Words / Chars: the total number of lines, words and characters in the file
+`,
 },
 { // step 7
 id: "halo-5",
 marg: 10,
 name: "File Name (halo-5)",
-move: '0, -40vh',
-content: ``,
+move: '0, -39vh',
+content: `The name of the file can be edited when the file is expanded and details are visible`,
 },
 { // step 8
 id: "halo-6",
 marg: 10,
 name: "File Description (halo-6)",
-move: '0, -40vh',
-content: ``,
+move: '0, -39vh',
+content: `Files can be given a short description for keeping track of the purpose or content of the file`,
 },
 { // step 9
 id: "halo-7",
 marg: 10,
 name: "Load File (halo-7)",
-move: '0, -40vh',
-content: ``,
+move: '0, -39vh',
+content: `Files can be activated and loaded into the editor by clicking the 'Load' button`,
 },
 { // step 10
-id: "halo-8",
-marg: 10,
-name: "Save File (halo-8)",
-move: '0, -40vh',
-content: ``,
-},
-{ // step 11
 id: "halo-9",
 marg: 10,
 name: "Delete File (halo-9)",
-move: '0, -40vh',
+move: '0, -39vh',
 content: ``,
 },
+{ // step 11
+id: "halo-8",
+marg: 10,
+name: "Save File (halo-8)",
+move: '0, -39vh',
+content: `Files can be saved to the your machine by clicking the 'Save' button. This will open an additional prompt where you can select to save the file as a template or as a standard .md file.`,
+},
+
+{ // step 11
+  id: "halo-16",
+  marg: 10,
+  name: "Save as Type (halo-16)",
+  move: '0, -39vh',
+  content: `Files can be saved to the your machine by clicking the 'Save' button. This will open an additional prompt where you can select to save the file as a template or as a standard .md file.`,
+  },
+
 { // step 12
 id: "halo-10",
 marg: 5,
 name: "Switch View (halo-10)",
-move: '0, 0',
+move: '0, -39vh',
 content: ``,
 },
 { // step 13
 id: "halo-11",
 marg: 5,
 name: "Toggle Dark Mode (halo-11)",
-move: '0, 0',
+move: '0, -39vh',
 content: ``,
 },
 { // step 14
 id: "halo-12",
 marg: 5,
 name: "Open Menu (halo-12)",
-move: '0, 0',
+move: '0, -39vh',
 content: ``,
 },
 { // step 15
 id: "halo-13",
-marg: 0,
+marg: 10,
 name: "Settings Menu (halo-13)",
-move: '0, -40vh',
+move: '0, -39vh',
 content: `Settings can be opened from the main menu`,
 },
 { // step 16
 id: "halo-14",
-marg: 0,
+marg: 5,
 name: "Reset Settings (halo-14)",
-move: '0, -40vh',
+move: '0, -39vh',
 content: ``,
 },
 { // step 17
 id: "halo-15",
-marg: 0,
+marg: 5,
 name: "Close Settings (halo-15)",
-move: '0, -40vh',
+move: '0, -39vh',
 content: ``,
+},
+
+
+
+
+
+
+
+
+
+
+
+{ // step 17
+id: "",
+marg: 5,
+name: "",
+move: '0, -39vh',
+content: 
+`
+<Box sx={{width: '100%', textAlign: 'center', fontSize: 5, mb:4, color: 'primary_a'}}>
+Happy Coding!
+</Box>
+
+<Box sx={{textAlign: 'center'}}>
+Follow this guide again or check the docs for more information.
+</Box>
+
+<Box sx={{textAlign: 'center', mt:4}}>
+<Link href='/docs'>
+  <LinkUI>Documentation</LinkUI>
+</Link>
+</Box>
+
+`,
 },
 
 
@@ -195,6 +242,13 @@ content: ``,
 
 
 
+const components = {
+  Box,
+  Flex,
+  Link,
+  LinkUI,
+  Button,
+} 
 
 
 
@@ -202,26 +256,41 @@ content: ``,
 
 
 
+  const REF_BOX = useRef(null)
+  const REF_CARD = useRef(null)
 
 
 
+  // track the current step of the guide
+  const [step, setStep] = useState(0);
+  // move the guide window if its in the way of content
+  const [guideLoc, setGuideLoc] = useState('0,0');
+  // hold the location of the halo
+  const [haloLoc, setHaloLoc] = useState({
+      exist: false,
+      l: 0,
+      t: 0,
+      h: 0,
+      w: 0,
+  });
+  // adjust teh shadow for the walkthrough card
+  const [walkthroughShadow, setWalkthroughShadow] = useState('10px')
 
-    // track the current step of the guide
-    const [step, setStep] = useState(0);
-    // move the guide window if its in the way of content
-    const [guideLoc, setGuideLoc] = useState('0, 40vh');
-    // hold the location of the halo
-    const [haloLoc, setHaloLoc] = useState({
-        exist: false,
-        l: 0,
-        t: 0,
-        h: 0,
-        w: 0,
-    });
-    // adjust teh shadow for the walkthrough card
-    const [walkthroughShadow, setWalkthroughShadow] = useState('10px')
+  const router = useRouter()
 
-    const router = useRouter()
+  
+  const handleOpen = () => {
+      gsap.to([REF_BOX.current], {opacity: 1, duration: .3})
+      gsap.to([REF_CARD.current],  {opacity: 1,  delay: .2, duration: .3})
+  }
+  
+  const handleClose = () => {
+      gsap.to([REF_CARD.current], {opacity: 0,  duration: .3})
+      gsap.to([REF_BOX.current],  {opacity: 0, duration: .3})
+      setTimeout(() => {
+        props.exit()
+      }, 300);
+  }
 
     // progress to the next step
     const nextStep = () => {
@@ -275,6 +344,10 @@ content: ``,
       }
       run()
     }
+
+    useEffect(()=>{
+      handleOpen()
+    })
         
 
     useEffect(() => {
@@ -292,7 +365,7 @@ content: ``,
         // this way if screen size or loc changes the halo is still accurate
 
         // if at first step = set a large box-shadow on the card
-        step === 0 ? setWalkthroughShadow('10000px') : setWalkthroughShadow('10px')
+        step === 0 || step === haloList.length - 1 ? setWalkthroughShadow('10000px') : setWalkthroughShadow('10px')
 
         
       return () => clearTimeout(haloTimeout)
@@ -307,7 +380,8 @@ content: ``,
   return (
     <>
       <Flex
-        onClick={props.exit}
+        onClick={handleClose}
+        ref={REF_BOX}
         sx={{
           position: "fixed",
           dispaly: 'block',
@@ -317,45 +391,47 @@ content: ``,
           width: "100vw",
           top:'0px',
           zIndex: '1000000',
-          pointerEvents: 'none',
+          opacity: '0',
+          // pointerEvents: 'none',
           // bg:'green',
         }}
       >
         <Flex
         onClick={e=>e.stopPropagation()}
+        ref={REF_CARD}
           sx={{
+            opacity: '0',
             m:4,
             flexDirection: "column",
             bg: "grey_0",
             width: "40rem",
             maxWidth: "90vw",
-            height: "20rem",
+            height: "auto",
+            height: "10rem",
             maxHeight: "20vh",
             borderRadius: 2,
             overflow: "hidden",
             transform: `translate(${guideLoc})`,
-            boxShadow: `0 0 ${walkthroughShadow} ${walkthroughShadow} rgba(130,130,130,.8)`,
+            boxShadow: theme => `0 0 ${walkthroughShadow} ${walkthroughShadow} ${theme.colors.modal_t}`,
             transition: 'box-shadow .5s, transform .5s',
             pointerEvents: 'auto',
           }}
         >
-          <Progress
+          {/* <Progress
             max={haloList.length}
-            value={step}
+            value={step === haloList.length - 1? '100%' : step}
             sx={{
               opacity: step === 0 ? "0" : "1",
               transition: ".3s",
-              height: "1rem",
+              height: ".5rem",
               borderRadius: 0,
             }}
-          />
+          /> */}
 
 
 
           <Flex
             sx={{
-              p: 4,
-              pt: 3,
               flexDirection: "column",
             }}
           >
@@ -364,11 +440,15 @@ content: ``,
             <Flex sx={{ 
                 overflow: 'hidden', 
                 justifyContent: 'space-between',
+                alignItems: 'center',
+                // borderBottom: '1px solid',
+                // borderColor: 'grey_8',
+                p:3,
             }}>
-              <Button px={4} onClick={props.exit}>
+              <Button px={4} onClick={handleClose}>
                 EXIT
               </Button>
-              <Box sx={{ textAlign: "center", fontSize: 4 }}>
+              <Box sx={{ textAlign: "center", fontSize: 5, color: 'primary_a', fontWeight: 'bold', fontFamily: 'heading', transform: 'translateY(.2rem)'}}>
                 {haloList[step]?.name}
               </Box>
               <Flex>
@@ -387,7 +467,24 @@ content: ``,
               </Flex>
             </Flex>
 
-            <MDX>{haloList[step]?.content}</MDX>
+            <Progress
+            max={haloList.length}
+            value={step}
+            sx={{
+              opacity: step === 0 || step === haloList.length - 1? "0" : "1",
+              transition: ".3s",
+              // height: ".2rem",
+              borderRadius: 0,
+            }}
+          />
+
+            <Box sx={{p:3, pt: 2,}}>
+              <MDX
+                components={components}
+                >
+                {haloList[step]?.content}
+              </MDX>
+            </Box>
           </Flex>
 
 

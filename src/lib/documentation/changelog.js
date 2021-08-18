@@ -7,9 +7,25 @@ content: `Check out the most recent changes and features to stay up to date!`,
 
   
 
+/*
 
+{
+name: "Version 0.0.2",
+group: "changelog",
+content: 
+`
+08/18/2021
 
+###### Added
 
+- An interactive guide 'walkthrough' for new users
+- Templates to simplify repeated structures
+- Image uploads //! will require downloading as a zip (unless no images were used)
+
+`,
+},
+
+*/
 
 {
 name: "Version 0.0.1 ",

@@ -15,6 +15,7 @@ import {
 
 import * as ALERT from "../../lib/alert";
 import * as SD from "../../lib/saveData";
+import * as FORMAT from '../../lib/format'
 import gsap from "gsap";
 
 import { CaretDown } from "@emotion-icons/boxicons-regular/CaretDown";
@@ -147,6 +148,7 @@ const LoadItem = ({
         <Flex sx={{ flexDirection: "column" }}>
           <Flex
             sx={{
+              justifyContent: 'space-between',
               borderBottom: "1px solid",
               fontSize: 1,
               borderColor: "grey_4",
@@ -155,7 +157,32 @@ const LoadItem = ({
               pb: 1,
             }}
           >
-            {currentSD.content.length} Characters
+            <Box>
+             Last edited 
+            </Box>
+            <Box>
+              {currentSD.edit}
+            </Box>
+          </Flex>
+          <Flex
+            sx={{
+              justifyContent: 'space-between',
+              borderBottom: "1px solid",
+              fontSize: 1,
+              borderColor: "grey_4",
+              color: "grey_10",
+              my: 1,
+              pb: 1,
+            }}
+          >
+             <Box>
+                Lines / Words / Chars
+              </Box>
+              <Box>
+              {FORMAT.numberWithCommas(currentSD.content.split(/\r|\n|\r\n/).length)}{' / '}
+              {FORMAT.numberWithCommas(currentSD.content.trim().split(/\s+/).length)}{' / '} 
+              {FORMAT.numberWithCommas(currentSD.content.length)}
+              </Box>
           </Flex>
 
           <Textarea

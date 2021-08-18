@@ -245,8 +245,10 @@ const Navbar = forwardRef((props, ref) => {
       case '9': {setShowLoad(true)}break;
       case '10': {setShowLoad(true)}break;
       case '11': {setShowLoad(true)}break;
-      case '15': {setShowSettings(true)};break;
+      case '12': {setShowSave(true)}break;
       case '16': {setShowSettings(true)};break;
+      case '17': {setShowSettings(true)};break;
+      case '18': {setShowSettings(true)};break;
 
       default: {
         setShowLoad(false)
