@@ -393,7 +393,12 @@ useEffect(()=>{
             />}
 
             {showGuideHalo && 
-            <HaloGuide />
+            <HaloGuide 
+              setLayout={props.setLayout}
+              openLoad={() => setShowLoad(true)}
+              closeLoad={() => setShowLoad(false)}
+              exit={() => setShowGuideHalo(false)}
+            />
             }
       
     </>

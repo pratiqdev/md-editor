@@ -451,6 +451,7 @@ const LoadModal = forwardRef((props, ref) => {
       {/* CARD ------------------------------------------*/}
       <Card
         variant="modal"
+        id='halo-3'
         ref={REF_CARD}
         onClick={(e) => e.stopPropagation()}
         sx={{

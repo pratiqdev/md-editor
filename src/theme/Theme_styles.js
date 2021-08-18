@@ -24,6 +24,12 @@ export default {
       },
 
     },
+    progress: {
+      '*':{
+        transition: 1,
+      },
+      color: 'primary_b',
+    },
     br:{
       my: 7
     },
