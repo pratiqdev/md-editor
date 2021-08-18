@@ -26,6 +26,7 @@ import { CaretUp } from "@emotion-icons/boxicons-regular/CaretUp";
 import { AssistantDirection } from "@emotion-icons/material";
 
 import * as FORMAT from '../../lib/format'
+import { findIndex } from "lodash";
 
 
 
@@ -114,9 +115,10 @@ const SaveModal = forwardRef((props, ref) => {
   };
 
 
-  const handleShowSaveAsTemplate = () => {    
+  const handleSaveAsTemplate = () => {    
     console.log("SAVE | handleSaveAsTemplate ");
-    props.handleShowSaveAsTemplate()
+    SD.addNewTemplateWithContent(currentSD)
+    SD.deleteById(props.currentIdForSave)
     handleClose()
   };
 
@@ -308,7 +310,7 @@ const SaveModal = forwardRef((props, ref) => {
                 <Button
                 variant="outline.secondary"
                 sx={{ p: 2, minWidth: "6rem",  width: '100%'}}
-                onClick={handleShowSaveAsTemplate}
+                onClick={handleSaveAsTemplate}
                 >
                 Save as Template
                 </Button>

@@ -159,6 +159,8 @@ const TemplateItem = ({
     loadModalTrigger,
     causeSave,
     itemKey,
+    causeParentTrigger,
+    handleClose
   }) => {
     const [showDetails, setShowDetails] = useState(false);
     const [newName, setNewName] = useState();
@@ -173,6 +175,9 @@ const TemplateItem = ({
     const handleLoadTemplate = (e) => {
       e.stopPropagation();
     //   handleActiveSwap(currentIndex);
+    SD.createNewWithContentAndActivate(currentSD)
+    causeParentTrigger()
+    handleClose()
     console.log('load this template')
     };
   
@@ -193,7 +198,7 @@ const TemplateItem = ({
   
     useEffect(() => {
       setNewName(currentSD.name);
-      setNewSum(currentSD.newSum);
+      setNewSum(currentSD.sum);
     });
   
     
@@ -236,12 +241,12 @@ const TemplateItem = ({
             color: "grey_15",
           }}
         >
-          <Flex sx={{ alignItems: "center" }}>
+          <Flex sx={{ alignItems: "center", width: '100%', }}>
             {/* <Box sx={{fontSize: 3}}>{currentSD.name}</Box> */}
             <Button variant="icon.primary" onClick={handleDetails} sx={{ mr: 2 }}>
               {showDetails ? <CaretDown size="22" /> : <CaretRight size="22" />}
             </Button>
-            <Box>
+            <Box sx={{width: '100%'}}>
               <Input
               id='halo-5'
                 value={newName}
@@ -253,9 +258,10 @@ const TemplateItem = ({
                   fontSize: 3,
                   border: "0px solid",
                   cursor: "auto",
-                  width: "auto",
+                  width: '100%',
                   minWidth: "2rem",
                   pointerEvents: showDetails ? 'auto' : 'none',
+                  textOverflow: 'ellipsis',
                 }}
               />
               <Box sx={{ fontSize: 1, color: "grey_10", textAlign: "left" }}>
@@ -270,7 +276,7 @@ const TemplateItem = ({
                   Save
               </Button>
               } */}
-            <Button id='halo-7' onClick={handleLoadTemplate}>Use</Button>
+            <Button id='halo-7' onClick={handleLoadTemplate}>Create</Button>
           </Flex>
         </Flex>
   
@@ -522,7 +528,7 @@ const LoadTemplateModal = props => {
   
             {/* SUBTITLE ------------------------------------------*/}
             <Box sx={{ color: "grey_12", my: 3, fontSize: 3 }}>
-              Create a new file from a template, or edit an existing template
+              Create a new file using a template from the list
             </Box>
   
 
@@ -562,6 +568,8 @@ const LoadTemplateModal = props => {
                    handleDelete={handleShowConfirmDelete}
                    loadModalTrigger={localTrigger}
                    causeSave={props.causeSave}
+                   causeParentTrigger={props.causeParentTrigger}
+                   handleClose={handleClose}
                  />
               ))}
             </Box>

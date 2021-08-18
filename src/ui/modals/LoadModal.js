@@ -63,7 +63,7 @@ const LoadItem = ({
 
   useEffect(() => {
     setNewName(currentSD.name);
-    setNewSum(currentSD.newSum);
+    setNewSum(currentSD.sum);
   });
 
   
@@ -106,28 +106,30 @@ const LoadItem = ({
           color: "grey_15",
         }}
       >
-        <Flex sx={{ alignItems: "center" }}>
+        <Flex sx={{ alignItems: "center", width: '100%'}}>
           {/* <Box sx={{fontSize: 3}}>{currentSD.name}</Box> */}
           <Button variant="icon.primary" onClick={handleDetails} sx={{ mr: 2 }}>
             {showDetails ? <CaretDown size="22" /> : <CaretRight size="22" />}
           </Button>
-          <Box>
+          <Box sx={{width: '100%'}}>
+
             <Input
             id='halo-5'
-              value={newName}
-              onChange={handleUpdateName}
-              onClick={(e) => e.stopPropagation()}
+            value={newName}
+            onChange={handleUpdateName}
+            onClick={(e) => e.stopPropagation()}
               sx={{
                 p: 0,
                 px:2,
                 fontSize: 3,
                 border: "0px solid",
                 cursor: "auto",
-                width: "auto",
+                width: "100%",
                 minWidth: "2rem",
                 pointerEvents: showDetails ? 'auto' : 'none',
+                textOverflow: 'ellipsis',
               }}
-            />
+              />
             <Box sx={{ fontSize: 1, color: "grey_10", textAlign: "left" }}>
               {currentSD.date}
             </Box>
@@ -199,7 +201,7 @@ const LoadItem = ({
               cursor: "auto",
               maxHeight: "6rem",
               border: "0px solid",
-              resize: 'false'
+              resize: 'none'
             }}
           />
 

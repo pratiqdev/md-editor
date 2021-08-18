@@ -268,7 +268,7 @@ export const createNew = () => {
     NUM_FILES++
     let num = NUM_FILES
 
-    let newContent = ''
+    let newContent = `# New File ${NUM_FILES}`
     let usePrepend = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content')?.state[0]
     let useAppend = SETTINGS_ARRAY.find(x=> x.id === 'auto-append-content')?.state[0]
     let prependString = SETTINGS_ARRAY.find(x=> x.id === 'auto-prepend-content')?.state[1]
@@ -315,8 +315,6 @@ export const createNewAndActivate = debounce(() => {
   3000,
   { leading: false, trailing: true }
   );
-
-
 
 
 
@@ -820,6 +818,20 @@ I am a new template!
     SAVE_TO_DISK()
 }
 
+
+export const addNewTemplateWithContent = (x) => {
+    TEMPLATE_ARRAY
+    .push(    {
+        name: x.name, 
+        sum: x.sum, 
+        date: x.date,
+        edit: x.edit, 
+        content: x.content, 
+        
+    })
+    SAVE_TO_DISK()
+}
+
 export const deleteTemplateById = (givenId) => {
     TEMPLATE_ARRAY
     .splice(givenId, 1);
@@ -836,4 +848,29 @@ export const updateTemplateNameByIndex = (val, i) => {
 export const updateTemplateSummaryByIndex = (val, i) => {
     TEMPLATE_ARRAY[i].sum = val
     SAVE_TO_DISK()
+}
+
+
+//~ ________________________________________________________________________________________________________________
+/** Create a new document with the default object */
+export const createNewWithContentAndActivate = (x) => {
+
+   
+    let newIndex = getAll().length
+
+    SD_ARRAY.push({
+        active: false, // is the current file active
+        name: `${newIndex + 1} | Template: ${x.name}`, // the short name used as the title
+        sum: x.sum, // a short summary used in the load document selection window
+        date: x.date, // the date of creation
+        edit: `${getNow()}`, // the date of the last edit
+        content: x.content, // the content of the document
+        position: {
+            line: 0,
+            column:0
+        }
+    })
+    setActiveById(newIndex)
+    SAVE_TO_DISK()
+
 }
