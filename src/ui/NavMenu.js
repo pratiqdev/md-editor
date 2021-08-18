@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 
 //* next
 import Link from "next/link";
+import {useRouter} from 'next/router'
 
 //* theme
 import { useThemeUI, Box, Button, Text, Link as L, Flex } from "theme-ui";
@@ -35,7 +36,7 @@ import { Paperclip } from '@emotion-icons/boxicons-regular/Paperclip'
 
 const NavMenu = (props) => {
   const [menuState, setMenuOpen] = useState(false);
-
+  const router = useRouter()
  
 
   const toggleMenu = () => {
@@ -48,9 +49,6 @@ const NavMenu = (props) => {
   //! this install flow / install status should be moved to the navbar since it is available pretty much everywhere and rendered immediately
 
 
-  
-  
-      
 
 
 
@@ -58,6 +56,7 @@ const NavMenu = (props) => {
   return (
     <>
       <Button
+      id='halo-12'
         sx={{ zIndex: 1, mr:3 }}
         variant="icon.plain"
         onClick={(e) => {
@@ -216,6 +215,23 @@ const NavMenu = (props) => {
                           <Paperclip size="24" />
                           </Flex>
                           Docs
+                        </Flex>
+                      </Button>
+                    </Text>
+                  </Link>
+
+                  <Link href={{pathname: 'editor', query: {walkthrough: true}}}>
+                    <Text as="a">
+                      <Button
+                        variant="menuItem"
+                        tabIndex="-1"
+                        onClick={(e) => toggleMenu()}
+                      >
+                        <Flex sx={{ alignItems: "center"}}>
+                          <Flex sx={{width: "3.5em", p:2, justifyContent: "center" }}>
+                          <Paperclip size="24" />
+                          </Flex>
+                          Walkthrough
                         </Flex>
                       </Button>
                     </Text>

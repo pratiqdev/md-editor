@@ -130,17 +130,64 @@ const MDPage = props => {
     // console.log(`new layout type: ${layoutType}`)
     setParentTrigger(!parentTrigger)
 
-    if(layoutType === 'editor'){
-      console.log('EDITOR | layout editor')
+    // Show editor ===============================================================
+    if(layoutType === 'editor' && breakIndex <= 1){
+      console.log('EDITOR | editor vertical')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
-        l: '-100vw',
+        l: '0',
+        r: '0',
+        w: '100vw',
+        h: '100%',
+      })
+      setRenderLayout({
+        p: 'absolute',
+        t: '100vh',
+        b: '',
+        l: '0',
+        r: '0',
+        w: '100vw',
+        h: '100vh',
+      })
+    }
+
+    if(layoutType === 'editor' && breakIndex > 0){
+      console.log('EDITOR | editor horizontal')
+      setEditorLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '0',
+        r: '0',
+        w: '100vw',
+        h: '100%',
+      })
+      setRenderLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '100vw',
         r: '',
         w: '100vw',
         h: '100%',
       })
+    }
+
+
+    // Show render ===============================================================
+    if(layoutType === 'render' && breakIndex <= 1){
+      console.log('EDITOR | render vertical')
+      setEditorLayout({
+        p: 'absolute',
+        t: '',
+        b: '100vh',
+        l: '0',
+        r: '0',
+        w: '100vw',
+        h: '100%',
+      })
       setRenderLayout({
         p: 'absolute',
         t: '3rem',
@@ -152,16 +199,14 @@ const MDPage = props => {
       })
     }
 
-
-
-    if(layoutType === 'render' ){
-      console.log('EDITOR | layout render')
+    if(layoutType === 'render' && breakIndex > 0){
+      console.log('EDITOR | render vertical')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
-        l: '0',
-        r: '0',
+        l: '',
+        r: '100vw', // move the editor off screen to the left
         w: '100vw',
         h: '100%',
       })
@@ -177,7 +222,7 @@ const MDPage = props => {
     }
 
 
-
+    // Show split ===============================================================
     if(layoutType === 'split' && breakIndex <= 1){
       console.log('EDITOR | split vertical')
       setEditorLayout({

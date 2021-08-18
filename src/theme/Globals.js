@@ -19,6 +19,11 @@ return  <Global
           // transition: useAnims ? 'background .3s, color .3s !important' : 'background 0.0s, color 0.0s !important'
           // transition: 'left 1s, right 1s, top 1s, bottom 1s',
         },
+        'html, body':{
+          overflow: 'hidden',
+          height: '100vh',
+          width: '100vw',
+        },
         // '.transitioned, .transitioned *':{
         //   // transition: '1s'
         // },

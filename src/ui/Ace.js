@@ -144,7 +144,7 @@ const Ace = props => {
         let snippetsArr = []
         SD.getAllSnippets().then(x=> {
 
-            console.log('all snippets returned', x)
+            // console.log('all snippets returned', x)
             snippetsArr = x
             
 
@@ -158,9 +158,9 @@ const Ace = props => {
             .then(x=>{
                 if(x){
 
-                        x.map((x, i)=>{
-                            console.log(`LOAD SETTINGS ${i} | ${x.id} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
-                        })
+                        // x.map((x, i)=>{
+                        //     console.log(`LOAD SETTINGS ${i} | ${x.id} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
+                        // })
                     // set keybinds
                     require.config({paths: { "ace" : "../lib/ace"}});
                     // require()

@@ -159,6 +159,7 @@ const SettingsModal = forwardRef((props, ref) => {
             alignItems: 'center',
             flexDirection: 'column',
             position: 'fixed',
+            display: 'block',
             top:'0',
             left:'0',
             height: '100vh',
@@ -174,6 +175,7 @@ const SettingsModal = forwardRef((props, ref) => {
 
             {/* CARD ------------------------------------------*/}
             <Card variant='modal' 
+            id='halo-13'
             ref={REF_CARD}
             onClick={e=>e.stopPropagation()}
             sx={{
@@ -242,8 +244,8 @@ const SettingsModal = forwardRef((props, ref) => {
                     
                     {/* ACCEPT / DENY BUTTONS ------------------------------------------*/}
                     <Flex sx={{width: '100%', justifyContent: 'space-between'}}>
-                        <Button variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleShowConfirmReset}>Reset</Button>
-                        <Button variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleClose}>Done</Button>
+                        <Button id='halo-14' variant='outline.secondary' sx={{p:2, minWidth: '6rem', }} onClick={handleShowConfirmReset}>Reset</Button>
+                        <Button id='halo-15' variant='outline.primary' sx={{p:2, minWidth: '6rem',}} onClick={handleClose}>Done</Button>
                     </Flex>
             
 

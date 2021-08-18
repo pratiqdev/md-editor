@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { useRouter } from 'next/router'
 import {
   Button,
   Box,
@@ -33,6 +34,8 @@ const LoadItem = ({
   const [newName, setNewName] = useState();
   const [newSum, setNewSum] = useState();
 
+  const router = useRouter()
+
   const handleDetails = () => {
     setShowDetails(!showDetails);
   };
@@ -62,8 +65,26 @@ const LoadItem = ({
     setNewSum(currentSD.newSum);
   });
 
+  
+  useEffect(()=>{
+    switch(router.query.step){
+
+      case '5': {setShowDetails(false)}break;
+      case '6': {setShowDetails(true)}break;
+      case '7': {setShowDetails(true)}break;
+      case '8': {setShowDetails(true)}break;
+      case '9': {setShowDetails(true)}break;
+      case '10': {setShowDetails(true)}break;
+      case '11': {setShowDetails(true)}break;
+      case '12': {setShowDetails(false)}break;
+
+
+    }
+  }, [router.query])
+
   return (
     <Box
+    id='halo-4'
       key={itemKey}
       sx={{
         border: "1px solid",
@@ -91,6 +112,7 @@ const LoadItem = ({
           </Button>
           <Box>
             <Input
+            id='halo-5'
               value={newName}
               onChange={handleUpdateName}
               onClick={(e) => e.stopPropagation()}
@@ -112,12 +134,12 @@ const LoadItem = ({
         </Flex>
 
         <Flex>
-            {!showDetails &&
+            {/* {!showDetails &&
             <Button variant="outline.primary" onClick={handleSave} sx={{ mr: 3 }}>
                 Save
             </Button>
-            }
-          <Button onClick={handleSwap}>Load</Button>
+            } */}
+          <Button id='halo-7' onClick={handleSwap}>Load</Button>
         </Flex>
       </Flex>
 
@@ -137,6 +159,7 @@ const LoadItem = ({
           </Flex>
 
           <Textarea
+            id='halo-6'
             value={newSum}
             onChange={handleUpdateSum}
             onClick={(e) => e.stopPropagation()}
@@ -154,6 +177,7 @@ const LoadItem = ({
 
           <Flex sx={{ mt: 4, justifyContent: "space-between" }}>
             <Button
+              id='halo-9'
               variant="outline.secondary"
               sx={{ minWidth: "6rem", mr: 2 }}
               onClick={() => handleDelete(currentIndex)}
@@ -161,9 +185,10 @@ const LoadItem = ({
               Delete
             </Button>
             <Button
+            id='halo-8'
               variant="outline.primary"
               sx={{ minWidth: "6rem" }}
-              onClick={() => console.log("create template from this file")}
+              onClick={handleSave}
             >
               Save
             </Button>

@@ -51,36 +51,47 @@ import {LayoutSplit} from '@emotion-icons/bootstrap/LayoutSplit'
 
 const Navbar = forwardRef((props, ref) => {
 
+  /// ====================================================================
   const breakIndex = useBreakpointIndex();
+  const router = useRouter()
+  const context = useThemeUI();
+  const { theme, components, colorMode, setColorMode } = context;
 
-
+  /// ====================================================================
   const REF_LOAD_MODAL = useRef()
   const REF_SAVE_MODAL = useRef()
   const REF_SETTINGS_MODAL = useRef()
   const REF_TEMPLATE_MODAL = useRef()
 
-
-
-  const router = useRouter()
-  const context = useThemeUI();
-  const { theme, components, colorMode, setColorMode } = context;
+  /// ====================================================================
   const [themeColor, setThemeColor] = useState('#0000ffff')
   const [appInstallStatus, setAppInstallStatus] = useState(libInstallStatus)
   const [deferred, setDeferred] = useState()
 
+  /// ====================================================================
   const [showLoad, setShowLoad] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [showSave, setShowSave] = useState(false)
   const [showSaveTemplate, setShowSaveTemplate] = useState(false)
   const [currentIdForSave, setCurrentIdForSave] = useState('')
-
-  const [showGuideHalo, setShowGuideHalo] = useState(true)
-
+  const [showGuideHalo, setShowGuideHalo] = useState(false)
   const [activeFileData, setActiveFileData] = useState()
+  const [toggle, setToggle] = useState(true)
+
+  const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
+
+  /// ====================================================================
+  useImperativeHandle(ref,
+    () => {
+        test: () => {// function name
+            // the above func. is customized function as it can 
+            // behave differently than its normal behavior 
+            console.log('useImperativeHandleRef')
+         } 
+    });  
 
 
-
-  //~ MODAL TOGGLES ______________________________________________________________________________________________________________________________
+  // ==================================================================================== MODAL TOGGLES
   const showLoadModal = () => {
       setShowLoad(true)
       // props.causeParentTrigger()
@@ -100,19 +111,100 @@ const Navbar = forwardRef((props, ref) => {
     setShowSettings(true)
   }
 
-  useImperativeHandle(ref,
-    () => {
-        test: () => {// function name
-            // the above func. is customized function as it can 
-            // behave differently than its normal behavior 
-            console.log('useImperativeHandleRef')
-         } 
-    });  
+
   
 
+  // ==================================================================================== SAVE FILES
+  const handleSaveWithId = debounce((givenId) => {
+    setCurrentIdForSave(typeof givenId === 'number' ? givenId : 'current')
+    console.log(`NAVBAR | handleSaveWithId: ${givenId}`)
+   
+     // setCurrentIdForSave(givenId ? givenId : 'current')
+     setShowSave(true)
+   },1000,{ leading: true, trailing: false, maxWait: 2000});
+   
+   
+   const handleShowSaveAsTemplate = () => {
+      setShowSaveTemplate(true)
+    }
+   
+    const handleSaveAsTemplate = () => {
+     console.log(`save file as template: ${currentIdForSave}`)
+   }
+
+
+ 
+
+  // ==================================================================================== TOGGLE LAYOUT
+  const toggleLayout = () => {
+    // console.log('toggle layout????')
+    if(props.setLayout){
+      if(toggle){
+        setToggle(false)
+        props.setLayout('editor')
+      }else{
+        setToggle(true)
+        props.setLayout('render')
+      }
+    }
+    props.causeParentTrigger()
+  }
+
+  const splitWindow = () => {
+    props.setLayout('split')
+  }
 
 
 
+
+  // ==================================================================================== GLOBAL SHORTCUTS
+  const handleCloseAll = debounce(() => {
+    REF_SAVE_MODAL?.current?.close()
+    REF_SETTINGS_MODAL?.current?.close()
+    REF_LOAD_MODAL?.current?.close()
+  },1000,{ leading: true, trailing: false, maxWait: 2000});
+
+  const handleShortcuts = e => {
+      if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        handleSaveWithId()
+      }
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        console.log('Esc - close all')
+        handleCloseAll()
+      }
+  }
+
+
+  // ==================================================================================== USE EFFECT
+  // on any change, load data and settings and setup keybinds
+  useEffect(()=>{
+
+    SD.getActive()
+      .then(x=>setActiveFileData(x))
+      .catch(err=>console.log(err))
+
+
+      if(router.query.walkthrough == 'true'){
+        setShowGuideHalo(true)
+      }else{
+        setShowGuideHalo(false)
+        if(router.query.walkthrough){
+          router.replace("/editor", undefined, { shallow: true })
+        }
+      }
+      
+
+    // router.query.includes('walkthrough') ? console.log('query walkthrough') : console.log('no query walkthrough')
+
+
+    window.addEventListener("keydown", e => handleShortcuts(e) ,true);
+    return () => window.removeEventListener("keydown", e => handleShortcuts(e) ,true);
+  })
+
+  /// ========================================================================================================================
   useEffect(()=>{
     triggerInstallFlow()
     setAppInstallStatus(libInstallStatus)
@@ -136,100 +228,39 @@ const Navbar = forwardRef((props, ref) => {
       }, 30000);
     }
 
-
-
-
- 
-
-
     
   }, [props, router.query.q, libInstallStatus]);
 
-const [toggle, setToggle] = useState(true)
 
-const toggleLayout = () => {
-  // console.log('toggle layout????')
-  if(props.setLayout){
-    if(toggle){
-      setToggle(false)
-      props.setLayout('editor')
-    }else{
-      setToggle(true)
-      props.setLayout('render')
+  useEffect(()=>{
+    console.log(`NAVBAR | STEP ${router.query.step}`)
+    switch(router.query.step){
+      case '1': {props.setLayout('split')}break;
+      case '2': {props.setLayout('split')}break;
+      case '4': {setShowLoad(true)}break;
+      case '5': {setShowLoad(true)}break;
+      case '6': {setShowLoad(true)}break;
+      case '7': {setShowLoad(true)}break;
+      case '8': {setShowLoad(true)}break;
+      case '9': {setShowLoad(true)}break;
+      case '10': {setShowLoad(true)}break;
+      case '11': {setShowLoad(true)}break;
+      case '15': {setShowSettings(true)};break;
+      case '16': {setShowSettings(true)};break;
+
+      default: {
+        setShowLoad(false)
+        setShowSave(false)
+        setShowSettings(false)
+        setShowSaveTemplate(false)
+      }
+
     }
-  }
-  props.causeParentTrigger()
-}
-
-const splitWindow = () => {
-  props.setLayout('split')
-}
-
-const layoutLongPress = useLongPress(()=>toggleLayout(), ()=>splitWindow(), 200)
+  }, [router.query])
 
 
 
-// const handleSave = debounce(() => {
-//   setShowSave(true)
-// },1000,{ leading: true, trailing: false, maxWait: 2000});
-
-const handleSaveWithId = debounce((givenId) => {
- setCurrentIdForSave(typeof givenId === 'number' ? givenId : 'current')
- console.log(`NAVBAR | handleSaveWithId: ${givenId}`)
-
-  // setCurrentIdForSave(givenId ? givenId : 'current')
-  setShowSave(true)
-},1000,{ leading: true, trailing: false, maxWait: 2000});
-
-
-const handleShowSaveAsTemplate = () => {
-   setShowSaveTemplate(true)
- }
-
- const handleSaveAsTemplate = () => {
-  console.log(`save file as template: ${currentIdForSave}`)
-}
-
-
-const handleCloseAll = debounce(() => {
-  REF_SAVE_MODAL?.current?.close()
-  REF_SETTINGS_MODAL?.current?.close()
-  REF_LOAD_MODAL?.current?.close()
-},1000,{ leading: true, trailing: false, maxWait: 2000});
-
-
-
-
-const handleShortcuts = e => {
-    if (e.key === 's' && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-      e.preventDefault();
-      handleSaveWithId()
-    }
-
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      console.log('Esc - close all')
-      handleCloseAll()
-    }
-}
-
-
-
-useEffect(()=>{
-
-  SD.getActive()
-    .then(x=>setActiveFileData(x))
-    .catch(err=>console.log(err))
-
-
-  window.addEventListener("keydown", e => handleShortcuts(e) ,true);
-  return () => window.removeEventListener("keydown", e => handleShortcuts(e) ,true);
-})
-
-
-
-// console.log(`props.layout: ${props.layoutType}`)
-
+  // ==================================================================================== ELEMENTS
   return (
     <>
       <Box
@@ -303,10 +334,9 @@ useEffect(()=>{
               </Flex>
 
           {props.editor &&
-          <Flex>
+          <Flex >
 
-              <Tipper tip="Click to toggle view, hold to split view" delay={[1000, 0]}>
-                <Button variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
+                <Button id='halo-10' variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
                     {(props.layoutType === 'editor' && breakIndex <=0) &&<CaretUp size='22'/>}
                     {(props.layoutType === 'render' && breakIndex <=0) &&<CaretDown size='22'/>}
                     {(props.layoutType === 'split' && breakIndex <=0) &&<LayoutSplit  style={{transform: 'rotate(90deg)'}} size='18'/>}
@@ -315,7 +345,6 @@ useEffect(()=>{
                     {(props.layoutType === 'render' && breakIndex > 0) &&<CaretRight size='22'/>}
                     {(props.layoutType === 'split' && breakIndex > 0) &&<LayoutSplit size='18'/>}
                 </Button>
-              </Tipper>
             
           </Flex>
           }
@@ -394,10 +423,7 @@ useEffect(()=>{
 
             {showGuideHalo && 
             <HaloGuide 
-              setLayout={props.setLayout}
-              openLoad={() => setShowLoad(true)}
-              closeLoad={() => setShowLoad(false)}
-              exit={() => setShowGuideHalo(false)}
+              exit={() => (setShowGuideHalo(false), router.push({query: {walkthrough: false}}))}
             />
             }
       

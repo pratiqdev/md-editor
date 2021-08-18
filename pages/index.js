@@ -88,7 +88,7 @@ const Index = (props) => {
           <Box sx={{p:4, textAlign: 'center', maxWidth: '25rem', mx:'auto',}}>
               Use the interactive walkthrough to get familiar with the interface and features of MDE
             </Box>
-            <Link href='/walkthrough'>
+            <Link href={{pathname: 'editor', query: {walkthrough: true}}}>
             <Button variant='outline.primary' sx={{mt:4, py: 2, width:  'auto', mx: 'auto', fontSize: [3,4,4],}}>Walkthrough</Button>
             </Link> 
           </Flex>

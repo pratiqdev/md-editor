@@ -25,10 +25,8 @@ export default {
 
     },
     progress: {
-      '*':{
-        transition: 1,
-      },
       color: 'primary_b',
+      bg: 'grey_4'
     },
     br:{
       my: 7
