@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from 'react'
 
 //* HLJS _________________________________________________________________________________________
 import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai.css';
 
 
 
@@ -19,7 +20,13 @@ import { debounce } from 'lodash'
 // import marked from 'marked'
 import { Remarkable } from 'remarkable'
 
-var md = new Remarkable({
+
+
+
+const Render = (props) => {
+
+
+let md = new Remarkable({
     highlight: (str, lang) => {
       if (lang && hljs.getLanguage(lang)) {
         try {
@@ -34,12 +41,6 @@ var md = new Remarkable({
       return ''; // use external default escaping
     }
   });
-
-
-const Render = (props) => {
-
-
-
 
 
 

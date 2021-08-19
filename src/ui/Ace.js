@@ -392,7 +392,7 @@ const Ace = props => {
                 fontFamily: 'monospace',
             }}
             >
-            <div style={{height: '100%'}} className='source' id='editor' ></div>
+            <div style={{height: '100%'}} id='editor' ></div>
             </Box>
         </div>
     )
