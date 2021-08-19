@@ -314,9 +314,16 @@ const Ace = props => {
             loadContent()
             loadSettings()
         }, 200);
+
+        
             
             // editor.setValue(props.parentContent || '97asdf876')
     }, [props.useTrigger])
+
+
+    useEffect(()=>{
+        console.log(`SCROLL | ${scroll.position}`)
+    }, [props.scroll])
 
 
     

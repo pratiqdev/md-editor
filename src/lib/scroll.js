@@ -11,6 +11,7 @@ export function useScroll() {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll, { passive: true });
 
   })
 
@@ -23,6 +24,16 @@ export function useScroll() {
     // }, []);
 
     // return offset
+}
+
+
+
+//*=========================================================================================================================
+
+export const useScrollSync = (a,b) => {
+  let pos = {a:0, b:0}
+
+  return pos
 }
 
 
