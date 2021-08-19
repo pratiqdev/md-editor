@@ -3,51 +3,8 @@ import React, { useRef, useEffect, useState } from 'react'
 
 
 //* HLJS _________________________________________________________________________________________
-import hljs from 'highlight.js/lib/core'
+import hljs from 'highlight.js'
 
-import xml from 'highlight.js/lib/languages/xml'
-hljs.registerLanguage('xml', xml);
-
-import javascript from 'highlight.js/lib/languages/javascript'
-hljs.registerLanguage('javascript', javascript);
-
-import css from 'highlight.js/lib/languages/javascript'
-hljs.registerLanguage('css', css);
-
-import python from 'highlight.js/lib/languages/python'
-hljs.registerLanguage('python', python);
-
-import sql from 'highlight.js/lib/languages/sql'
-hljs.registerLanguage('sql', sql);
-
-import json from 'highlight.js/lib/languages/json'
-hljs.registerLanguage('json', json);
-
-import bash from 'highlight.js/lib/languages/bash'
-hljs.registerLanguage('bash', bash);
-
-import shell from 'highlight.js/lib/languages/shell'
-hljs.registerLanguage('shell', shell);
-
-import diff from 'highlight.js/lib/languages/diff'
-hljs.registerLanguage('diff', diff);
-
-import markdown from 'highlight.js/lib/languages/markdown'
-hljs.registerLanguage('markdown', markdown);
-
-import java from 'highlight.js/lib/languages/java'
-hljs.registerLanguage('java', java);
-
-import lua from 'highlight.js/lib/languages/lua'
-hljs.registerLanguage('lua', lua);
-
-import makefile from 'highlight.js/lib/languages/makefile'
-hljs.registerLanguage('makefile', makefile);
-
-import perl from 'highlight.js/lib/languages/perl'
-hljs.registerLanguage('perl', perl);
-
-import { scrollSync } from '../lib/scroll'
 
 
 
@@ -59,37 +16,28 @@ import { Button, Box, Flex, Text } from "theme-ui";
 
 //* EXTERNAL ______________________________________________________________________________________
 import { debounce } from 'lodash'
-import marked from 'marked'
+// import marked from 'marked'
+import { Remarkable } from 'remarkable'
 
+var md = new Remarkable({
+    highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return hljs.highlight(lang, str).value;
+          } catch (err) {}
+        }
+    
+        try {
+          return hljs.highlightAuto(str).value;
+        } catch (err) {}
+    
+        return ''; // use external default escaping
+      }
+  });
 
 
 const Render = (props) => {
 
-    const scroller = document.getElementById('halo-1');
-    const scrolling = () => {
-        if(scroller){
-
-            let height = scroller.clientHeight;
-            let scrollHeight = scroller.scrollHeight - height;
-            let scrollTop = scroller.scrollTop;
-            let percent = scrollTop / scrollHeight
-            // console.log( 'SCROLL R | '+percent)
-            scrollSync('render', percent)
-        }
-      }
-
-      const scrollerTo = p => {
-          if(scroller){
-
-              let height = scroller.clientHeight;
-              let scrollHeight = scroller.scrollHeight - height;
-              let scrollTop = scroller.scrollTop;
-              let percent = scrollHeight * p
-              scroller.scrollTop = percent
-              // console.log(`scrollTop: ${percent}`)
-            }
-      }
-  
 
 
 
@@ -104,58 +52,11 @@ const Render = (props) => {
         let t = text || ''
         t = t.replace(/^---[\s\S]+?---$/m, '')
 
-        const __html = marked(t)
+        const __html = md.render(t)
         return { __html }
     }
 
 
-
-    const setNewThemes = () => {
-        if (REF_RESULTBOX) {
-            const nodes = REF_RESULTBOX.current.querySelectorAll('pre code');
-            nodes.forEach((node) => {
-                node.classList.add('style1')
-            });
-        }
-    }
-
-    const debounceTheme = debounce(() => {
-        setNewThemes()
-    }, 1000, {leading: false, trailing: true})
-    
-    const debounceHljs = debounce(() => {
-        hljs.highlightAll()
-    }, 1000, {leading: false, trailing: true})
-
-    useEffect(()=>{
-        debounceTheme()
-        debounceHljs()
-    }, [props.parentContent])
-
-
-
-    useEffect(()=>{
-        if(scroller){
-            scroller.addEventListener('scroll', scrolling)
-            scrollerTo(.5)
-        }
-        
-        return () => {
-            if(scroller){
-                scroller.removeEventListener('scroll', scrolling)
-            }
-
-        }
-    })
-
-
-
-
-
-    useEffect(()=>{
-        console.log(`RENDER SCROLL | ${props.scroll}`)
-        scrollerTo(props.scroll)
-    }, [props.scroll])
 
 
 
@@ -166,6 +67,7 @@ const Render = (props) => {
             {/* <Button sx={{position: 'relative', zIndex: 1000000 }} onClick={()=>switchTheme()}>!!!</Button> */}
             <Box
             id='halo-1'
+            className='result-html'
             sx={{
                 position: props.layout.p,
                 top: props.layout.t,

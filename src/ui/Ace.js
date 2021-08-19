@@ -48,7 +48,7 @@ import {
 import * as SD from '../lib/saveData'
 
 
-import AceEditor from "react-ace";
+// import AceEditor from "react-ace"; //!removing react-ace
 // import { Insert } from '@emotion-icons/fluentui-system-filled';
 
 import { scrollSync } from '../lib/scroll'
@@ -83,17 +83,13 @@ const Ace = props => {
         SD.saveActiveFile()
     }
 
-    var ed
-    var sess
-
 
 
     let editor
 
     //* define the editor at start
     useEffect(()=>{
-        const reactAceComponent = REF_ACE.current;
-        editor = reactAceComponent.editor;
+        editor = ace.edit('editor')
         
         
     })
@@ -171,23 +167,23 @@ const Ace = props => {
                         //     console.log(`LOAD SETTINGS ${i} | ${x.id} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
                         // })
                     // set keybinds
-                    require.config({paths: { "ace" : "../lib/ace"}});
+                    // require.config({paths: { "ace" : "../lib/ace"}});
                     // require()
                     // require.config({paths: { "ace" : "../../node_modules/ace-builds/ace"}});
-                    require(["ace-builds/src-noconflict/ace"], function(ace) {
-                        ed = ace.edit("UNIQUE_ID_OF_DIV")
-                        sess = ed.getSession()
+                    // require(["ace-builds/src-noconflict/ace"], function(ace) {
+                        // ed = ace.edit("UNIQUE_ID_OF_DIV")
+                        // sess = ed.getSession()
 
                         
                         // editor.setTheme("ace/theme/twilight")
-                        ed.session.setMode("ace/mode/markdown")
+                        editor.session.setMode("ace/mode/markdown")
 
 
                         // do this before disabling snippets so manager has access to the files required
                         registerSnippets(
                             x.find(x=>x.id === 'custom-snippets').state[0],
-                            ed,
-                            ed.session,
+                            editor,
+                            editor.session,
                             'markdown',
                             createSnippets(snippetsArr)
                         ).then(()=>{
@@ -252,17 +248,17 @@ const Ace = props => {
                         
                         // let sess = ed.getSession()
 
-                        const calcScroll = () => {
-                            let ratio = sess.getScrollTop() / (ed.renderer.layerConfig.maxHeight - ed.renderer.$size.scrollerHeight + ed.renderer.scrollMargin.bottom) 
-                            if(ratio >= 0 && ratio <= 1){
-                                props.handleScroll('editor', ratio)
-                            }
-                        }
+                        // const calcScroll = () => {
+                        //     let ratio = sess.getScrollTop() / (editor.renderer.layerConfig.maxHeight - ed.renderer.$size.scrollerHeight + ed.renderer.scrollMargin.bottom) 
+                        //     if(ratio >= 0 && ratio <= 1){
+                        //         props.handleScroll('editor', ratio)
+                        //     }
+                        // }
                         
                         
-                        sess.on('changeScrollTop', (scroll) => {
-                            calcScroll()
-                        })
+                        // editor.session.on('changeScrollTop', (scroll) => {
+                        //     calcScroll()
+                        // })
            
                             
 
@@ -275,7 +271,7 @@ const Ace = props => {
 
                         
                         // show current keybindings _________________________________________________________
-                        ed.commands.addCommand({
+                        editor.commands.addCommand({
                             name: "showKeyboardShortcuts",
                             bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-k"},
                             exec: function(ed) {
@@ -289,7 +285,7 @@ const Ace = props => {
                         
                         // test keybindings _________________________________________________________________
 
-                        ed.commands.addCommand({
+                        editor.commands.addCommand({
                             name: "testKeybindings",
                             bindKey: {win: "Ctrl-Shift-n", mac: "Command-Shift-n"},
                             exec: function(ed) {
@@ -304,7 +300,8 @@ const Ace = props => {
         
                          
                         
-                    })
+                    // }
+                    // )
 
 
                   
@@ -330,11 +327,11 @@ const Ace = props => {
     }
 
 
-    useEffect(()=>{
-        editor.getSession().setScrollTop(props.scroll)
-        console.log(`ACE SCROLL | ${props.scroll}`)
+    // useEffect(()=>{
+    //     editor.getSession().setScrollTop(props.scroll)
+    //     console.log(`ACE SCROLL | ${props.scroll}`)
         
-    }, [props.scroll])
+    // }, [props.scroll])
     
 
     //! load content from parent only when useTrigger fires 
@@ -379,37 +376,24 @@ const Ace = props => {
 
     return(
         <div class='transitioned'>
-        <Box 
-            id='halo-0'
-            sx={{
-            // position: 'relative',
-            // height: '10vh',
-            position: props.layout.p,
-            right: props.layout.r,
-            left: props.layout.l,
-            top: props.layout.t,
-            bottom: props.layout.b,
-            width: props.layout.w,
-            height: props.layout.h,
-            overflow: 'hidden',
-        }}
-        // onFocus={()=>breakIndex <= 0 && props.setLayout('editor')} // used to hide render window on mobile devices because virtual keyboard takes up so much space.
-        // onFocusOut={()=>breakIndex <= 0 && props.setLayout('split')}
-        >
-            <AceEditor
-                ref={REF_ACE}
-                mode="java"
-                theme="github"
-                onChange={onChange}
-                name="UNIQUE_ID_OF_DIV"
-                editorProps={{ $blockScrolling: true }}
-                width={'100%'}
-                height={'100%'}
-
-                  style={{zIndex: '2', }}
-                />
+            <Box 
+                id='halo-0'
+                sx={{
+                // position: 'relative',
+                // height: '10vh',
+                position: props.layout.p,
+                right: props.layout.r,
+                left: props.layout.l,
+                top: props.layout.t,
+                bottom: props.layout.b,
+                width: props.layout.w,
+                height: props.layout.h,
+                overflow: 'hidden',
+                fontFamily: 'monospace',
+            }}
+            >
+            <div style={{height: '100%'}} className='source' id='editor' ></div>
             </Box>
-            {/* {showSaveModal && <SaveModal handleDeny={()=>setShowSaveModal(false)} contentForSave={contentForSave}/>} */}
         </div>
     )
 }
