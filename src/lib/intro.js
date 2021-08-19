@@ -284,7 +284,7 @@ Please make sure to update tests as appropriate.
 
 ## Usage
 
-\`\`\`python
+\`\`\` python
 import foobar
 
 # returns 'words'
