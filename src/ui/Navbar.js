@@ -422,7 +422,7 @@ const Navbar = forwardRef((props, ref) => {
             currentIdForSave={currentIdForSave}
             handleDeny={()=>setShowSave(false)} 
             handleAccept={()=>setShowSave(false)}
-            handleShowSaveAsTemplate={handleShowSaveAsTemplate}
+            // handleShowSaveAsTemplate={handleShowSaveAsTemplate}
             />}
 
           {showSaveTemplate && 

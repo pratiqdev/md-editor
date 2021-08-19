@@ -49,8 +49,9 @@ import * as SD from '../lib/saveData'
 
 
 import AceEditor from "react-ace";
-import { Insert } from '@emotion-icons/fluentui-system-filled';
+// import { Insert } from '@emotion-icons/fluentui-system-filled';
 
+import { scrollSync } from '../lib/scroll'
 
 
 
@@ -82,6 +83,8 @@ const Ace = props => {
         SD.saveActiveFile()
     }
 
+    var ed
+    var sess
 
 
 
@@ -96,6 +99,8 @@ const Ace = props => {
     })
 
 
+
+
     //* change themes and bg on colorMode or theme change
     useEffect(()=>{
         if(colorMode === 'dark'){
@@ -106,6 +111,10 @@ const Ace = props => {
             gsap.to([editor.container], {background: '#ddd', duration: .3})
         }
     }, [colorMode, theme])
+
+    // const calcScroll = () => {
+    //        return ed.renderer.layerConfig.maxHeight - ed.renderer.$size.scrollerHeight + ed.renderer.scrollMargin.bottom / sess.getScrollTop()          
+    // }
     
 
     const loadContent = () => {
@@ -146,7 +155,7 @@ const Ace = props => {
 
             // console.log('all snippets returned', x)
             snippetsArr = x
-            
+              
 
 
         })
@@ -166,7 +175,10 @@ const Ace = props => {
                     // require()
                     // require.config({paths: { "ace" : "../../node_modules/ace-builds/ace"}});
                     require(["ace-builds/src-noconflict/ace"], function(ace) {
-                        var ed = ace.edit("UNIQUE_ID_OF_DIV")
+                        ed = ace.edit("UNIQUE_ID_OF_DIV")
+                        sess = ed.getSession()
+
+                        
                         // editor.setTheme("ace/theme/twilight")
                         ed.session.setMode("ace/mode/markdown")
 
@@ -237,7 +249,20 @@ const Ace = props => {
                             }, 250);
                         })
 
+                        
+                        // let sess = ed.getSession()
 
+                        const calcScroll = () => {
+                            let ratio = sess.getScrollTop() / (ed.renderer.layerConfig.maxHeight - ed.renderer.$size.scrollerHeight + ed.renderer.scrollMargin.bottom) 
+                            if(ratio >= 0 && ratio <= 1){
+                                props.handleScroll('editor', ratio)
+                            }
+                        }
+                        
+                        
+                        sess.on('changeScrollTop', (scroll) => {
+                            calcScroll()
+                        })
            
                             
 
@@ -304,6 +329,12 @@ const Ace = props => {
         }
     }
 
+
+    useEffect(()=>{
+        editor.getSession().setScrollTop(props.scroll)
+        console.log(`ACE SCROLL | ${props.scroll}`)
+        
+    }, [props.scroll])
     
 
     //! load content from parent only when useTrigger fires 
@@ -321,9 +352,12 @@ const Ace = props => {
     }, [props.useTrigger])
 
 
-    useEffect(()=>{
-        console.log(`SCROLL | ${scroll.position}`)
-    }, [props.scroll])
+    // useEffect(()=>{
+    //     console.log(`SCROLL | ${scroll.position}`)
+    // }, [])
+
+
+
 
 
     
