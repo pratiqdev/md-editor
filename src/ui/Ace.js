@@ -51,7 +51,6 @@ import * as SD from '../lib/saveData'
 import AceEditor from "react-ace";
 // import { Insert } from '@emotion-icons/fluentui-system-filled';
 
-import { scrollSync } from '../lib/scroll'
 
 
 

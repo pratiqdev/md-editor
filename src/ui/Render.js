@@ -47,7 +47,6 @@ hljs.registerLanguage('makefile', makefile);
 import perl from 'highlight.js/lib/languages/perl'
 hljs.registerLanguage('perl', perl);
 
-import { scrollSync } from '../lib/scroll'
 
 
 
