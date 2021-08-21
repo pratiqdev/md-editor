@@ -31,7 +31,7 @@
 
 
 - no snippets
-- no keyboard shortcuts
+- no replace with find
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMzODY0ODQ3NV19
+eyJoaXN0b3J5IjpbLTEzOTcxNDU2NDRdfQ==
 -->
