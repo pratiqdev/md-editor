@@ -70,22 +70,23 @@ name: "Welcome!",
 move: '0, -39vh',
 content: 
 `This markdown editor is full of features! Take the full tour or exit anytime to explore on your own.
+Use the next button to progress through the guide, or click outside to exit.
 
-> Use the next button to progress through the guide, or click outside to exit.`,
+> WARNING: This tour-guide component is still under development and you may experience bugs`,
 },
 { // step 1
 id: "halo-0",
 marg: 0,
 move: '0, -39vh',
 name: "Text Editor",
-content: `Use the text editor to modify content of the md file. `,
+content: `Use the text editor to modify content of the md file. CHeck out snippet usage in the documentation section `,
 },
 { // step 2
 id: "halo-1",
 marg: 0,
 move: '0, -39vh',
 name: "Rendered Result",
-content: `The renderer will display the final result of the editors content, in `,
+content: `The renderer will display the final result of the editors content, rendered with marked / @next/mdx `,
 },
 { // step 3
 id: "halo-2",
@@ -111,45 +112,53 @@ content: `This is a single file, the currently active file will be highlighted.`
 { // step 6
 id: "halo-4",
 marg: 10,
-name: "File Details (halo-4)",
+name: "File Details",
 move: '0, -39vh',
 content: `Each file will have details that can be seen by expanding the file. Details include:
 - Edited: the date and time of the most recent change
 - Lines / Words / Chars: the total number of lines, words and characters in the file
 `,
+closeFunc: () => {
+
+}
 },
 { // step 7
 id: "halo-5",
 marg: 10,
-name: "File Name (halo-5)",
+name: "File Name",
 move: '0, -39vh',
 content: `The name of the file can be edited when the file is expanded and details are visible`,
 },
 { // step 8
 id: "halo-6",
 marg: 10,
-name: "File Description (halo-6)",
+name: "File Description",
 move: '0, -39vh',
 content: `Files can be given a short description for keeping track of the purpose or content of the file`,
 },
 { // step 9
 id: "halo-7",
 marg: 10,
-name: "Load File (halo-7)",
+name: "Load File",
 move: '0, -39vh',
 content: `Files can be activated and loaded into the editor by clicking the 'Load' button`,
+closeFunc: () => {
+  if(document){
+    document.getElementById('halo-10').click()
+  }
+}
 },
 { // step 10
 id: "halo-9",
 marg: 10,
-name: "Delete File (halo-9)",
+name: "Delete File",
 move: '0, -39vh',
-content: ``,
+content: `Files can be easily deleted from memory. Be sure to save your files first!`,
 },
 { // step 11
 id: "halo-8",
 marg: 10,
-name: "Save File (halo-8)",
+name: "Save File",
 move: '0, -39vh',
 content: `Files can be saved to the your machine by clicking the 'Save' button. This will open an additional prompt where you can select to save the file as a template or as a standard .md file.`,
 },
@@ -157,7 +166,7 @@ content: `Files can be saved to the your machine by clicking the 'Save' button. 
 { // step 11
   id: "halo-16",
   marg: 10,
-  name: "Save as Type (halo-16)",
+  name: "Save as Type",
   move: '0, -39vh',
   content: `Files can be saved to the your machine by clicking the 'Save' button. This will open an additional prompt where you can select to save the file as a template or as a standard .md file.`,
   },
@@ -165,44 +174,44 @@ content: `Files can be saved to the your machine by clicking the 'Save' button. 
 { // step 12
 id: "halo-10",
 marg: 5,
-name: "Switch View (halo-10)",
+name: "Switch View",
 move: '0, -39vh',
-content: ``,
+content: `The view can be toggle between split-view (click and hold) or fullscreen-view (click)`,
 },
 { // step 13
 id: "halo-11",
 marg: 5,
-name: "Toggle Dark Mode (halo-11)",
+name: "Toggle Dark Mode",
 move: '0, -39vh',
-content: ``,
+content: `Save your eyes (and battery power) by switching to dark mode`,
 },
 { // step 14
 id: "halo-12",
 marg: 5,
-name: "Open Menu (halo-12)",
+name: "Open Menu",
 move: '0, -39vh',
-content: ``,
+content: `Open the main menu for more options and features`,
 },
 { // step 15
 id: "halo-13",
 marg: 10,
-name: "Settings Menu (halo-13)",
+name: "Settings Menu",
 move: '0, -39vh',
-content: `Settings can be opened from the main menu`,
+content: `Settings can be opened from the main menu, and edited at any time. Settings are automatically saved and updated when changed`,
 },
 { // step 16
 id: "halo-14",
 marg: 5,
-name: "Reset Settings (halo-14)",
+name: "Reset Settings",
 move: '0, -39vh',
-content: ``,
+content: `Messed up? Reset the settings to their original state`,
 },
 { // step 17
 id: "halo-15",
 marg: 5,
-name: "Close Settings (halo-15)",
+name: "Close Settings",
 move: '0, -39vh',
-content: ``,
+content: `All finished? Save and exit the settings menu`,
 },
 
 
@@ -218,7 +227,7 @@ content: ``,
 { // step 17
 id: "",
 marg: 5,
-name: "",
+name: "The End",
 move: '0, -39vh',
 content: 
 `
@@ -409,8 +418,8 @@ const components = {
             width: "40rem",
             maxWidth: "90vw",
             height: "auto",
-            height: "10rem",
-            maxHeight: "20vh",
+            // height: "10rem",
+            maxHeight: "40vh",
             borderRadius: 2,
             overflow: "hidden",
             transform: `translate(${guideLoc})`,

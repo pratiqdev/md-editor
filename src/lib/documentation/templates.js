@@ -11,6 +11,12 @@ New templates can be created by navigating to the file selection window and clic
 This will open a secondary window where you can select the 'Save as Template' option.
 `
 },
+{name: 'Using Templates',
+group: 'templates',
+content: `
+Templates can be loaded by creating a new document and selecting load from template.
+`
+},
 
 
 ]

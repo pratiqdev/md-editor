@@ -464,7 +464,7 @@ const Docs = (props) => {
           </MDX>
 
           <Box sx={{ p: 5, bg: "grey_4", m: -5, mt: 3 }}>
-            Made By Michael Jannetta @pratiqdev/mdd
+            Made By Michael Jannetta @pratiqdev/md-editor
           </Box>
         </Box>
       </Box>

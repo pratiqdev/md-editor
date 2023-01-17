@@ -5,7 +5,7 @@ group: "issues",
 content:
 `This application may not function as expected, especially on mobile devices. This application was built mainly for desktop users, and may not respond or function as it was intended. 
 
-If you would like to report a problem, please visit the [repo](https://github.com.pratiqdev/mdd) and submit a new issue.`,
+If you would like to report a problem, please visit the [repo](https://github.com.pratiqdev/md-editor) and submit a new issue.`,
 },
 
 {

@@ -2,8 +2,8 @@ import files from './files'
 import templates from './templates'
 import editorFunctionSettings from './editorFunctionSettings'
 import editorDisplaySettings from './editorDisplaySettings'
-import changelog from './changelog'
-import issues from './issues'
+// import changelog from './changelog'
+// import issues from './issues'
 
 
 const documentation = [
@@ -49,8 +49,8 @@ Visit [the Ace website](https://ace.c9.io/) to use it in your project!
 
 ...editorFunctionSettings,
 ...editorDisplaySettings,
-...changelog,
-...issues,
+// ...changelog,
+// ...issues,
 
 ];
 

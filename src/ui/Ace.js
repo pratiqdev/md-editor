@@ -158,6 +158,12 @@ const Ace = props => {
             .then(x=>{
                 if(x){
 
+                    const parsedSettings = {}
+
+                    x.forEach(setting => {
+                        parsedSettings[setting.id.replace(/-/g, '_')] = setting.state
+                    })
+
                         // x.map((x, i)=>{
                         //     console.log(`LOAD SETTINGS ${i} | ${x.id} - ${typeof x.state === 'object' ? x.state[0] : x.state}`)
                         // })
@@ -173,7 +179,8 @@ const Ace = props => {
 
                         // do this before disabling snippets so manager has access to the files required
                         registerSnippets(
-                            x.find(x=>x.id === 'custom-snippets').state[0],
+                            // x?.find(x=>x.id === 'custom-snippets').state[0],
+                            parsedSettings.custom_snippets[0],
                             ed,
                             ed.session,
                             'markdown',
@@ -183,7 +190,8 @@ const Ace = props => {
                             setTimeout(() => {
 
                                 const wrapMethod = () => {
-                                    let state = x.find(x=>x.id === 'wrap-lines').state 
+                                    // let state = x?.find(x=>x.id === 'wrap-lines').state 
+                                    let state = parsedSettings.wrap_lines
                                     let wrap
                                     if(state === 0){ wrap = false }
                                     if(state === 1){ wrap = true }
@@ -192,7 +200,8 @@ const Ace = props => {
                                 }
 
                                 const foldMarkMethod = () => {
-                                    let state = x.find(x=>x.id === 'fold-marker').state 
+                                    // let state = x?.find(x=>x.id === 'fold-marker').state 
+                                    let state = parsedSettings.fold_marker
                                     let mark
                                     if(state === 0){ mark = 'markbegin' }
                                     if(state === 1){ mark = 'markend' }
@@ -203,27 +212,27 @@ const Ace = props => {
                                 editor.session.setUseWrapMode(true);
                                 editor.setOptions({
                                     autoScrollEditorIntoView: true, // prevent auto scrolling
-                                    fontSize: x.find(x=>x.id === 'font-size').state,                                    //done
-                                    enableBasicAutocompletion: x.find(x=>x.id === 'enable-basic-autocompletion').state, //done
-                                    enableLiveAutocompletion: x.find(x=>x.id === 'enable-live-autocompletion').state,   //done
-                                    enableSnippets: x.find(x=>x.id === 'custom-snippets').state[0],                     //done
-                                    copyWithEmptySelection: x.find(x=>x.id === 'copy-with-empty-selection').state,      //done
-                                    showPrintMargin: x.find(x=>x.id === 'show-print-margin').state,                     //done
-                                    printMarginColumn: x.find(x=>x.id === 'print-margin-location').state,               //done
+                                    fontSize: parsedSettings.font_size,                                                  //done
+                                    enableBasicAutocompletion: parsedSettings.enable_basic_autocompletion, //done
+                                    enableLiveAutocompletion: parsedSettings.enable_live_autocompletion,   //done
+                                    enableSnippets: parsedSettings.custom_snippets[0],                     //done
+                                    copyWithEmptySelection: parsedSettings.copy_with_empty_selection, //x?.find(x=>x.id === 'copy-with-empty-selection')?.state,      //done
+                                    showPrintMargin: parsedSettings.show_print_margin, //x?.find(x=>x.id === 'show-print-margin')?.state,                     //done
+                                    printMarginColumn: parsedSettings.print_margin_location, //x?.find(x=>x.id === 'print-margin-location')?.state,               //done
                                     wrap: wrapMethod(),                                                                 //done
-                                    useSoftTabs: x.find(x=>x.id === 'use-soft-tabs').state,                             //done
-                                    tabSize: x.find(x=>x.id === 'soft-tab-length').state,                               //done
-                                    indentedSoftWrap: x.find(x=>x.id === 'indent-wrapped-lines').state,                 //! not working
-                                    showInvisibles: x.find(x=>x.id === 'show-invisibles').state,                        //done
-                                    selectionStyle: x.find(x=>x.id === 'select-line').state ? 'line' : 'text',          //done
-                                    dragDelay: x.find(x=>x.id === 'drag-delay').state,                                  //done
-                                    dragEnabled: x.find(x=>x.id === 'drag-and-drop').state,                             //done
-                                    firstLineNumber: x.find(x=>x.id === 'first-line').state,                            //done
-                                    fadeFoldWidgets: x.find(x=>x.id === 'fade-fold').state,                             //done
-                                    showFoldWidgets: x.find(x=>x.id === 'fold-widgets').state,                          //done
-                                    showLineNumbers: x.find(x=>x.id === 'line-numbers').state,                          //done
+                                    useSoftTabs: parsedSettings.use_soft_tabs, //x?.find(x=>x.id === 'use-soft-tabs')?.state,                             //done
+                                    tabSize: parsedSettings.soft_tabs_length, //x?.find(x=>x.id === 'soft-tab-length')?.state,                               //done
+                                    indentedSoftWrap: parsedSettings.indent_wrapped_lines, //x?.find(x=>x.id === 'indent-wrapped-lines')?.state,                 //! not working
+                                    showInvisibles: parsedSettings.show_invisibles, //x?.find(x=>x.id === 'show-invisibles')?.state,                        //done
+                                    selectionStyle: parsedSettings.select_line ? 'line' : 'text', // x?.find(x=>x.id === 'select-line')?.state ? 'line' : 'text',          //done
+                                    dragDelay: parsedSettings.drag_delay, //x?.find(x=>x.id === 'drag-delay')?.state,                                  //done
+                                    dragEnabled: parsedSettings.drag_and_drop, //x?.find(x=>x.id === 'drag-and-drop')?.state,                             //done
+                                    firstLineNumber: parsedSettings.first_line, //x?.find(x=>x.id === 'first-line')?.state,                            //done
+                                    fadeFoldWidgets: parsedSettings.fade_fold, // x?.find(x=>x.id === 'fade-fold')?.state,                             //done
+                                    showFoldWidgets: parsedSettings.fold_widgets, //x?.find(x=>x.id === 'fold-widgets')?.state,                          //done
+                                    showLineNumbers: parsedSettings.line_numbers, // x?.find(x=>x.id === 'line-numbers')?.state,                          //done
                                     foldStyle: foldMarkMethod(),                                                        //done
-                                    showGutter: x.find(x=>x.id === 'show-gutter').state,                                //done
+                                    showGutter: parsedSettings.show_gutter, //x?.find(x=>x.id === 'show-gutter')?.state,                                //done
                                     // next
                                     // - scroll speed
                                     // - highlight gutter lines
