@@ -29,11 +29,20 @@ export function useScroll() {
 
 
 //*=========================================================================================================================
+export const scrollSync = (origin, scrollFloat) => {
+  const scrollPos = {a:0, b:0}
 
-export const useScrollSync = (a,b) => {
-  let pos = {a:0, b:0}
+  if(origin === 'editor'){
+    scrollPos.b = scrollFloat
+  }
 
-  return pos
+  if(origin === 'render'){
+    scrollPos.a = scrollFloat
+  }
+
+  // console.log(`SCROLL | a:${scrollPos.a} - b:${scrollPos.b}`)
+  
+  return scrollPos
 }
 
 

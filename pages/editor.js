@@ -16,7 +16,6 @@ import Navbar from "../src/ui/Navbar";
 import * as SD from '../src/lib/saveData.js'
 import * as ALERT from '../src/lib/alert'
 import MdeLogo from '../src/ui/MdeLogo'
-import { useScrollSync } from '../src/lib/scroll'
 
 
 
@@ -39,7 +38,6 @@ const MDPage = props => {
   // const { theme, components, colorMode, setColorMode } = context;
 
   const breakIndex = useBreakpointIndex();
-  const scrollSync = useScrollSync()
 
   //~ DEFAULTS ___________________________________________________________________________________________________________________________________
   // let defaultText = '# MD Editor \r\n Made with \r\n ```js \r\n - React \r\n - Next \r\n - <3 \r\n  ``` \r\n > By Michael Jannetta'
@@ -56,6 +54,9 @@ const MDPage = props => {
   const [renderLayout, setRenderLayout] = useState({})
   const [layoutType, setLayoutType] = useState('split')
   const [parentTrigger, setParentTrigger] = useState(false)
+
+  const [aceScroll, setAceScroll] = useState(0.0)
+  const [renScroll, setRenScroll] = useState(0.0)
   // const [showSpinner, setShowSpinner] = useState(true)
 
 
@@ -273,6 +274,20 @@ const MDPage = props => {
   }, [layoutType, breakIndex])
 
 
+  const scrollSync = (origin, scrollFloat) => {
+  
+    if(origin === 'editor'){
+      setRenScroll(scrollFloat)
+    }
+    
+    if(origin === 'render'){
+      setAceScroll(scrollFloat)
+    }
+  
+  }
+  
+
+
 
 
 
@@ -315,7 +330,8 @@ const MDPage = props => {
               layout={editorLayout}
               fontSize={fontSize}
               useTrigger={parentTrigger}
-              scroll={scrollSync}
+              scroll={aceScroll}
+              handleScroll={scrollSync}
             />
           </Box>
 
@@ -325,7 +341,8 @@ const MDPage = props => {
               useTrigger={parentTrigger}
               parentContent={parentContent} 
               layout={renderLayout}
-              scroll={scrollSync}
+              scroll={renScroll}
+              handleScroll={scrollSync}
             />
           </Box>
         </Flex>

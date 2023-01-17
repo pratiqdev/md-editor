@@ -64,6 +64,32 @@ import marked from 'marked'
 
 const Render = (props) => {
 
+    const scroller = document.getElementById('halo-1');
+    const scrolling = () => {
+        if(scroller){
+
+            let height = scroller.clientHeight;
+            let scrollHeight = scroller.scrollHeight - height;
+            let scrollTop = scroller.scrollTop;
+            let percent = scrollTop / scrollHeight
+            // console.log( 'SCROLL R | '+percent)
+            scrollSync('render', percent)
+        }
+      }
+
+      const scrollerTo = p => {
+          if(scroller){
+
+              let height = scroller.clientHeight;
+              let scrollHeight = scroller.scrollHeight - height;
+              let scrollTop = scroller.scrollTop;
+              let percent = scrollHeight * p
+              scroller.scrollTop = percent
+              // console.log(`scrollTop: ${percent}`)
+            }
+      }
+  
+
 
 
 
@@ -107,6 +133,29 @@ const Render = (props) => {
 
 
 
+    useEffect(()=>{
+        if(scroller){
+            scroller.addEventListener('scroll', scrolling)
+            scrollerTo(.5)
+        }
+        
+        return () => {
+            if(scroller){
+                scroller.removeEventListener('scroll', scrolling)
+            }
+
+        }
+    })
+
+
+
+
+
+    useEffect(()=>{
+        console.log(`RENDER SCROLL | ${props.scroll}`)
+        scrollerTo(props.scroll)
+    }, [props.scroll])
+
 
 
 
@@ -127,7 +176,7 @@ const Render = (props) => {
                 transition: 'background .3s',
                 overflowY: 'auto',
                 
-
+  
                 p:[4,5,6],
                 pt:4,
 
