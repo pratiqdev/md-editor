@@ -315,7 +315,7 @@ const MDPage = props => {
               layout={editorLayout}
               fontSize={fontSize}
               useTrigger={parentTrigger}
-              scroll={scroll}
+              scroll={scrollSync}
             />
           </Box>
 
@@ -325,7 +325,7 @@ const MDPage = props => {
               useTrigger={parentTrigger}
               parentContent={parentContent} 
               layout={renderLayout}
-              scroll={scroll}
+              scroll={scrollSync}
             />
           </Box>
         </Flex>

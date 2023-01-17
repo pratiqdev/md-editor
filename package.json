@@ -4,13 +4,14 @@
   "description": "personal web dev portfolio using next.js",
   "main": "index.js",
   "scripts": {
-    "dev": "clear && next",
+    "dev": "clear && next dev",
     "git": "git add . && git commit -m",
     "build": "next build",
     "start": "next start",
     "deploy": "next build && next export",
     "bust": "clear && next build && next start",
-    "bump": "npm --no-git-tag-version version patch"
+    "bump": "npm --no-git-tag-version version patch",
+    "test": "jest"
     
   },
   "keywords": [],
@@ -19,6 +20,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
+    
     "@mdx-js/loader": "^1.5.7",
     "@mdx-js/react": "^1.6.22",
     "@mdx-js/runtime": "^1.6.22",

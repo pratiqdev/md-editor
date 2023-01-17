@@ -69,14 +69,16 @@ marg: 0,
 name: "Welcome!",
 move: '0, -39vh',
 content: 
-`Use the next and back buttons, or your arrow keys, to navigate through the steps and learn more about the editor and its features!`,
+`This markdown editor is full of features! Take the full tour or exit anytime to explore on your own.
+
+> Use the next button to progress through the guide, or click outside to exit.`,
 },
 { // step 1
 id: "halo-0",
 marg: 0,
 move: '0, -39vh',
 name: "Text Editor",
-content: `Use the text editor to modify content of the md file`,
+content: `Use the text editor to modify content of the md file. `,
 },
 { // step 2
 id: "halo-1",
