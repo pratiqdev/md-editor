@@ -9,6 +9,7 @@
     border: 0px solid black;
     border-bottom: 1px solid white;
     resize: none;
+    font-family: monospace !important;
   }
     textarea:focus{
         outline:none;
