@@ -5,10 +5,14 @@ import styled from '@emotion/styled'
 
 
 const tippyDefaults = `
+  z-index: 100;
   font-size: 1em;
-  padding: 0;
+  padding: 1rem;
   margin-top: 0em;
   border-radius: 0.25em;
+  white-space: wrap;
+  opacity: 1 !important;
+  border: 1px solid #fff2;
 `
 
 const DefaultWrap = styled(Tippy)`
@@ -22,10 +26,11 @@ const DefaultWrap = styled(Tippy)`
 
 const DarkWrap = styled(Tippy)`
   ${tippyDefaults}
-  background: ${(props) => props.theme.colors.grey_2};
-  color: ${(props) => props.theme.colors.grey_7};
+  background: black !important;
+  color: white !important;
+  opacity: 1 !important;
   & .tippy-arrow:before {
-    color: ${(props) => props.theme.colors.grey_2};
+    color: black !important;
   }
 `;
 
@@ -56,13 +61,17 @@ const GreenWrap = styled(Tippy)`
   }
 `;
 
+let placement = 'bottom center';
+let delay = 500
+
 const Tipper = props => {
+  return <DarkWrap content={props.tip} delay={props.delay ? props.delay : [delay, 0]}>{props.children}</DarkWrap>
   switch(props.color){
-    case 'dark': {return <DarkWrap placement={props.placement ? props.placement : 'bottom'} content={props.tip} delay={props.delay ? props.delay : [1000, 0]}>{props.children}</DarkWrap>}
-    case 'light': {return <LightWrap placement={props.placement ? props.placement : 'bottom'} content={props.tip} delay={props.delay ? props.delay : [1000, 0]}>{props.children}</LightWrap>}
-    case 'red': {return <RedWrap placement={props.placement ? props.placement : 'bottom'} content={props.tip} delay={props.delay ? props.delay : [1000, 0]}>{props.children}</RedWrap>}
-    case 'green': {return <GreenWrap placement={props.placement ? props.placement : 'bottom'} content={props.tip} delay={props.delay ? props.delay : [1000, 0]}>{props.children}</GreenWrap>}
-    default: {return <DefaultWrap placement={props.placement ? props.placement : 'bottom'} content={props.tip} delay={props.delay ? props.delay : [1000, 0]}>{props.children}</DefaultWrap>}
+    case 'dark': { return <DarkWrap content={props.tip} delay={props.delay ? props.delay : [delay, 0]}>{props.children}</DarkWrap> }
+    case 'light': {return <LightWrap  content={props.tip} delay={props.delay ? props.delay : [delay, 0]}>{props.children}</LightWrap>}
+    case 'red': {return <RedWrap  content={props.tip} delay={props.delay ? props.delay : [delay, 0]}>{props.children}</RedWrap>}
+    case 'green': {return <GreenWrap  content={props.tip} delay={props.delay ? props.delay : [delay, 0]}>{props.children}</GreenWrap>}
+    default: {return <DefaultWrap content={props.tip} delay={props.delay ? props.delay : [delay, 0]}>{props.children}</DefaultWrap>}
   }
 
 }

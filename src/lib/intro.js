@@ -1,5 +1,4 @@
 const intro = 
-
 `---
 title: {{filename}}
 created: {{date}}
@@ -10,324 +9,49 @@ author: {{author}}
 
 ![link-text](https://picsum.photos/1000/200?random=41)
 
-# My Project
 
-![badge](https://img.shields.io/badge/Build_status-successful-blue)
-![badge](https://img.shields.io/badge/Version-0.0.349-color)
-![badge](https://img.shields.io/badge/Made_with_<3-red)
 
 
-Foobar is a Python library for dealing with word pluralization.
 
-## Installation
+## Common Keyboard Shortcuts
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+| FUNCTION | KEYS |
+|:--|:--|
+| command palette           | \`CTRL + .\` 
+| local palette             | \`CTRL + SPACE\`
+| save file dialog          | \`CTRL + S\`
+| goto line                 | \`CTRL + L\`
+| multi-cursor edit         | \`CTRL + CLICK\`
+| move line up              | \`ALT + ARROW_UP\`
+| show keyboard shortcuts   | \`CTRL + SHIFT + .\`   
+<br />
 
-\`\`\`bash
-pip install foobar
-\`\`\`
 
 
-## Usage
 
-\`\`\`python
-import foobar
+## Useful Features
 
-# returns 'words'
-foobar.pluralize('word')
+**Templates**
+allow quick creation of commonly formatted documents with custom templates
 
-# returns 'geese'
-foobar.pluralize('goose')
+**Snippets**
+provide custom formatted, insertable code snippets with tab-indexed inputs for 
+quick reuse.
 
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
+**Auto Replace**
+values with handlebars syntax to easily update frequently repeated text like 
+version-numbers or URL's. 
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+**Auto Complete**
+suggestions with the built-in local palette provides a quick solution 
+to repetitive content
 
-Please make sure to update tests as appropriate.
+**Hidden Front Matter**
+in the rendered result prevents cluttered content and accurate previews
 
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-![link-text](https://picsum.photos/1000/200?random=41)
-
-# My Project 2
-
-![badge](https://img.shields.io/badge/Build_status-successful-blue)
-![badge](https://img.shields.io/badge/Version-0.0.349-color)
-![badge](https://img.shields.io/badge/Made_with_<3-red)
-
-
-Foobar is a Python library for dealing with word pluralization.
-
-## Installation
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
-\`\`\`bash
-pip install foobar
-\`\`\`
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-![link-text](https://picsum.photos/1000/200?random=41)
-
-# My Project 3
-
-![badge](https://img.shields.io/badge/Build_status-successful-blue)
-![badge](https://img.shields.io/badge/Version-0.0.349-color)
-![badge](https://img.shields.io/badge/Made_with_<3-red)
-
-
-Foobar is a Python library for dealing with word pluralization.
-
-## Installation
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
-\`\`\`bash
-pip install foobar
-\`\`\`
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
-
-
-## Usage
-
-\`\`\`python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-\`\`\`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[![](https://img.shields.io/badge/MIT-blue)](https://choosealicense.com/licenses/mit/)
+**100% Local**
+storage used to store file metadata, file content, editor settings and app 
+settings
 
 `
 export default intro

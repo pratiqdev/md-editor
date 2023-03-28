@@ -55,6 +55,8 @@ const NavMenu = (props) => {
 
   return (
     <>
+      <Tipper color="dark" tip="Open the Main Menu">
+
       <Button
       id='halo-12'
         sx={{ zIndex: 1, mr:3 }}
@@ -65,6 +67,8 @@ const NavMenu = (props) => {
       >
         <MenuOutline size="30" />
       </Button>
+      </Tipper>
+
       <Box
         sx={{
           position: "fixed",

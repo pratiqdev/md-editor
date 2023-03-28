@@ -31,6 +31,8 @@ import "ace-builds/src-noconflict/ext-options"
 import "ace-builds/src-noconflict/ext-prompt"
 import "ace-builds/src-noconflict/ext-searchbox"
 
+// require('ace/commands/command_palette').commands(ace);
+
 
 // import 'ace-builds/webpack-resolver'
 
@@ -249,6 +251,7 @@ const Ace = props => {
                                     // - highlight gutter lines
                                     // - set font family (must be monospace options)
                                     // - cursor style
+                                    behavioursEnabled: true,
                                     wrapBehavioursEnabled: true, // what is this???
                                     // also what is behaviors enabled????? i think that means autocomplete brackets and parenthesis
                                 })
@@ -279,19 +282,21 @@ const Ace = props => {
 
             
 
+                        ace.config.loadModule("ace/ext/keybinding_menu", function (module) {
+                            module.init(editor);
+                        })
 
+                        // ace.config.loadModule("ace/ext/keybinding_menu", function (module) {
+                        //     module.init(editor);
+                        // })
 
                         
                         // show current keybindings _________________________________________________________
                         ed.commands.addCommand({
                             name: "showKeyboardShortcuts",
-                            bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-k"},
+                            bindKey: {win: "Ctrl-shift-.", mac: "Command-shift-."},
                             exec: function(ed) {
-                                ace.config.loadModule("ace/ext/keybinding_menu", function(module) {
-                                    console.log('???')
-                                    module.init(editor);
-                                    editor.showKeyboardShortcuts()
-                                })
+                                editor.showKeyboardShortcuts()
                             }
                         })
                         
@@ -305,6 +310,38 @@ const Ace = props => {
                             }
                         })
 
+                        // ed.commands.addCommand({
+                        //     name: "showCommandPaletteShortcut",
+                        //     bindKey: { win: "Ctrl-Alt-P", mac: "Command-Alt-P" },
+                        //     exec: function (editor) {
+                        //         console.log("?????????")
+                        //         // editor.showCommandPalette()
+                        //         editor.commands.exec("showCommands", editor);
+                        //     }
+                        // })
+
+                        editor.commands.addCommand({
+                            name: 'openCommandPalette',
+                            bindKey: { win: 'Ctrl-.', mac: 'Command-.' },
+                            exec: (editor) => {
+                               var event = new KeyboardEvent('keydown', { key: 'F1', keyCode: 112, which: 112 });
+                                var el = document.getElementsByClassName("ace_text-input")[0]
+                                el && el.dispatchEvent(event)
+                            },
+                        });
+
+
+
+
+                        // editor.commands.bindKey("ctrl-.", function(){
+                        //     // ace.config.loadModule('ace/ext/command_palette', (module) => {
+                        //     //         module.init(editor);
+                        //     //     });
+                        //     var event = new KeyboardEvent('keydown', { key: 'F1', keyCode: 112, which: 112 });
+                        //     var el = document.getElementsByClassName("ace_text-input")[0]
+                        //     el &&   el.dispatchEvent(event)
+                        // })
+                        
                         
 
 
@@ -313,6 +350,9 @@ const Ace = props => {
                          
                         
                     })
+
+
+
 
 
                   

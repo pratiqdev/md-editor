@@ -454,7 +454,8 @@ const Docs = (props) => {
             overflowY: "auto",
             borderColor: "grey_1",
             bg: "grey_0",
-            
+            fontSize: '1rem',
+            lineHeight: '2rem'
           }}
         >
           <MDX

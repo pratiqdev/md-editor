@@ -11,6 +11,81 @@ import { Button, Box, Flex, Text, Grid } from "theme-ui";
 //* LOCAL _________________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
 
+
+/*
+Custom and built-in code snippets
+              Automatic keyword replacement on save
+              Custom and built-in templates
+              VSCode style shortcuts
+              Advanced settings and configuration
+              100% local storage - no database required
+              Automatic snippet cursor movement
+              Unlimited file count with local storage
+              VSCode style command palette
+              Detailed, categorized and searchable documentation
+              Custom format and style guides
+              VSCode style editor navigation
+*/
+
+const FEATURE_CARDS = [
+  {
+    title: 'Command Palette',
+    text: 'VSCode style command palette with rich commands'
+  },
+  {
+    title: 'Code Snippets',
+    text: 'Built-in, extendable and custom snippets for quick insterions'
+  },
+  {
+    title:'Extensive Shortcuts',
+    text:'Long list of familiar shortcuts for frequently used features'
+  },
+  {
+    title: 'Keyword Replace',
+    text: 'Automatic keyword replacement of save using the handlebars format'
+  },
+  {
+    title: 'Advanced Settings',
+    text: 'Customize appearance and behaviors of the editor and application'
+  },
+  {
+    title: '100% Local',
+    text: 'No database required with 100% client-side meta/content store'
+  },
+  {
+    title: 'Searchable Docs',
+    text: 'Detailed docs for all features with a simple searchable doc-page'
+  },
+  {
+    title: 'Simple Navigation',
+    text: 'In-code keyboard navigation using VSCode style `alt` commands'
+  },
+  
+]
+
+
+
+const INTRO_CARDS = [
+  {
+    title: 'Interactive Guide',
+    text: 'Use the interactive walkthrough to get familiar with the interface and features of MDE',
+    linkText: 'Guide',
+    linkHref: { pathname: 'editor', query: { walkthough: true } },
+  },
+  {
+    title: 'Use The Editor',
+    text: 'Jump in and experiment with the editor and its features or documentation',
+    linkText: 'Editor',
+    linkHref: { pathname: 'editor' },
+  },
+  {
+    title: 'Extensive Documentation',
+    text: 'Use the interactive walkthrough to get familiar with the interface and features of MDE',
+    linkText: 'Docs',
+    linkHref: { pathname: 'docs' },
+  }
+]
+
 /** the home page */
 const Index = (props) => {
   const router = useRouter();
@@ -75,50 +150,38 @@ const Index = (props) => {
             }}>
               
           
-                <Link href='/editor'>
-                  <Button variant='accent' sx={{whiteSpace: 'no-wrap', m:4, p: 4, px:8, fontSize: [3,4,4], }}>Get Started!</Button>
-                </Link>
               {/* <Box sx={{mx: ['auto', 0, 0], width: ['auto', 'auto', '100%'], flex:0, mt: 4, p:4, }}> */}
               {/* <Box id='welcome-1' sx={{p:4, width: '100%', height: ['40vw','40vw','auto']}} /> */}
           {/* </Box>   */}
           </Flex>  
 
-          <Grid columns={[1,1,3]} sx={{mt: [0,0,2], mb:8, alignItems: 'space-between'}} >
+          <Grid columns={[1,1,3]} gap={4} sx={{mt: [2,2,4], mb:8, alignItems: 'space-between'}} >
 
 
-          <Flex sx={{mt: 6, flexDirection: ['column', 'row', 'column'], justifyContent: 'space-between', background: '#88f2', p:4, borderRadius: '.5rem'}}>
-          <Box sx={{p:4, textAlign: 'center', maxWidth: '50rem', mx:'auto', fontWeight: 'bold', flex:1}}>
-              Use the interactive walkthrough to get familiar with the interface and features of MDE
-            </Box>
-            <Link href={{pathname: 'editor', query: {walkthrough: true}}}>
-            <Button variant='primary' sx={{mt:2, py: 2, width:  'auto', mx: 'auto', fontSize: [3,4,4],}}>Walkthrough</Button>
-            </Link> 
-          </Flex>
+            {INTRO_CARDS.map((item, idx) =>
+              <Flex sx={{flexDirection: ['column', 'row', 'column'], justifyContent: 'space-between', background: idx == 1 ? '#66f4' : '#88f2', p:4, borderRadius: '.5rem', fontSize: idx === 1 ? '1.4rem' : '1.2rem', my: idx === 1 ? '-2rem' : '0'}}>
+                <Box sx={{p:2, textAlign: 'center', maxWidth: '50rem', mx:'auto', fontWeight: 'bold', flex:1}}>
+                  {item.title}
+                </Box>
+                <Box sx={{textAlign: 'center', fontSize: '90%', height: '100%', flex:1, alignItems: 'center', mx: 3}}>
+                  {item.text}
+                </Box>
+                <Link href={item.linkHref}>
+                  <Button variant={idx === 1 ? 'accent' : 'secondary'} sx={{mt:4, py: 2, width:  'auto', mx: 'auto', fontSize: idx === 1 ? [4,5,5] : [2,2,3], minWidth: '6rem'}}>{item.linkText}</Button>
+                </Link> 
+              </Flex>
+            )}
 
-          <Flex sx={{mt: 6, flexDirection: ['column', 'row', 'column'], justifyContent: 'space-between', background: '#88f2', p:4, borderRadius: '.5rem'}}>
-          <Box sx={{p:4, textAlign: 'center', maxWidth: '50rem', mx:'auto', fontWeight: 'bold', flex:1}}>
-              Browse the docs to find more details about all of the features, settings of MDE
-            </Box>
-            <Link href='/docs'>
-            <Button variant='primary' sx={{mt:2, py: 2, width:'auto', mx: 'auto', fontSize: [3,4,4],}}>Documentation</Button>
-            </Link> 
-          </Flex>
 
-          <Flex sx={{mt: 6, flexDirection: ['column', 'row', 'column'], justifyContent: 'space-between', background: '#88f2', p:4, borderRadius: '.5rem'}}>
-          <Box sx={{p:4, textAlign: 'center', maxWidth: '50rem', mx:'auto', fontWeight: 'bold', flex:1}}>
-              Use the interactive walkthrough to get familiar with the interface and features of MDE
-            </Box>
-            <Link href='/about'>
-              <Button variant='primary' sx={{mt:2, py: 2, width: 'auto', mx: 'auto', fontSize: [3,4,4],}}>About this App</Button>
-            </Link> 
-          </Flex>
+
+
     
         </Grid>
 
 
           <Box sx={{  mt:8, mb:4, textAlign: ['center']}}>
             <Text sx={{color:'primary_b', fontSize: [3,4,4], fontWeight: 'bold'}}>
-                An advanced markdown editor with awesome features
+                USEFUL FEATURES
             </Text>
               
               </Box>
@@ -130,60 +193,16 @@ const Index = (props) => {
                 <li>Advanced command pallette</li>
                 <li>VSCode style editor navigation</li>
               </ul> */}
-          <Grid columns={[2,2,6]}  >
+          <Grid columns={[2,2,4]}  >
 
+            {FEATURE_CARDS.map((item, idx) => 
+              <Box sx={{ px: 2, background: '#88f3', m: 2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Box sx={{fontWeight: 'bold'}}>{item.title}</Box>
+                <Box sx={{fontSize: '90%', mt: 2}}>{item.text}</Box>
+              </Box>
+            )}
 
-            <Box sx={{px:2, background: '#88f1', m:2, px: 2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Custom and built-in code snippets
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Automatic keyword replacement on save
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Custom and built-in templates
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              VSCode style shortcuts
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Advanced settings and configuration
-            </Box>
-  
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              100% local storage - no database required
-            </Box>
-
-
-
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Automatic snippet cursor movement
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Unlimited file count with local storage
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              VSCode style command palette
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Detailed, categorized and searchable documentation
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              Custom format and style guides
-            </Box>
-
-            <Box sx={{px:2, background: '#88f1', m:2, borderRadius: '.5rem', textAlign: 'center', justifyContent: 'center', height: '7rem', display: 'flex', alignItems: 'center'}}>
-              VSCode style editor navigation
-            </Box>
-      
+              
           </Grid>
         </Flex>
 

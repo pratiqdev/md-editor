@@ -73,7 +73,7 @@ const Render = (props) => {
             let scrollTop = scroller.scrollTop;
             let percent = scrollTop / scrollHeight
             // console.log( 'SCROLL R | '+percent)
-            scrollSync('render', percent)
+            // scrollSync('render', percent)
         }
       }
 

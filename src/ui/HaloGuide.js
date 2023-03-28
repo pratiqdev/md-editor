@@ -176,7 +176,7 @@ id: "halo-10",
 marg: 5,
 name: "Switch View",
 move: '0, -39vh',
-content: `The view can be toggle between split-view (click and hold) or fullscreen-view (click)`,
+content: `The view can be toggled between full-screen views (left) or split-screen view (right)`,
 },
 { // step 13
 id: "halo-11",
@@ -240,7 +240,7 @@ Follow this guide again or check the docs for more information.
 </Box>
 
 <Box sx={{textAlign: 'center', mt:4}}>
-<Link href='/docs'>
+<Link href='/docs' passHref>
   <LinkUI>Documentation</LinkUI>
 </Link>
 </Box>

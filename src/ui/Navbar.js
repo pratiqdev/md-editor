@@ -311,44 +311,57 @@ const Navbar = forwardRef((props, ref) => {
           <Flex sx={{alignItems: 'center'}}>
 
 
+          <Tipper color="dark" tip="Navigate to the Welcome page">
           <Link href='/'>
             <Flex sx={{  height: '2rem', ml: 3, cursor: "pointer", fontSize: 6, alignItems: 'center' }}>
               <MdeLogo /> 
             </Flex>
           </Link>
+          </Tipper>
 
             {props.editor &&
-              <Flex 
-              id='halo-2'
-              sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
-              onClick={(e)=>setShowLoad(true)}
-              >
-                <Box sx={{fontSize: 1, p:0, m:0}}>
-                  {activeFileData && activeFileData.name}
-                </Box>
-                <Box sx={{my: '-.2rem',}}>
-                  {activeFileData && activeFileData.date }
-                </Box>
-                {/* <Box sx={{ p:0, m:0}}>
-                  {activeFileData && activeFileData.edit }
-                </Box> */}
-              </Flex>
+              <Tipper color="dark" tip="Open the File Menu">
+                <Flex 
+                id='halo-2'
+                sx={{fontSize: 0, ml: 5, flexDirection: 'column', whiteSpace: 'nowrap', cursor: 'pointer'}}
+                onClick={(e)=>setShowLoad(true)}
+                >
+                  <Box sx={{fontSize: 1, p:0, m:0}}>
+                    {activeFileData && activeFileData.name}
+                  </Box>
+                  <Box sx={{my: '-.2rem',}}>
+                    {activeFileData && activeFileData.date }
+                  </Box>
+                  {/* <Box sx={{ p:0, m:0}}>
+                    {activeFileData && activeFileData.edit }
+                  </Box> */}
+                </Flex>
+              </Tipper>
               }
 
               </Flex>
 
           {props.editor &&
-          <Flex >
+          <Flex id='halo-10'>
 
-                <Button id='halo-10' variant='icon.plain' sx={{mr:3}} {...layoutLongPress}>
-                    {(props.layoutType === 'editor' && breakIndex <=0) &&<CaretUp size='22'/>}
-                    {(props.layoutType === 'render' && breakIndex <=0) &&<CaretDown size='22'/>}
-                    {(props.layoutType === 'split' && breakIndex <=0) &&<LayoutSplit  style={{transform: 'rotate(90deg)'}} size='18'/>}
+              <Tipper color="dark" tip="Toggle 'Editor' or 'Render' view">
 
-                    {(props.layoutType === 'editor' && breakIndex > 0) &&<CaretLeft size='22'/>}
-                    {(props.layoutType === 'render' && breakIndex > 0) &&<CaretRight size='22'/>}
-                    {(props.layoutType === 'split' && breakIndex > 0) &&<LayoutSplit size='18'/>}
+                <Button variant='icon.plain' sx={{mr:3}} onClick={toggleLayout}>
+                    {((props.layoutType === 'editor' || props.layoutType === 'split') && breakIndex <=0) &&<CaretUp size='22'/>}
+                    {((props.layoutType === 'render' || props.layoutType === 'split') && breakIndex <=0) &&<CaretDown size='22'/>}
+
+                {((props.layoutType === 'render' || props.layoutType === 'split') && breakIndex > 0) &&<CaretLeft size='22'/>}
+                {((props.layoutType === 'editor' || props.layoutType === 'split') && breakIndex > 0) &&<CaretRight size='22'/>}
                 </Button>
+              </Tipper>
+
+              <Tipper color="dark" tip="Enable split-screen view">
+                <Button variant='icon.plain' sx={{ mr: 3 }} onClick={() => props.layoutType == 'split' ? toggleLayout() : splitWindow()}>
+                  {(breakIndex <= 0) && <LayoutSplit style={{ transform: 'rotate(90deg)' }} size='18' />}
+                  {(breakIndex > 0) && <LayoutSplit size='18' />}
+                </Button>
+              </Tipper>
+
             
           </Flex>
           }
@@ -360,6 +373,7 @@ const Navbar = forwardRef((props, ref) => {
         <Flex mr={0}>
           
           <ThemeToggle />
+
           <NavMenu 
             appInstallStatus={appInstallStatus} 
             showSettingsModal={showSettingsModal} 

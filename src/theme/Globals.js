@@ -19,6 +19,13 @@ return  <Global
           // transition: useAnims ? 'background .3s, color .3s !important' : 'background 0.0s, color 0.0s !important'
           // transition: 'left 1s, right 1s, top 1s, bottom 1s',
         },
+        // 'ul, li':{
+        //   lineHeight: '2rem',
+        //   marginBottom: '.5rem'
+        // },
+        // 'h1': {
+        //   marginTop: '2rem !important'
+        // },
         'html, body':{
           overflow: 'hidden',
           height: '100vh',
@@ -34,7 +41,8 @@ return  <Global
           padding: '10px'
         },
         'body': {
-          maxHeight: '100vh'
+          maxHeight: '100vh',
+          // fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
         },
 
         '#welcome-1':{
@@ -212,6 +220,11 @@ return  <Global
           }
         },
 
+        '#ace_settingsmenu *': {
+          color: 'black !important',
+          width: '100%'
+        },
+
 
 
         //~HIGHLIGHT THEMES____________________________________________________________________
@@ -219,16 +232,16 @@ return  <Global
         
         ...hls1,
 
-        '.hljs pre':{
+        '.hljs, .hljs *, .hljs pre, .hljs pre *':{
           background: colorMode === 'dark' ? '#222 !important' : '#eee !important',
           overflowX: 'auto',
           overflow: 'hidden',
           // padding: '10px !important',
-          fontSize: 'inherit !important',
+          fontSize: '.9rem !important ',
         },
         '.hljs code':{
           // padding: '10px !important',
-          fontSize: 'inherit !important',
+          // fontSize: '',
         }
 
        
