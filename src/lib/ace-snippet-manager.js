@@ -19,14 +19,14 @@ export const registerSnippets = function(active, editor, session, mode, snippetT
         m.snippetText = snippetText
         m.snippet = snippetManager.parseSnippetFile(snippetText, m.scope)
         if(active){
-            console.log(`SNIPPET MGR | active`)
+            // console.log(`SNIPPET MGR | active`)
             snippetManager.snippetMap = {}
 
             
             snippetManager.register(m.snippet, m.scope)
             resolve()
         }else{
-            console.log(`SNIPPET MGR | disable snippets!`)
+            // console.log(`SNIPPET MGR | disable snippets!`)
             snippetManager.snippetMap = {}
         }
 

@@ -11,6 +11,7 @@ export function useScroll() {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll, { passive: true });
 
   })
 
@@ -23,6 +24,25 @@ export function useScroll() {
     // }, []);
 
     // return offset
+}
+
+
+
+//*=========================================================================================================================
+export const scrollSync = (origin, scrollFloat) => {
+  const scrollPos = {a:0, b:0}
+
+  if(origin === 'editor'){
+    scrollPos.b = scrollFloat
+  }
+
+  if(origin === 'render'){
+    scrollPos.a = scrollFloat
+  }
+
+  // console.log(`SCROLL | a:${scrollPos.a} - b:${scrollPos.b}`)
+  
+  return scrollPos
 }
 
 

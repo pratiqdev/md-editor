@@ -28,7 +28,7 @@ const excludedTerms = [
     .replace(/ /g, "%%")
     .split("%%")
 
-    console.log()
+    // console.log()
 
     .filter(
       (s) => {
@@ -36,7 +36,7 @@ const excludedTerms = [
         return excludedTerms
           .map((term) => {
               if(s === term){
-                  console.log(`term excluded: ${term}`)
+                  // console.log(`term excluded: ${term}`)
                   return false
               }else{
                   return true

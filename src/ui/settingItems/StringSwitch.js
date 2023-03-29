@@ -22,7 +22,7 @@ const StringSwitch = ({s, si, handle}) => {
             handle(si, value)
             
         }else{
-            ALERT.minMaxAlert(s.min, s.max)
+            ALERT.minMax(s.min, s.max)
         }
     }
 

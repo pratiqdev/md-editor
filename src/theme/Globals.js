@@ -1,15 +1,39 @@
 import { Global } from "@emotion/react";
-import theme from './Theme'
+import {useThemeUI} from 'theme-ui'
+import { useAnims } from '../lib/motion'
 
-const Globals = (props) => (
-  <Global
+import hljsStyle1 from './hljsStyle1'
+
+const Globals = (props) => {
+
+  const context = useThemeUI();
+  const { colorMode } = context;
+
+  const hls1 = hljsStyle1(colorMode)
+return  <Global
     styles={(theme) => {
       return ({
         "*": {
           boxSizing: 'border-box',
           scrollPadding: ['10rem', '4rem', '4rem'],
-          transition: 'background .3s, color .3s'
+          // transition: useAnims ? 'background .3s, color .3s !important' : 'background 0.0s, color 0.0s !important'
+          // transition: 'left 1s, right 1s, top 1s, bottom 1s',
         },
+        // 'ul, li':{
+        //   lineHeight: '2rem',
+        //   marginBottom: '.5rem'
+        // },
+        // 'h1': {
+        //   marginTop: '2rem !important'
+        // },
+        'html, body':{
+          overflow: 'hidden',
+          height: '100vh',
+          width: '100vw',
+        },
+        // '.transitioned, .transitioned *':{
+        //   // transition: '1s'
+        // },
         // text highlight color
         '::selection': {
           background: theme.colors.grey_6,
@@ -17,7 +41,13 @@ const Globals = (props) => (
           padding: '10px'
         },
         'body': {
-          maxHeight: '100vh'
+          maxHeight: '100vh',
+          // fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+        },
+
+        '#welcome-1':{
+          backgroundImage: 'url("/screenshots/editor1.png")',
+          backgroundSize: '100% auto'
         },
 
         // Ace gutter tooltip _______________________________________________________________
@@ -29,6 +59,18 @@ const Globals = (props) => (
           borderRadius: '3px',
           maxWidth: '90vw',
           whiteSpace: 'normal',
+        },
+
+        // Ace gutter tooltip _______________________________________________________________
+        '.ace_hidpi ~ .ace-tm': {
+          // background: theme.colors.grey_4,
+          // color: theme.colors.grey_15,
+          // border: '1px solid',
+          // borderColor: theme.colors.grey_15,
+        },
+        '.ace_hidpi ': {
+          // background: 'red',
+          minHeight: '1.6rem'
         },
 
         // Keyboard shortcut list ___________________________________________________________
@@ -177,8 +219,34 @@ const Globals = (props) => (
             background: theme.colors.primary_c
           }
         },
+
+        '#ace_settingsmenu *': {
+          color: 'black !important',
+          width: '100%'
+        },
+
+
+
+        //~HIGHLIGHT THEMES____________________________________________________________________
+
+        
+        ...hls1,
+
+        '.hljs, .hljs *, .hljs pre, .hljs pre *':{
+          background: colorMode === 'dark' ? '#222 !important' : '#eee !important',
+          overflowX: 'auto',
+          overflow: 'hidden',
+          // padding: '10px !important',
+          fontSize: '.9rem !important ',
+        },
+        '.hljs code':{
+          // padding: '10px !important',
+          // fontSize: '',
+        }
+
+       
       });
     }}
   />
-);
+};
 export default Globals

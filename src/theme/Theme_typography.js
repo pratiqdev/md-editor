@@ -21,7 +21,7 @@ export default {
       },
       text: {
         default: {
-          fontSize: [1,2,3],
+          fontSize: [1,2,2],
           color: 'text',
           lineHeight: 'body',
           fontFamily: 'special',

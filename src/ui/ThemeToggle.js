@@ -23,7 +23,7 @@ const ThemeToggle = (props) => {
   const next = colorMode === "dark" ? "light" : "dark";
 
   return (
-    <Button 
+    <Button id='halo-11'
     suppressHydrationWarning={true}
     sx={{zIndex: 2}} variant='icon.plain' onClick={(e) => {
       setColorMode(next);

@@ -20,7 +20,7 @@ const StringSwitch = ({s, si, handle}) => {
         if(s.min <= value.length && value.length <= s.max){
             setNewValue(value)
         }else{
-            ALERT.minMaxAlert(s.min, s.max)
+            ALERT.minMax(s.min, s.max)
         }
         updateValue()
     }

@@ -184,6 +184,7 @@ const Strings = ({o, oi, handleInner, handleRemove}) => {
 
 const Snippets = ({s, si, handle}) => {
     const REF_REMOVE_CARD = useRef(null)
+    const REF_BOX = useRef(null)
 
     const [showDetails, setShowDetails] = useState(false)
     const [newGlobalActive, setNewGlobalActive] = useState(s.state[0])
@@ -245,9 +246,11 @@ const Snippets = ({s, si, handle}) => {
 
     const openUpRemoveAnim = () => {
         gsap.to([REF_REMOVE_CARD.current],  {opacity: 1, y: '0', delay: .2, duration: .3})
+        gsap.to([REF_BOX.current], { opacity: 1, duration: 0.3 });
     }
     
     const closeDownRemoveAnim = () => {
+        gsap.to([REF_BOX.current], { opacity: 0, duration: 0.3 });
         gsap.to([REF_REMOVE_CARD.current], {opacity: 0, y: '3rem', duration: .3})
     }
 
@@ -256,7 +259,7 @@ const Snippets = ({s, si, handle}) => {
 
 
    return(
-
+    <>
         <Flex sx={{
             width: '100%', 
             flexDirection: 'column', 
@@ -338,36 +341,56 @@ const Snippets = ({s, si, handle}) => {
             <Button variant='outline.primary' sx={{mx:2, mt:4, mb:2}} onClick={handleNewCondition}>Add a Snippet</Button>
             </>
             }
+             </Flex>
 
 
             {showRemoveConfirm && 
-                <Card variant='modal'
-                ref={REF_REMOVE_CARD}
+                <Flex
+                ref={REF_BOX}
                 sx={{
-                    position: 'absolute',
-                    // width: '20rem',
-                    maxWidth: '90vw',
-                    // height: '10rem',
-                    bg: 'grey_0',
-                    border: '2px solid',
-                    borderColor: 'red',
-                    color: 'red',
-                    transform: 'translateY(3rem)',
-                    opacity: '0',
-                }}>
-                    <Box sx={{width: '100%', textAlign: 'center', fontSize: [4,6,8]}}>REMOVE CONDITION</Box>
-                    <Box sx={{color: 'grey_15',  textAlign: 'center', m:2,}}>name or id</Box>
-                    <Box sx={{color: 'grey_15',  textAlign: 'center', m:3, my:6}}>This will remove this condition from the list. Are you sure you want to continue?</Box>
-                    <Flex sx={{justifyContent: 'space-between', m:3}}>
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                position: "absolute",
+                top: "0",
+                left: "0",
+                height: "100%",
+                width: "100%",
+                bg: "rgba(100,100,100,.8)",
+                opacity: "0",
+                zIndex: 1000,
+                }}
+                onClick={handleCancelRemove}
+            >
+                    <Card variant='modal'
+                    ref={REF_REMOVE_CARD}
+                    sx={{
+                        position: 'absolute',
+                        // width: '20rem',
+                        maxWidth: '90vw',
+                        // height: '10rem',
+                        bg: 'grey_0',
+                        border: '2px solid',
+                        borderColor: 'red',
+                        color: 'red',
+                        transform: 'translateY(3rem)',
+                        opacity: '0',
+                    }}>
+                        <Box sx={{width: '100%', textAlign: 'center', fontSize: [4,6,8]}}>REMOVE CONDITION</Box>
+                        <Box sx={{color: 'grey_15',  textAlign: 'center', m:2,}}>name or id</Box>
+                        <Box sx={{color: 'grey_15',  textAlign: 'center', m:3, my:6}}>This will remove this condition from the list. Are you sure you want to continue?</Box>
+                        <Flex sx={{justifyContent: 'space-between', m:3}}>
 
-                    <Button variant='outline.primary' onClick={handleCancelRemove}>Cancel</Button>
-                    <Button sx={{bg:'red'}} onClick={handleConfirmRemove}>Remove</Button>
-                    </Flex>
+                        <Button variant='outline.primary' onClick={handleCancelRemove}>Cancel</Button>
+                        <Button sx={{bg:'red'}} onClick={handleConfirmRemove}>Remove</Button>
+                        </Flex>
 
-                </Card>
+                    </Card>
+                </Flex>
             }
+            </>
 
-        </Flex>
+       
    )
 }
 

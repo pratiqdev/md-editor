@@ -54,12 +54,16 @@ const MDPage = props => {
   const [renderLayout, setRenderLayout] = useState({})
   const [layoutType, setLayoutType] = useState('split')
   const [parentTrigger, setParentTrigger] = useState(false)
+
+  const [aceScroll, setAceScroll] = useState(0.0)
+  const [renScroll, setRenScroll] = useState(0.0)
   // const [showSpinner, setShowSpinner] = useState(true)
 
 
 
+
   const handleChange = (val, line, column) => {
-      console.log('EDITOR | handleChange - 034958')
+      // console.log('EDITOR | handleChange - 034958')
       setParentContent(val) 
       if(line && column && line !== 0 && column !== 0){
         SD.updateContent(val, line + 1, column + 1)
@@ -106,19 +110,16 @@ const MDPage = props => {
 
 
   useEffect(()=>{
-    console.log('EDITOR | useEffect | parentTrigger triggered')
+    // console.log('EDITOR | useEffect | parentTrigger triggered')
  
     loadContent() //!!!!!!!!!!!! STEP 1 
 
   }, [parentTrigger]) //!!!!!! ORIGIN
 
   useEffect(()=>{
-    if(!DONE_LOADING){
-      setParentTrigger(!parentTrigger)
-      DONE_LOADING = true
+      // setParentTrigger(!parentTrigger)
       hideSpinner()
       ALERT.welcomeAlerts()
-    }
   })
 
   //~ EDITOR / RENDER LAYOUT __________________________________________________________________________________________________________________
@@ -130,40 +131,66 @@ const MDPage = props => {
   
   //* useEffect for layout changes
   useEffect(()=>{
-    console.log(`new layout type: ${layoutType}`)
+    // console.log(`new layout type: ${layoutType}`)
+    setParentTrigger(!parentTrigger)
 
-    if(layoutType === 'editor'){
+    // Show editor ===============================================================
+    if(layoutType === 'editor' && breakIndex <= 1){
+      console.log('EDITOR | editor vertical')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
         l: '0',
         r: '0',
-        w: '',
-        h: '',
+        w: '100vw',
+        h: '100%',
       })
       setRenderLayout({
         p: 'absolute',
+        t: '100vh',
+        b: '',
+        l: '0',
+        r: '0',
+        w: '100vw',
+        h: '100vh',
+      })
+    }
+
+    if(layoutType === 'editor' && breakIndex > 0){
+      console.log('EDITOR | editor horizontal')
+      setEditorLayout({
+        p: 'absolute',
         t: '3rem',
         b: '0',
         l: '0',
         r: '0',
-        w: '',
-        h: '',
+        w: '100vw',
+        h: '100%',
       })
-    }
-
-
-
-    if(layoutType === 'render' ){
-      setEditorLayout({
+      setRenderLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
         l: '100vw',
+        r: '',
+        w: '100vw',
+        h: '100%',
+      })
+    }
+
+
+    // Show render ===============================================================
+    if(layoutType === 'render' && breakIndex <= 1){
+      console.log('EDITOR | render vertical')
+      setEditorLayout({
+        p: 'absolute',
+        t: '',
+        b: '100vh',
+        l: '0',
         r: '0',
-        w: '',
-        h: '',
+        w: '100vw',
+        h: '100%',
       })
       setRenderLayout({
         p: 'absolute',
@@ -171,21 +198,44 @@ const MDPage = props => {
         b: '0',
         l: '0',
         r: '0',
-        w: '',
-        h: '',
+        w: '100vw',
+        h: '100%',
+      })
+    }
+
+    if(layoutType === 'render' && breakIndex > 0){
+      console.log('EDITOR | render vertical')
+      setEditorLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '',
+        r: '100vw', // move the editor off screen to the left
+        w: '100vw',
+        h: '100%',
+      })
+      setRenderLayout({
+        p: 'absolute',
+        t: '3rem',
+        b: '0',
+        l: '0',
+        r: '0',
+        w: '100vw',
+        h: '100%',
       })
     }
 
 
-
+    // Show split ===============================================================
     if(layoutType === 'split' && breakIndex <= 1){
+      console.log('EDITOR | split vertical')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '50vh',
         l: '0',
         r: '0',
-        w: '',
+        w: '100vw',
         h: '',
       })
       setRenderLayout({
@@ -194,18 +244,19 @@ const MDPage = props => {
         b: '0',
         l: '0',
         r: '0',
-        w: '',
+        w: '100vw',
         h: '',
       })
     }
     if(layoutType === 'split' && breakIndex > 0){
+      console.log('EDITOR | split horizontal')
       setEditorLayout({
         p: 'absolute',
         t: '3rem',
         b: '0',
         l: '0',
         r: '50vw',
-        w: '',
+        w: '50vw',
         h: '',
       })
       setRenderLayout({
@@ -214,13 +265,28 @@ const MDPage = props => {
         b: '0',
         l: '50vw',
         r: '0',
-        w: '',
+        w: '50vw',
         h: '',
       })
     }
 
 
   }, [layoutType, breakIndex])
+
+
+  const scrollSync = (origin, scrollFloat) => {
+  
+    if(origin === 'editor'){
+      setRenScroll(scrollFloat)
+    }
+    
+    if(origin === 'render'){
+      setAceScroll(scrollFloat)
+    }
+  
+  }
+  
+
 
 
 
@@ -254,8 +320,8 @@ const MDPage = props => {
 
         <Flex sx={{flexDirection: ['column', 'row', 'row']}}>
           <Box sx={{
-            height: editorLayout.h,
-            width: editorLayout.w
+            // height: editorLayout.h,
+            // width: editorLayout.w
             }} >
             <Ace 
               setLayout={setLayoutType}
@@ -264,6 +330,8 @@ const MDPage = props => {
               layout={editorLayout}
               fontSize={fontSize}
               useTrigger={parentTrigger}
+              scroll={aceScroll}
+              handleScroll={scrollSync}
             />
           </Box>
 
@@ -273,6 +341,8 @@ const MDPage = props => {
               useTrigger={parentTrigger}
               parentContent={parentContent} 
               layout={renderLayout}
+              scroll={renScroll}
+              handleScroll={scrollSync}
             />
           </Box>
         </Flex>

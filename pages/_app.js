@@ -13,7 +13,8 @@ import { useRouter } from 'next/router'
 
 
 //* theme-ui
-import '../src/theme/editor.css'
+
+// import '../src/theme/editor.css'
 import { useThemeUI, ThemeProvider, Flex, Box } from 'theme-ui' 
 
 //* local deps
@@ -48,11 +49,11 @@ const App = ({ Component, pageProps }) => {
   useEffect(() => {
     SD.init()
     toast.remove()
-
   }), [];
-  
+   
     return (
       <ThemeProvider theme={theme}>
+       
         <Globals />
           <Head>
             <title>MD Editor</title>

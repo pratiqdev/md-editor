@@ -1,273 +1,260 @@
 let SETTINGS_ARRAY = [
-  {    id: "enable-basic-autocompletion",
-    name: "Basic Autocompletion", // name on menu
-    group: "editorSettings", // group for grouping or filtering or details
-    desc: "Enable text autocompletion with strings derived from local document", // description to explain setting
-    type: "boolean", // type for display and toggle
-    state: true, // state for display and functionality
-    default: true, // default to revert to defaults
-  },
-  {    id: "enable-live-autocompletion",
-  name: "Live Autocompletion", // name on menu
+{    id: "font-size",
+name: "Default Font Size", 
+group: "editorSettings", 
+desc: "Define the default font-size for the editor", 
+type: "number", 
+state: 14, 
+min: 6,
+max: 24,
+default: 14, 
+},
+{    id: "enable-basic-autocompletion",
+  name: "Basic Autocompletion", // name on menu
   group: "editorSettings", // group for grouping or filtering or details
   desc: "Enable text autocompletion with strings derived from local document", // description to explain setting
   type: "boolean", // type for display and toggle
   state: true, // state for display and functionality
   default: true, // default to revert to defaults
 },
-
-  {    id: "array-setting",
-    name: "An array setting",
-    group: "editorSettings",
-    desc: "This setting controls things about stuff",
-    type: "array",
-    state: 2,
-    default: 1,
-    options: [
-      {
-        name: "Option One Full Name",
-        shortName: "Option One",
-        desc: "This is the option one to control something",
-      },
-      {
-        name: "Option Two Long Text Name",
-        shortName: "Option Two",
-        desc: "This is the option two to control something else",
-      },
-      {
-        name: "Option Three Really Long Text Name",
-        shortName: "Option Three",
-        desc: "This is the option three to control something completely different",
-      },
-    ],
-  },
-  {    id: "number-setting",
-    name: "A number setting",
-    group: "editorSettings",
-    desc: "This setting controls things about stuff",
-    type: "number",
-    state: 17,
-    min: 0,
-    max: 100,
-    default: 50,
-  },
-
-  {    id: "auto-prepend-content",
-    name: "Auto prepend content",
-    group: "editorSettings",
-    desc: "Define a custom string at the beginning of each new file",
-    type: "bool-string",
-    state: [
-      true,
-      `--- 
+{    id: "enable-live-autocompletion",
+name: "Live Autocompletion", // name on menu
+group: "editorSettings", // group for grouping or filtering or details
+desc: "Enable text autocompletion with strings derived from local document", // description to explain setting
+type: "boolean", // type for display and toggle
+state: true, // state for display and functionality
+default: true, // default to revert to defaults
+},
+{    id: "show-invisibles",
+name: "Show Invisible Characters",
+group: "editorSettings",
+desc: "Enable rendering of normally invisible characters like spaces tabs and newlines", 
+type: "boolean", 
+state: false, 
+default: false, 
+},
+{    id: "select-line",
+name: "Select Entire Line",
+group: "editorSettings",
+desc: "Highlight the entire row when selecting from one line to another", 
+type: "boolean", 
+state: true, 
+default: true, 
+},
+{    id: "auto-prepend-content",
+  name: "Auto prepend content",
+  group: "editorSettings",
+  desc: "Define a custom string at the beginning of each new file",
+  type: "bool-string",
+  state: [
+    true,
+    `--- 
 title: {{filename}}
 created: {{date}}
 edited: {{edit}}
 ---`,
-    ],
-    min: 0,
-    max: 5000,
-    default: [
-      true,
-      `--- 
+  ],
+  min: 0,
+  max: 5000,
+  default: [
+    true,
+    `--- 
 title: {{filename}}
 created: {{date}}
 edited: {{edit}}
 ---`,
-    ],
-  },
-
-  {    id: "auto-append-content",
-    name: "Auto append content",
-    group: "editorSettings",
-    desc: "Define a custom string at the end of each new file",
-    type: "bool-string",
-    state: [false, ""],
-    min: 0,
-    max: 5000,
-    default: "",
-  },
-
-  {    id: "find-and-replace-values",
-    name: "Find and replace values",
-    group: "editorSettings",
-    desc: "Define a set of custom strings to find and replace content on save. ",
-    type: "find-and-replace",
-    state: [
-      true, // is replacer enabled
-      {
-        active: true,
-        name: "Name of file",
-        description:
-          "This built-in replacer will replace all occurences of {{filename}} with the current name of the file.",
-        find: "{{filename}}",
-        replace: "{{filename}}",
-      },
-      {
-        active: true,
-        name: "Date of creation",
-        description:
-          "This built-in replacer will replace all occurences of {{date}} with the actual date and time of file creation.",
-        find: "{{date}}",
-        replace: "{{date}}",
-      },
-      {
-        active: true,
-        name: "Date of last edit",
-        description:
-          "This built-in replacer will replace all occurences of {{edit}} with the actual date and time of the last edit.",
-        find: "{{edit}}",
-        replace: "{{edit}}",
-      },
-      {
-        active: true,
-        name: "Line count",
-        description:
-          "This built-in replacer will replace all occurences of {{line-count}} with the number of vertical lines in the file.",
-        find: "{{line-count}}",
-        replace: "{{line-count}}",
-      },
-      {
-        active: true,
-        name: "Word count",
-        description:
-          "This built-in replacer will replace all occurences of {{word-count}} with the number of words in the file",
-        find: "{{word-count}}",
-        replace: "{{word-count}}",
-      },
-      {
-        active: true,
-        name: "Character count",
-        description:
-          "This built-in replacer will replace all occurences of {{character-count}} with the actual date and time of file creation.",
-        find: "{{character-count}}",
-        replace: "{{character-count}}",
-      },
-      {
-        active: true,
-        name: "Author name",
-        description:
-          "This built-in replacer will all occurences of {{date}} with the actual date and time of file creation.",
-        find: "{{author}}",
-        replace: "Some Dude",
-      },
-      {
-        active: false,
-        name: "Test 1",
-        description: "This a plain string test",
-        find: "{{test}}",
-        replace: "IT REPLACED ME!",
-      },
-      {
-        active: true,
-        name: "Test 2",
-        description: "This is a test of RegExp.",
-        find: /-test-/gm,
-        replace: "REGEX REPLACED ME!",
-      },
-    ],
-    default: [
-      {
-        find: "{{date}}",
-        replace: "{{date}}",
-      },
-      {
-        find: "{{filename}}",
-        replace: "{{filename}}",
-      },
-      {
-        find: "{{author}}",
-        replace: "Some Dude",
-      },
-    ],
-  },
-  {    id: "custom-snippets",
-    name: "Custom snippets",
-    group: "editorSettings",
-    desc: "Add or remove custom snippets",
-    type: "snippets",
-    state: [
-        true,
-    { 
-        title: 'Link',
-        name: "link", 
-        code: "[${1:alt-text}](${2:url})",
-        active: true,
-        description: 'Optional description'
+  ],
+},
+{    id: "auto-append-content",
+  name: "Auto append content",
+  group: "editorSettings",
+  desc: "Define a custom string at the end of each new file",
+  type: "bool-string",
+  state: [false, ""],
+  min: 0,
+  max: 5000,
+  default: "",
+},
+{    id: "find-and-replace-values",
+  name: "Find and replace values",
+  group: "editorSettings",
+  desc: "Define a set of custom strings to find and replace content on save. ",
+  type: "find-and-replace",
+  state: [
+    true, // is replacer enabled
+    {
+      active: true,
+      name: "Name of file",
+      description:
+        "This built-in replacer will replace all occurences of {{filename}} with the current name of the file.",
+      find: "{{filename}}",
+      replace: "{{filename}}",
     },
-    { 
-        title: 'Image',
-          name: "img", 
-          code: "![${1:link-text}](${2:url})",
+    {
+      active: true,
+      name: "Date of creation",
+      description:
+        "This built-in replacer will replace all occurences of {{date}} with the actual date and time of file creation.",
+      find: "{{date}}",
+      replace: "{{date}}",
+    },
+    {
+      active: true,
+      name: "Date of last edit",
+      description:
+        "This built-in replacer will replace all occurences of {{edit}} with the actual date and time of the last edit.",
+      find: "{{edit}}",
+      replace: "{{edit}}",
+    },
+    {
+      active: true,
+      name: "Line count",
+      description:
+        "This built-in replacer will replace all occurences of {{line-count}} with the number of vertical lines in the file.",
+      find: "{{line-count}}",
+      replace: "{{line-count}}",
+    },
+    {
+      active: true,
+      name: "Word count",
+      description:
+        "This built-in replacer will replace all occurences of {{word-count}} with the number of words in the file",
+      find: "{{word-count}}",
+      replace: "{{word-count}}",
+    },
+    {
+      active: true,
+      name: "Character count",
+      description:
+        "This built-in replacer will replace all occurences of {{character-count}} with the actual date and time of file creation.",
+      find: "{{character-count}}",
+      replace: "{{character-count}}",
+    },
+    {
+      active: true,
+      name: "Author name",
+      description:
+        "This built-in replacer will all occurences of {{date}} with the actual date and time of file creation.",
+      find: "{{author}}",
+      replace: "Some Dude",
+    },
+    {
+      active: false,
+      name: "Test 1",
+      description: "This a plain string test",
+      find: "{{test}}",
+      replace: "IT REPLACED ME!",
+    },
+    {
+      active: true,
+      name: "Test 2",
+      description: "This is a test of RegExp.",
+      find: /-test-/gm,
+      replace: "REGEX REPLACED ME!",
+    },
+  ],
+  default: [
+    {
+      find: "{{date}}",
+      replace: "{{date}}",
+    },
+    {
+      find: "{{filename}}",
+      replace: "{{filename}}",
+    },
+    {
+      find: "{{author}}",
+      replace: "Some Dude",
+    },
+  ],
+},
+{    id: "custom-snippets",
+  name: "Custom snippets",
+  group: "editorSettings",
+  desc: "Add or remove custom snippets",
+  type: "snippets",
+  state: [
+      true,
+  { 
+      title: 'Link',
+      name: "link", 
+      code: "[${1:alt-text}](${2:url})",
+      active: true,
+      description: 'Optional description'
+  },
+  { 
+      title: 'Image',
+        name: "img", 
+        code: "![${1:link-text}](${2:url})",
+        active: true,
+      description: 'Optional description'
+  },
+  { 
+      title: 'Code block',
+      name: "codeblock", 
+      code: "```${1:lang} \r\n ${2:code} \r\n```",
+      active: true,
+      description: 'Optional description'
+  },
+  {
+      title: 'Table',
+      name: "table",
+      code: "|${1:heading-1}|${2:heading-2}|${3:heading-3}|\r\n|:--|:--|:--|\r\n|${4:content-1}|${5:content-2}|${6:content-3}|\r\n",
+      active: true,
+      description: 'Optional description'
+  },
+  {
+      title: 'Badge',
+      name: "badge",
+      code: "![badge](https://img.shields.io/badge/${1:label}-${2:message}-${3:color})",
+      active: true,
+      description: 'Optional description'
+  },
+  ],
+  default: [
+      { 
+          title: 'Link',
+          name: "link", 
+          code: "[${1:alt-text}](${2:url})",
           active: true,
-        description: 'Optional description'
-    },
-    { 
-        title: 'Code block',
-        name: "codeblock", 
-        code: "```${1:lang} \r\n ${2:code} \r\n```",
-        active: true,
-        description: 'Optional description'
-    },
-    {
-        title: 'Table',
-        name: "table",
-        code: "|${1:heading-1}|${2:heading-2}|${3:heading-3}|\r\n|:--|:--|:--|\r\n|${4:content-1}|${5:content-2}|${6:content-3}|\r\n",
-        active: true,
-        description: 'Optional description'
-    },
-    {
-        title: 'Badge',
-        name: "badge",
-        code: "![badge](https://img.shields.io/badge/${1:label}-${2:message}-${3:color})",
-        active: true,
-        description: 'Optional description'
-    },
-    ],
-    default: [
-        { 
-            title: 'Link',
-            name: "link", 
-            code: "[${1:alt-text}](${2:url})",
+          description: 'Optional description'
+      },
+      { 
+            name: "Image", 
+            code: "![${1:link-text}](${2:url})",
             active: true,
-            description: 'Optional description'
-        },
-        { 
-              name: "Image", 
-              code: "![${1:link-text}](${2:url})",
-              active: true,
-            description: 'Optional description'
-        },
-        { 
-            title: 'Code block',
-            name: "codeblock", 
-            code: "```${1:lang} \r\n ${2:code} \r\n```",
-            active: true,
-            description: 'Optional description'
-        },
-        {
-            title: 'Table',
-            name: "table",
-            code: "|${1:heading-1}|${2:heading-2}|${3:heading-3}|\r\n|:--|:--|:--|\r\n|${4:content-1}|${5:content-2}|${6:content-3}|\r\n",
-            active: true,
-            description: 'Optional description'
-        },
-        {
-            title: 'Badge',
-            name: "badge",
-            code: "![badge](https://img.shields.io/badge/${1:label}-${2:message}-${3:color})",
-            active: true,
-            description: 'Optional description'
-        },
-        ],
-  },
-  {    id: "copy-with-empty-selection",
-  name: "Copy / Cut Line", 
-  group: "editorSettings", 
-  desc: "Modify the entire line at cursor location if no text is selected", 
-  type: "boolean", 
-  state: true, 
-  default: true, 
+          description: 'Optional description'
+      },
+      { 
+          title: 'Code block',
+          name: "codeblock", 
+          code: "```${1:lang} \r\n ${2:code} \r\n```",
+          active: true,
+          description: 'Optional description'
+      },
+      {
+          title: 'Table',
+          name: "table",
+          code: "|${1:heading-1}|${2:heading-2}|${3:heading-3}|\r\n|:--|:--|:--|\r\n|${4:content-1}|${5:content-2}|${6:content-3}|\r\n",
+          active: true,
+          description: 'Optional description'
+      },
+      {
+          title: 'Badge',
+          name: "badge",
+          code: "![badge](https://img.shields.io/badge/${1:label}-${2:message}-${3:color})",
+          active: true,
+          description: 'Optional description'
+      },
+      ],
+},
+{    id: "copy-with-empty-selection",
+name: "Copy / Cut Line", 
+group: "editorSettings", 
+desc: "Modify the entire line at cursor location if no text is selected", 
+type: "boolean", 
+state: true, 
+default: true, 
 },
 {    id: "use-soft-tabs",
 name: "Use Soft Tabs", 
@@ -283,6 +270,8 @@ group: "editorSettings",
 desc: "Define how many spaces will be used with soft-tabs", 
 type: "number", 
 state: 4, 
+min: 1,
+max: 10,
 default: 4, 
 },
 {    id: "multi-cursor-select",
@@ -307,6 +296,8 @@ group: "editorSettings",
 desc: "Define the location of the print margin in character spaces from the left side", 
 type: "number", 
 state: 80, 
+min: 20,
+max: 260,
 default: 80, 
 },
 {    id: "wrap-lines",
@@ -314,8 +305,8 @@ name: "Wrap Lines",
 group: "editorSettings",
 desc: "Control how lines are wrapped to the next line",
 type: "array",
-state: 0,
-default: 0,
+state: 1,
+default: 1,
 options: [
   {
     name: "Disable Wrapping",
@@ -341,6 +332,87 @@ desc: "Automatically add a tab or soft-tab to the beginning of all lines when wr
 type: "boolean", 
 state: true, 
 default: true, 
+},
+{    id: "drag-and-drop",
+name: "Enable Drag and Drop", 
+group: "editorSettings", 
+desc: "Allow selected text to be dragged and dropped using the mouse", 
+type: "boolean", 
+state: true, 
+default: true, 
+},
+{    id: "drag-delay",
+name: "Drag and Drop Delay", 
+group: "editorSettings", 
+desc: "Define the delay, in milliseconds, before a text selection activates drag and drop", 
+type: "number", 
+state: 250, 
+default: 250, 
+},
+{    id: "show-gutter",
+name: "Show Editor Gutter", 
+group: "editorSettings", 
+desc: "Show or hide the entire gutter in the editor", 
+type: "boolean", 
+state: true, 
+default: true, 
+},
+{    id: "line-numbers",
+name: "Show Line Numbers", 
+group: "editorSettings", 
+desc: "Show or hide the line numbers in the editors gutter", 
+type: "boolean", 
+state: true, 
+default: true, 
+},
+{    id: "first-line",
+name: "First Line Number", 
+group: "editorSettings", 
+desc: "Define the number at which the line numbering should start", 
+type: "number", 
+state: 1, 
+default: 1, 
+},
+{    id: "fold-widgets",
+name: "Enable Code Folding", 
+group: "editorSettings", 
+desc: "Allow indented or nested sections to be `folded` or collapsed using an arrow on the editors gutter", 
+type: "boolean", 
+state: true, 
+default: true, 
+},
+{    id: "fade-fold",
+name: "Fade Fold Widgets", 
+group: "editorSettings", 
+desc: "Cause the fade widgets to fade to transparent when not hovering the gutter", 
+type: "boolean", 
+state: false, 
+default: false, 
+},
+{    id: "fold-marker",
+name: "Code Folding Type",
+group: "editorSettings",
+desc: "Control how sections are marked for code folding",
+type: "array",
+state: 0,
+default: 0,
+options: [
+  {
+    name: "Mark Beginning of Section",
+    shortName: "Beginning",
+    desc: "Only mark the beginning of the section that can be folded",
+  },
+  {
+    name: "Mark End of Section",
+    shortName: "End",
+    desc: "Only mark the end of the section that can be folded",
+  },
+  {
+    name: "Mark Beginning and End",
+    shortName: "Both",
+    desc: "Mark the Beginning and end of sections with arrows facing towards the content to be folded",
+  },
+],
 },
 ];
 export default SETTINGS_ARRAY;

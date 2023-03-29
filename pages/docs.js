@@ -18,7 +18,7 @@ import { useResponsiveValue, useBreakpointIndex } from "@theme-ui/match-media";
 
 // LOCAL ____________________________________________________________________________________
 import Navbar from "../src/ui/Navbar";
-import dataList from "../src/lib/documentation";
+import dataList from "../src/lib/documentation/documentation";
 import MDX from "@mdx-js/runtime";
 
 // EXTERNAL ____________________________________________________________________________________
@@ -175,7 +175,7 @@ const DocMenu = (props) => {
   const [canCollapse, setCanCollapse] = useState(true);
 
   const collapseAll = () => {
-    console.log("collapseAll");
+    // console.log("collapseAll");
     setTrigger(!trigger);
   };
 
@@ -201,6 +201,7 @@ const DocMenu = (props) => {
         top: ["", "10rem", "10rem"],
         bottom: "0",
         overflow: "hidden",
+        overflowY: 'auto',
         maxHeight: "93vh",
         flexDirection: "column",
         p: 2,
@@ -239,7 +240,7 @@ const DocMenu = (props) => {
 //~ generate groups ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const generateGroups = debounce(
   (sv) => {
-    console.log(`-------------------------------------------------`);
+    // console.log(`-------------------------------------------------`);
     docString = "";
     uniqueGroups.map((group, index) => generateSections(group, sv));
   },
@@ -359,16 +360,22 @@ const append = (val) => {
 };
 
 const h1 = (val) => {
-  val = val.toUpperCase();
-  docString += `\r\n # ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  if(val){
+    val = val.toUpperCase()
+    docString += `\r\n # ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  }
 };
 
 const h2 = (val) => {
-  docString += `\r\n ## ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  if(val){
+    docString += `\r\n ## ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  }
 };
 
 const h3 = (val) => {
-  docString += `\r\n#### ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  if(val){
+    docString += `\r\n#### ${val} <div id='${val.toLowerCase().replace(/ /g, '-')}' />\r\n`;
+  }
 };
 
 
@@ -407,7 +414,7 @@ const Docs = (props) => {
 
   return (
     <Box sx={{ bg: "grey_4", height: "100vh", }}>
-      <Navbar />
+      <Navbar/>
       <Box sx={{ overflowX: "hidden" }}>
         <Box
           sx={{
@@ -447,7 +454,8 @@ const Docs = (props) => {
             overflowY: "auto",
             borderColor: "grey_1",
             bg: "grey_0",
-            
+            fontSize: '1rem',
+            lineHeight: '2rem'
           }}
         >
           <MDX
@@ -457,7 +465,7 @@ const Docs = (props) => {
           </MDX>
 
           <Box sx={{ p: 5, bg: "grey_4", m: -5, mt: 3 }}>
-            Made By Michael Jannetta @pratiqdev/mdd
+            Made By Michael Jannetta @pratiqdev/md-editor
           </Box>
         </Box>
       </Box>
