@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "clear && next dev",
     "git": "git add . && git commit -m",
-    "build": "next build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
     "start": "next start",
     "deploy": "next build && next export",
     "bust": "clear && next build && next start",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
+    "@jridgewell/set-array": "^1.1.2",
     "@mdx-js/loader": "^1.5.7",
     "@mdx-js/react": "^1.6.22",
     "@mdx-js/runtime": "^1.6.22",
@@ -66,7 +67,10 @@
   },
   "devDependencies": {
     "@types/node": "^13.9.0",
-    "@types/react": "^16.9.23",
+    "@types/react": "^17",
     "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
