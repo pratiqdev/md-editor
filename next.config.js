@@ -23,7 +23,7 @@ module.exports = withMDX(withPWA(withTM({
         config.node = {
           dgram: "empty",
           fs: "empty",
-          net: "empty",
+          net: "empty", 
           tls: "empty",
           child_process: "empty",
         };
