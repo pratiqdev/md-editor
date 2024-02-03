@@ -9,10 +9,10 @@ const editorFunctionSettings = [
     name: 'Command Palette',
     group: 'Keyboard Shortcuts',
     content: 
-`Open the full 
+`Open the full command palette within the editor to browse, search and select options that are not bound to a keyboard shortcut.
 
-*Type: switch*  
-*Default: Enabled*
+*Type: shortcut*  
+*Default: F1*
 
 `},
 

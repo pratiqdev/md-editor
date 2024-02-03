@@ -1,7 +1,7 @@
 export default {
     fonts: {
-        body: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif`,
-        heading: "Helvetica, sans-serif",
+        body: `Roboto -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif`,
+        heading: "Roboto, Helvetica, sans-serif",
         monospace: "Menlo, monospace",
         special:'Montserrat, sans-serif',
       },
@@ -24,7 +24,7 @@ export default {
           fontSize: [1,2,2],
           color: 'text',
           lineHeight: 'body',
-          fontFamily: 'special',
+          fontFamily: 'body',
         },
         caps: {
           textTransform: 'uppercase',
@@ -35,7 +35,21 @@ export default {
           letterSpacing: '.07em',
           fontFamily: 'special',
           fontWeight: 'bold',
-      },
+          fontSize: '3rem'
+        },
+        subheading: {
+          color: 'primary_a',
+          letterSpacing: '.07em',
+          fontFamily: 'body',
+          fontWeight: 'bold',
+          fontSize: '2rem'
+        },
+        large: {
+          // color: 'primary_a',
+          letterSpacing: '.07em',
+          fontFamily: 'body',
+          fontSize: '1.6rem'
+        },
     },
     links: {
       heading:{

@@ -33,19 +33,19 @@ export default {
     },
     h1: {
       variant: "text.heading",
-      fontSize: [7,8,9],
+      fontSize: [5,5,6],
       fontFamily: "heading",
       color: "primary_a",
       borderBottom: '2px solid',
       borderColor: 'primary_a',
       mt: 8,
     '&:first-of-type':{
-      mt: 1,
+      mt: 3,
     },
     },
     h2: {
       variant: "text.heading",
-      fontSize: [5,6,7],
+      fontSize: [4,4,5],
       mt: 8,
       pt: 2,
       mb: 0,
@@ -60,14 +60,14 @@ export default {
     },
     h3: {
       variant: "text.heading",
-      fontSize: [6,7,7],
+      fontSize: [3,3,4],
       mt: 5,
       // mb: 3,
 
     },
     h4: {
       variant: "text.heading",
-      fontSize: [3,4,4],
+      fontSize: [3,3,4],
       mt: 5,
       // mb: 3,
     },

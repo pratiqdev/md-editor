@@ -22,6 +22,15 @@ const ThemeToggle = (props) => {
   
   const next = colorMode === "dark" ? "light" : "dark";
 
+  useEffect(() => {
+    // document.documentElement.classList.add(colorMode);
+    if (colorMode === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [colorMode]);
+
   return (
     <Button id='halo-11'
     suppressHydrationWarning={true}

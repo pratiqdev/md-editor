@@ -16,7 +16,7 @@ const Logo = (props) => {
         //     preserveAspectRatio="xMidYMid meet">
         //     <g fill={ props.color ? props.color : logoThemeColor } transform="translate(0.000000,61.000000) scale(0.02,-0.02)" stroke="none">
         //     <path id="Unnamed"
-        // fill="none" stroke={ props.color ? props.color : logoThemeColor } stroke-width="3"
+        // fill="none" stroke={ props.color ? props.color : logoThemeColor } strokeWidth="3"
         // d="M 14.38,125.62
         //    C 14.38,125.62 14.25,382.00 14.25,382.00
         //      14.25,382.00 33.75,370.12 33.75,370.25
